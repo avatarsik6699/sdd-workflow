@@ -44,7 +44,7 @@ Then run this loop:
 ## Where to read
 
 - Docs site (EN): <https://avatarsik6699.github.io/sdd-workflow/>
-- Docs site (RU): <https://avatarsik6699.github.io/sdd-workflow/ru/>
+- Docs site (RU): appears at `/ru/` on the same domain after the first bilingual Pages deploy
 - Quickstart page: [docs/quickstart.md](docs/quickstart.md)
 - FAQ: [docs/faq.md](docs/faq.md)
 - Playbooks: [docs/playbooks/](docs/playbooks/)
