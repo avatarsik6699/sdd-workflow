@@ -1,0 +1,39 @@
+{
+  "name": "sdd-workflow",
+  "version": "1.0.0",
+  "description": "Project-local SDD workflow plugin for spec drafting, phase initialization, gate checks, context updates, and spec synchronization.",
+  "author": {
+    "name": "Local Project Plugin"
+  },
+  "license": "MIT",
+  "keywords": [
+    "sdd",
+    "workflow",
+    "phase-gate",
+    "spec-init",
+    "phase-init",
+    "spec-sync",
+    "context7"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "SDD Workflow",
+    "shortDescription": "Phase workflow, gates, and contract sync for this repo",
+    "longDescription": "Workspace-local Codex plugin that exposes the project's SDD workflow as native Codex skills and slash commands, while also declaring project-local Context7 MCP expectations.",
+    "developerName": "Local Project",
+    "category": "Coding",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Draft SPEC.md from a high-level project brief",
+      "Initialize the next project phase from SPEC.md",
+      "Run the phase gate checks for the current phase",
+      "Sync CONTEXT.md and STATE.md after a phase completes"
+    ],
+    "brandColor": "#0F766E"
+  }
+}

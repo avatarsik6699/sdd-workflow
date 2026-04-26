@@ -1,0 +1,33 @@
+{
+  "name": "sdd-workflow-init",
+  "version": "1.0.0",
+  "description": "Bootstrap plugin for sdd-workflow. Exposes /workflow-init for integrating the SDD workflow into a target project.",
+  "author": {
+    "name": "sdd-workflow"
+  },
+  "license": "MIT",
+  "keywords": [
+    "sdd",
+    "workflow",
+    "init",
+    "bootstrap"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "SDD Workflow Init",
+    "shortDescription": "Integrate the SDD workflow into any project",
+    "longDescription": "Single bootstrap skill that copies the SDD workflow (AGENTS.md, CLAUDE.md, skill wrappers, plugins, playbooks, and document scaffolds) into a target project. Run once per project from a freshly cloned sdd-workflow checkout.",
+    "developerName": "sdd-workflow",
+    "category": "Coding",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Integrate the SDD workflow into the project at <path>",
+      "Bootstrap SDD skills, AGENTS.md, and docs/ scaffolds in this project"
+    ],
+    "brandColor": "#0F766E"
+  }
+}
