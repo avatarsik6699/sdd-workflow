@@ -5,7 +5,7 @@
 
 **Легенда:** `[ ]` — не начато · `[~]` — в работе · `[x]` — готово · `[-]` — решили не делать (пиши причину рядом)
 
-**Прогресс:** 49 / 60
+**Прогресс:** 56 / 60
 
 ---
 
@@ -56,7 +56,7 @@
 - [x] Quickstart «`workflow-init` за 60 секунд»
 - [x] Глоссарий терминов SDD
 - [x] FAQ
-- [-] Включить Pages в Settings → Pages → Source: GitHub Actions — требуется действие в GitHub UI
+- [x] Включить Pages в Settings → Pages → Source: GitHub Actions
 - [-] Кастомный домен *(опционально)* — отложено до публикации
 
 ## 4. README
@@ -85,14 +85,14 @@
 
 ## 7. Настройки репозитория на GitHub
 
-- [-] Description заполнено — требуется действие в GitHub UI
-- [-] Topics: `claude-code`, `agent-workflows`, `sdd`, `playbooks`, `spec-driven-development` — требуется действие в GitHub UI
+- [x] Description заполнено
+- [x] Topics: `claude-code`, `agent-workflows`, `sdd`, `playbooks`, `spec-driven-development`
 - [-] Social preview image (1280×640 PNG) — требуется действие в GitHub UI
-- [-] Включить Discussions — требуется действие в GitHub UI
-- [-] Включить Private vulnerability reporting — требуется действие в GitHub UI
-- [-] Branch protection на `main`: require PR, require status checks — требуется действие в GitHub UI
+- [x] Включить Discussions
+- [x] Включить Private vulnerability reporting
+- [x] Branch protection на `main`: require PR, require status checks
 - [-] Pin важных issues/discussions (Roadmap, FAQ) — требуется действие в GitHub UI
-- [-] Auto-delete head branches после merge — требуется действие в GitHub UI
+- [x] Auto-delete head branches после merge
 
 ## 8. Доп. документация для этого репо
 
@@ -110,3 +110,4 @@
 - `2026-04-26` — создан этот файл.
 - `2026-04-26` — выполнены локальные шаги hardening: governance-файлы, `.github` templates/workflows, quality-конфиги, docs-site каркас, README, release/versioning.
 - `2026-04-26` — отмечены шаги, требующие ручной настройки через GitHub UI.
+- `2026-04-26` — выполнены GitHub-настройки через `gh api`: Pages (GitHub Actions), description/homepage/topics, Discussions, private vulnerability reporting, branch protection, auto-delete branch on merge.
