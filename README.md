@@ -6,6 +6,8 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-blue)](https://avatarsik6699.github.io/sdd-workflow/)
 
+![sdd-workflow preview](preview.png)
+
 A stack-agnostic Spec-Driven Development workflow you can drop into any project.
 No CLI, no language runtime, no build manifest.
 
