@@ -10,6 +10,7 @@ exclude = [
   "localhost",
   "127\\.0\\.0\\.1",
   "^http://",
+  "^https://avatarsik6699\\.github\\.io/sdd-workflow/?$",
 ]
 
 exclude_path = [
