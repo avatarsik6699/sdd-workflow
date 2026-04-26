@@ -5,7 +5,7 @@
 
 **Легенда:** `[ ]` — не начато · `[~]` — в работе · `[x]` — готово · `[-]` — решили не делать (пиши причину рядом)
 
-**Прогресс:** 56 / 60
+**Прогресс:** 57 / 60
 
 ---
 
@@ -91,7 +91,7 @@
 - [x] Включить Discussions
 - [x] Включить Private vulnerability reporting
 - [x] Branch protection на `main`: require PR, require status checks
-- [-] Pin важных issues/discussions (Roadmap, FAQ) — требуется действие в GitHub UI
+- [x] Pin важных issues/discussions (Roadmap, FAQ)
 - [x] Auto-delete head branches после merge
 
 ## 8. Доп. документация для этого репо
@@ -111,3 +111,4 @@
 - `2026-04-26` — выполнены локальные шаги hardening: governance-файлы, `.github` templates/workflows, quality-конфиги, docs-site каркас, README, release/versioning.
 - `2026-04-26` — отмечены шаги, требующие ручной настройки через GitHub UI.
 - `2026-04-26` — выполнены GitHub-настройки через `gh api`: Pages (GitHub Actions), description/homepage/topics, Discussions, private vulnerability reporting, branch protection, auto-delete branch on merge.
+- `2026-04-26` — созданы и закреплены (`pin`) issues `#10` (Roadmap) и `#11` (FAQ).
