@@ -8,14 +8,54 @@ theme:
   name: material
   language: en
   features:
-    - navigation.instant
     - navigation.sections
     - navigation.top
+    - toc.follow
     - content.code.copy
     - search.suggest
     - search.highlight
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
 
 plugins:
+  - i18n:
+      docs_structure: suffix
+      fallback_to_default: true
+      languages:
+        - locale: en
+          name: English
+          default: true
+          build: true
+          link: /sdd-workflow/
+        - locale: ru
+          name: Русский
+          build: true
+          link: /sdd-workflow/ru/
+          nav_translations:
+            Home: Главная
+            Quickstart: Быстрый старт
+            Skills Catalog: Каталог навыков
+            Playbooks: Плейбуки
+            Reference: Справочник
+            Glossary: Глоссарий
+            FAQ: Вопросы и ответы
+            Architecture: Архитектура
+            Compatibility: Совместимость
+            Roadmap: Дорожная карта
+            Contributing: Участие
   - search
   - git-revision-date-localized:
       type: date
@@ -36,6 +76,18 @@ markdown_extensions:
 
 extra_javascript:
   - https://unpkg.com/mermaid@10/dist/mermaid.min.js
+
+extra_css:
+  - stylesheets/extra.css
+
+extra:
+  alternate:
+    - name: English
+      link: /sdd-workflow/
+      lang: en
+    - name: Русский
+      link: /sdd-workflow/ru/
+      lang: ru
 
 nav:
   - Home: index.md

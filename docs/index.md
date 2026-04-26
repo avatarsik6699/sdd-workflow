@@ -1,26 +1,46 @@
 # sdd-workflow
 
-A stack-agnostic Spec-Driven Development workflow you can apply to existing or new projects.
+A practical Spec-Driven Development workflow you can plug into an existing repository in minutes.
 
-## Workflow map
+![Workflow diagram](assets/workflow.png){ .hero-image }
 
-```mermaid
-flowchart TD
-  A[workflow-init] --> B[spec-init]
-  B --> C[phase-init]
-  C --> D[Implementation]
-  D --> E[phase-gate]
-  E --> F[context-update]
-  F --> G{More scope?}
-  G -- Yes --> C
-  G -- No --> H[Release tag]
+## Start fast
+
+```bash
+git clone https://github.com/avatarsik6699/sdd-workflow.git /tmp/sdd-workflow
+cd /tmp/sdd-workflow
+/workflow-init /path/to/target-project
+cd /path/to/target-project
 ```
 
-## What this gives you
+Then repeat this cycle:
 
-- Five reusable SDD skills inside target projects
-- Canonical playbooks in plain Markdown
-- Agent-agnostic wrappers for Claude Code and Codex
-- Fixed documentation contract for SPEC/STATE/CONTEXT/CHANGELOG and phase files
+1. `/spec-init`
+2. `/phase-init 01`
+3. Implement phase scope
+4. `/phase-gate 01`
+5. `/context-update 01`
 
-Start with [Quickstart](quickstart.md).
+## What this repository provides
+
+- Canonical playbooks (`docs/playbooks/`) with workflow rules.
+- Ready wrappers for Claude Code and Codex.
+- Documentation contract templates for SPEC, STATE, CONTEXT, CHANGELOG, and phases.
+- Git clone only workflow assets: no CLI package, no runtime lock-in.
+
+## Where to go next
+
+- [Quickstart](quickstart.md)
+- [Skills Catalog](skills.md)
+- [FAQ](faq.md)
+- [Playbooks Overview](playbooks/README.md)
+
+## Quick answers
+
+### Is this a CLI tool?
+
+No. Commands are agent skills/wrappers, and logic lives in Markdown playbooks.
+
+### Can I use it with my current stack?
+
+Yes. The workflow is stack-agnostic. Gate commands are configured in `docs/STACK.md` inside the integrated project.

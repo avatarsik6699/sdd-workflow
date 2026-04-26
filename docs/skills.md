@@ -1,32 +1,36 @@
 # Skills catalog
 
-## `/workflow-init`
+## Bootstrap
 
-- Purpose: copy workflow assets into a target project
-- Input: target project path
-- Output: seeded docs, skill wrappers, hooks, and stack-specific gate command hints
+### `/workflow-init`
 
-## `/spec-init`
+- Purpose: copy workflow assets into a target repository.
+- Input: path to target project.
+- Output: docs templates, wrappers, hooks, and stack gate placeholders.
 
-- Purpose: draft and validate `docs/SPEC.md`
-- Typical use: first step in new product scope
+## Core operating loop (inside integrated project)
 
-## `/phase-init`
+### `/spec-init`
 
-- Purpose: scaffold `docs/PHASE_XX.md` from `SPEC.md`
-- Typical use: before implementation starts for each phase
+- Purpose: draft or refresh `docs/SPEC.md`.
+- Use when: you start new scope or need to rewrite the contract.
 
-## `/phase-gate`
+### `/phase-init`
 
-- Purpose: execute stack gate commands and validate completion criteria
-- Typical use: before merge/tag
+- Purpose: scaffold `docs/PHASE_XX.md` from current SPEC.
+- Use when: you are preparing the next implementation slice.
 
-## `/spec-sync`
+### `/phase-gate`
 
-- Purpose: propagate SPEC deltas to STATE/CONTEXT/CHANGELOG and phase docs
-- Typical use: when requirements change mid-flight
+- Purpose: run configured checks and completion criteria.
+- Use when: phase is implemented and must be validated.
 
-## `/context-update`
+### `/context-update`
 
-- Purpose: reconcile docs after phase completion
-- Typical use: after successful gate and before PR merge
+- Purpose: sync STATE/CONTEXT/CHANGELOG after a passed gate.
+- Use when: phase is complete and ready for merge.
+
+### `/spec-sync`
+
+- Purpose: propagate SPEC changes into downstream docs.
+- Use when: requirements changed mid-implementation.
