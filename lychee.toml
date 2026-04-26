@@ -1,0 +1,18 @@
+accept = ["200..=299", "429"]
+include_mail = false
+include_fragments = true
+exclude_all_private = true
+max_retries = 2
+timeout = 20
+user_agent = "sdd-workflow-link-check"
+
+exclude = [
+  "localhost",
+  "127\\.0\\.0\\.1",
+  "^http://",
+]
+
+exclude_path = [
+  ".git",
+  "node_modules",
+]

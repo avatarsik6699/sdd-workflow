@@ -1,0 +1,39 @@
+name: Bug report
+description: Report a reproducible problem in the workflow
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Please include enough detail for us to reproduce.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Include exact commands and file paths.
+      placeholder: |
+        1. Run /workflow-init ...
+        2. Open docs/STACK.md ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Agent runtime, OS, and relevant versions.
+    validations:
+      required: true
