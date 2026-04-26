@@ -1,0 +1,39 @@
+name: Script tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    outputs:
+      has_tests: ${{ steps.check.outputs.has_tests }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: check
+        run: |
+          if find tests -type f -name "*.bats" -print -quit | grep -q .; then
+            echo "has_tests=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_tests=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  bats:
+    needs: detect
+    if: needs.detect.outputs.has_tests == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup bats
+        uses: mig4/setup-bats@v1
+      - name: Run bats tests
+        run: bats tests
+
+  no_tests:
+    needs: detect
+    if: needs.detect.outputs.has_tests != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "No bats tests found; nothing to run."

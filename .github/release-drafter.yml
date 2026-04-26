@@ -1,0 +1,29 @@
+name-template: 'v$RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+change-template: '- $TITLE (#$NUMBER)'
+categories:
+  - title: 'Features'
+    labels:
+      - 'enhancement'
+  - title: 'Fixes'
+    labels:
+      - 'bug'
+  - title: 'Documentation'
+    labels:
+      - 'documentation'
+  - title: 'Maintenance'
+    labels:
+      - 'chore'
+change-title-escapes: '\\<*_&'
+version-resolver:
+  major:
+    labels: [major]
+  minor:
+    labels: [enhancement, feature]
+  patch:
+    labels: [bug, chore, documentation]
+  default: patch
+template: |
+  ## Changes
+
+  $CHANGES

@@ -1,0 +1,58 @@
+site_name: sdd-workflow
+site_description: Stack-agnostic Spec-Driven Development workflow bundle
+site_url: https://avatarsik6699.github.io/sdd-workflow/
+repo_url: https://github.com/avatarsik6699/sdd-workflow
+repo_name: avatarsik6699/sdd-workflow
+
+theme:
+  name: material
+  language: en
+  features:
+    - navigation.instant
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - search.suggest
+    - search.highlight
+
+plugins:
+  - search
+  - git-revision-date-localized:
+      type: date
+  - include-markdown
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+extra_javascript:
+  - https://unpkg.com/mermaid@10/dist/mermaid.min.js
+
+nav:
+  - Home: index.md
+  - Quickstart: quickstart.md
+  - Skills Catalog: skills.md
+  - Playbooks:
+      - Overview: playbooks/README.md
+      - workflow-init: playbooks/workflow-init.md
+      - spec-init: playbooks/spec-init.md
+      - phase-init: playbooks/phase-init.md
+      - phase-gate: playbooks/phase-gate.md
+      - spec-sync: playbooks/spec-sync.md
+      - context-update: playbooks/context-update.md
+  - Reference:
+      - Glossary: glossary.md
+      - FAQ: faq.md
+      - Architecture: architecture.md
+      - Compatibility: compatibility.md
+      - Roadmap: roadmap.md
+      - Contributing: CONTRIBUTING.md

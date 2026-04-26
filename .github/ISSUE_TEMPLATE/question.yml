@@ -1,0 +1,16 @@
+name: Question
+description: Ask for usage guidance
+labels: [question]
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+      description: What are you trying to achieve?
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Share relevant snippets or steps you already tried.

@@ -1,93 +1,58 @@
 # sdd-workflow
 
-A stack-agnostic Spec-Driven Development workflow you can drop into any project — new or
-existing. No CLI, no Python, no templates, no language runtime. Just markdown playbooks, agent
-skill wrappers, and a single bootstrap skill.
+[![Lint](https://github.com/avatarsik6699/sdd-workflow/actions/workflows/lint.yml/badge.svg)](https://github.com/avatarsik6699/sdd-workflow/actions/workflows/lint.yml)
+[![Links](https://github.com/avatarsik6699/sdd-workflow/actions/workflows/links.yml/badge.svg)](https://github.com/avatarsik6699/sdd-workflow/actions/workflows/links.yml)
+[![Release](https://img.shields.io/github/v/release/avatarsik6699/sdd-workflow)](https://github.com/avatarsik6699/sdd-workflow/releases)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-blue)](https://avatarsik6699.github.io/sdd-workflow/)
 
-## What you get
+A stack-agnostic Spec-Driven Development workflow you can drop into any project.
+No CLI, no language runtime, no build manifest.
 
-- 5 SDD skills in your project: `/spec-init`, `/phase-init`, `/phase-gate`, `/spec-sync`, `/context-update`
-- A universal `AGENTS.md` (model-agnostic; reused by Claude Code, Codex, and any other agent)
-- Wrappers for both Claude Code (`.claude/skills/`) and Codex (`plugins/sdd-workflow/`)
-- Document scaffolds (`docs/SPEC.md`, `docs/STATE.md`, `docs/STACK.md`, `docs/CONTEXT.md`,
-  `docs/CHANGELOG.md`, `docs/PHASE_TEMPLATE.md`, `docs/KNOWN_GOTCHAS.md`, `docs/DECISIONS.md`)
-- An MCP config that wires Context7 for library lookups
-- A safety hook (`scripts/block-dangerous-bash.sh`) for both runtimes
-
-## Install
+## Quickstart
 
 ```bash
-# 1. Clone this repo somewhere convenient (sibling to your project, /tmp, anywhere).
-git clone https://github.com/<you>/sdd-workflow.git ~/tmp/sdd-workflow
-cd ~/tmp/sdd-workflow
-
-# 2. Open your agent in this directory and run the bootstrap skill, pointing at the target project.
-#    Claude Code:
-#      /workflow-init /path/to/your-project
-#    Codex:
-#      /workflow-init /path/to/your-project
-
-# 3. The skill copies AGENTS.md, CLAUDE.md, .claude/skills/, plugins/sdd-workflow/,
-#    docs/playbooks/, and seeded doc scaffolds into the target. It asks you for the
-#    project name, owner, and the gate commands for your stack, then writes docs/STACK.md.
-
-# 4. After it succeeds, you can delete the cloned sdd-workflow checkout — the workflow now
-#    lives inside your project.
+git clone https://github.com/avatarsik6699/sdd-workflow.git /tmp/sdd-workflow
+cd /tmp/sdd-workflow
+# In your agent session:
+/workflow-init /path/to/your-project
 cd /path/to/your-project
-# Open your agent here. The 5 SDD skills are now discoverable.
 ```
 
-## Usage in the integrated project
+After bootstrap, run `/spec-init`, `/phase-init`, `/phase-gate`, and `/context-update` in sequence.
 
-Once `/workflow-init` has run, the project follows the standard SDD loop:
+## Demo run
 
-```
-1. /spec-init "describe what you are building"
-   → drafts and validates docs/SPEC.md
-
-2. /phase-init 01
-   → scaffolds docs/PHASE_01.md from SPEC.md
-
-3. (architect fills Contracts + Files in PHASE_01.md, AI implements scope on feat/phase-01)
-
-4. /phase-gate 01
-   → runs the commands declared in docs/STACK.md#gate-commands and reports PASS/FAIL
-
-5. /context-update 01
-   → updates docs/CONTEXT.md, docs/STATE.md, docs/CHANGELOG.md
-
-6. git commit + PR + merge to develop, tag v0.1.0
-
-7. /phase-init 02 → repeat
+```text
+$ /workflow-init /tmp/acme-app
+[workflow-init] copied AGENTS.md, CLAUDE.md, wrappers, playbooks, templates
+[workflow-init] wrote docs/STACK.md with gate command placeholders
+[workflow-init] complete
 ```
 
-If `docs/SPEC.md` changes mid-flight, run `/spec-sync "what changed"` to propagate the change to
-CHANGELOG, STATE, CONTEXT, and any affected phase files before continuing.
+## Documentation
 
-## Why this is split out from project templates
+- GitHub Pages: <https://avatarsik6699.github.io/sdd-workflow/>
+- Playbooks: [docs/playbooks/](docs/playbooks/)
+- Contribution guide: [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md)
 
-This repo intentionally ships only the workflow. There are no FastAPI / Nuxt / React / Spring
-snapshots here, no `sdd init` Python CLI, no `templates/<id>/source/` directories. That keeps the
-workflow:
+## Who is this for?
 
-- **Cloneable into any stack** — Go, Rust, TypeScript, Python, anything.
-- **Cheap to update** — re-run `/workflow-init` against the new clone; the skill overwrites only
-  versioned wrappers and playbooks, never your `SPEC.md` or `STATE.md`.
-- **Easy to read** — about 20 markdown files; no build step, no test suite to maintain.
+- Teams that want a repeatable SDD loop without adopting a framework-specific template.
+- Projects that need agent-agnostic workflow files (Claude Code, Codex, and others).
 
-For stack-specific scaffolds (FastAPI + Nuxt, FastAPI + React Router, etc.), see the separate
-`sdd-template` repository or maintain your own internal templates.
+## Who is this NOT for?
+
+- Teams expecting a project scaffolder, runtime CLI, or full starter boilerplate.
+- Repositories that need framework-specific generators bundled in the workflow itself.
 
 ## File map
 
 - [docs/playbooks/](docs/playbooks/) — canonical workflow procedures (6 files)
-- [docs/playbooks/workflow-init.md](docs/playbooks/workflow-init.md) — what `/workflow-init` does
 - [project-files/](project-files/) — exact tree copied into target projects
-- [project-files/AGENTS.md](project-files/AGENTS.md) — universal agent rules shipped to projects
-- [.claude/skills/workflow-init/](.claude/skills/workflow-init/) — Claude Code bootstrap wrapper
+- [.claude/skills/workflow-init/](.claude/skills/workflow-init/) — Claude bootstrap wrapper
 - [plugins/sdd-workflow/](plugins/sdd-workflow/) — Codex bootstrap plugin
-- [AGENTS.md](AGENTS.md) — rules for working on this repo (not for integrated projects)
-- [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) — how to extend or modify the workflow
+- [AGENTS.md](AGENTS.md) — rules for working on this repo
 
 ## License
 

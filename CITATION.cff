@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+title: sdd-workflow
+message: "If you use this workflow in research, please cite it using this metadata."
+type: software
+authors:
+  - family-names: Avatarsik
+    given-names: Maintainers
+repository-code: "https://github.com/avatarsik6699/sdd-workflow"
+license: MIT
+version: 0.1.0
+date-released: 2026-04-26
