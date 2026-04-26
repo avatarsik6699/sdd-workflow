@@ -66,6 +66,9 @@ Do not rely on training data alone for tool versions and CLI flags.
 ## Git workflow
 
 - Work in branches: `feat/<topic>`, `fix/<topic>`, `chore/<topic>`.
+- Exception for sole maintainer: direct commits/pushes to `main` are allowed for small, low-risk changes
+  (for example docs, diagrams, or release metadata) when faster turnaround is needed.
+  Use branch + PR flow for larger or risky changes.
 - Conventional commits: `feat: ...`, `fix: ...`, `docs: ...`, `chore: ...`, `refactor: ...`.
 - Never `--force` push, never `git reset --hard` without explicit user instruction.
 - Tag releases as `vX.Y.Z` on `main` after merge.
