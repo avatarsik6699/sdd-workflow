@@ -10,7 +10,7 @@ jobs:
     name: Markdownlint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Lint Markdown
         uses: DavidAnson/markdownlint-cli2-action@v19
         with:
@@ -22,6 +22,6 @@ jobs:
     name: ShellCheck
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Run shellcheck
         run: shellcheck scripts/*.sh project-files/plugins/sdd-workflow/scripts/*.sh

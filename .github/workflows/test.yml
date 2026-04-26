@@ -11,7 +11,7 @@ jobs:
     outputs:
       has_tests: ${{ steps.check.outputs.has_tests }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - id: check
         run: |
           if find tests -type f -name "*.bats" -print -quit | grep -q .; then
@@ -25,7 +25,7 @@ jobs:
     if: needs.detect.outputs.has_tests == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup bats
         uses: mig4/setup-bats@v1
       - name: Run bats tests

@@ -23,7 +23,7 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Extract changelog section
         run: |
           version="${GITHUB_REF_NAME#v}"
