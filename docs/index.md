@@ -1,10 +1,10 @@
 # sdd-workflow
 
-A practical Spec-Driven Development workflow you can plug into an existing repository in minutes.
+A practical Spec-Driven Development workflow for teams that want clear scope control, predictable delivery phases, and durable project context.
 
 ![Workflow diagram](assets/workflow.png){ .hero-image }
 
-## Start fast
+## Getting started
 
 ```bash
 git clone https://github.com/avatarsik6699/sdd-workflow.git /tmp/sdd-workflow
@@ -13,7 +13,7 @@ cd /tmp/sdd-workflow
 cd /path/to/target-project
 ```
 
-Then repeat this cycle:
+Initialize once, then repeat this cycle for each delivery phase:
 
 1. `/spec-init`
 2. `/phase-init 01`
@@ -23,10 +23,12 @@ Then repeat this cycle:
 
 ## What this repository provides
 
-- Canonical playbooks (`docs/playbooks/`) with workflow rules.
-- Ready wrappers for Claude Code and Codex.
-- Documentation contract templates for SPEC, STATE, CONTEXT, CHANGELOG, and phases.
-- Git clone only workflow assets: no CLI package, no runtime lock-in.
+- Canonical playbooks (`docs/playbooks/`) that define how each workflow step should be performed.
+- Ready wrappers for Claude Code and Codex so the same process can run in different agent environments.
+- Documentation contract templates for SPEC, STATE, CONTEXT, CHANGELOG, and phase files to keep planning and execution aligned.
+- Git-clone-only workflow assets with no CLI package and no runtime lock-in.
+
+This repository is intentionally documentation-first: implementation guidance lives in playbooks, while wrappers stay thin and interface-focused.
 
 ## Where to go next
 

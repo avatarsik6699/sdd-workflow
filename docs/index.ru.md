@@ -1,10 +1,10 @@
 # sdd-workflow
 
-Практичный workflow Spec-Driven Development, который можно подключить к существующему репозиторию за несколько минут.
+Практичный workflow Spec-Driven Development для команд, которым нужны чёткие границы scope, предсказуемые этапы поставки и сохраняемый контекст проекта.
 
 ![Схема workflow](assets/workflow.png){ .hero-image }
 
-## Быстрый старт
+## Начало работы
 
 ```bash
 git clone https://github.com/avatarsik6699/sdd-workflow.git /tmp/sdd-workflow
@@ -13,7 +13,7 @@ cd /tmp/sdd-workflow
 cd /path/to/target-project
 ```
 
-Дальше повторяйте цикл:
+Инициализация выполняется один раз, затем для каждой фазы повторяется цикл:
 
 1. `/spec-init`
 2. `/phase-init 01`
@@ -23,10 +23,12 @@ cd /path/to/target-project
 
 ## Что даёт этот репозиторий
 
-- Канонические playbooks (`docs/playbooks/`) с правилами процесса.
-- Готовые обёртки для Claude Code и Codex.
-- Шаблоны контрактной документации: SPEC, STATE, CONTEXT, CHANGELOG и фазы.
-- Только workflow-ассеты через `git clone`: без CLI-пакета и без привязки к runtime.
+- Канонические playbooks (`docs/playbooks/`), где зафиксированы процедуры каждого шага workflow.
+- Готовые обёртки для Claude Code и Codex, позволяющие запускать один и тот же процесс в разных агентных средах.
+- Шаблоны контрактной документации: SPEC, STATE, CONTEXT, CHANGELOG и фазовые файлы, чтобы синхронизировать планирование и реализацию.
+- Workflow-ассеты, которые доставляются через `git clone`, без CLI-пакета и без привязки к runtime.
+
+Репозиторий намеренно построен как documentation-first: процедурная логика хранится в playbooks, а обёртки остаются тонким интерфейсным слоем.
 
 ## Куда идти дальше
 

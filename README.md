@@ -9,10 +9,11 @@
 [![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-blue)](https://avatarsik6699.github.io/sdd-workflow/)
 
 A clean, stack-agnostic Spec-Driven Development workflow that drops into any repository.
+It defines a documentation contract, a repeatable phase loop, and clear gate criteria so teams can move from requirements to implementation with predictable checkpoints.
 
 ![sdd-workflow preview](preview.png)
 
-## Start in 2 minutes
+## Getting started
 
 ```bash
 git clone https://github.com/avatarsik6699/sdd-workflow.git /tmp/sdd-workflow
@@ -22,7 +23,7 @@ cd /tmp/sdd-workflow
 cd /path/to/your-project
 ```
 
-Then run this loop:
+Initialize the workflow in your target project once, then run this delivery loop for each phase:
 
 1. `/spec-init`
 2. `/phase-init 01`
@@ -32,14 +33,20 @@ Then run this loop:
 
 ## Workflow map
 
-![Workflow diagram](workflow.png)
+![Workflow diagram](docs/assets/workflow.png)
 
 ## What you get
 
-- Canonical playbooks in `docs/playbooks/`.
-- Bootstrap + integrated-project wrappers for Claude Code and Codex.
-- Fixed documentation contract (`SPEC.md`, `STATE.md`, `CONTEXT.md`, `CHANGELOG.md`, `PHASE_XX.md`).
-- No CLI, no runtime dependency, no build manifest.
+- Canonical playbooks in `docs/playbooks/` that define each workflow skill and the expected procedure.
+- Bootstrap and integrated-project wrappers for Claude Code and Codex, so teams can apply the same process in different agent environments.
+- A fixed documentation contract (`SPEC.md`, `STATE.md`, `CONTEXT.md`, `CHANGELOG.md`, `PHASE_XX.md`) that keeps planning, execution, and project memory in sync.
+- No CLI, no runtime dependency, and no build manifest: the workflow ships as portable documentation and wrappers.
+
+## How the workflow is used
+
+In a target repository, the first step (`/workflow-init`) installs the workflow files and skill wrappers.
+After that, each phase follows the same pattern: define scope from SPEC, implement only that scope, run a gate review, and update context documents.
+This structure keeps scope controlled and gives contributors a consistent way to understand project status over time.
 
 ## Where to read
 
