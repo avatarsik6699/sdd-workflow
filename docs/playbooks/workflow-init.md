@@ -90,6 +90,7 @@ For conflicts, default policy:
   overwrite. Leave the existing file. Report a warning.
 - For `docs/playbooks/<name>.md`: overwrite (these are versioned with the workflow).
 - For `.claude/skills/<name>/SKILL.md` and `plugins/sdd-workflow/...`: overwrite (wrappers).
+- For `docs/templates/PHASE_NOTES_TEMPLATE.md` → `docs/PHASE_NOTES_TEMPLATE.md`: do **not** overwrite.
 - For `scripts/*` and `.mcp.json`: skip if already present.
 
 Show the user a planned action list **before** writing anything. Wait for `proceed` (or accept the
@@ -111,16 +112,18 @@ Files to copy from `project-files/` to the target root, preserving structure:
 - `AGENTS.md` → `AGENTS.md`
 - `CLAUDE.md` → `CLAUDE.md`
 - `.mcp.json` → `.mcp.json`
-- `.claude/skills/<5 skills>/SKILL.md` → `.claude/skills/<5 skills>/SKILL.md`
+- `.claude/skills/<7 skills>/SKILL.md` → `.claude/skills/<7 skills>/SKILL.md`
+  (spec-init, phase-init, phase-gate, spec-sync, context-update, impl-brief, impl-assist)
 - `plugins/sdd-workflow/` → `plugins/sdd-workflow/` (commands, skills, hooks.json, .mcp.json,
   .codex-plugin/, scripts/, README.md)
-- `docs/playbooks/<6 playbooks>.md` → `docs/playbooks/<6 playbooks>.md` (includes `workflow-init.md`
-  for future-self reference)
+- `docs/playbooks/<8 playbooks>.md` → `docs/playbooks/<8 playbooks>.md` (includes `workflow-init.md`
+  for future-self reference, plus `impl-brief.md` and `impl-assist.md`)
 - `docs/templates/SPEC.md` → `docs/SPEC.md` (only if missing)
 - `docs/templates/STATE.md` → `docs/STATE.md` (only if missing)
 - `docs/templates/CHANGELOG.md` → `docs/CHANGELOG.md` (only if missing)
 - `docs/templates/CONTEXT.md` → `docs/CONTEXT.md` (only if missing)
 - `docs/templates/PHASE_TEMPLATE.md` → `docs/PHASE_TEMPLATE.md` (only if missing)
+- `docs/templates/PHASE_NOTES_TEMPLATE.md` → `docs/PHASE_NOTES_TEMPLATE.md` (only if missing)
 - `docs/templates/STACK.md` → `docs/STACK.md` (only if missing — if existing, leave it and tell the
   user where to merge gate commands)
 - `docs/templates/KNOWN_GOTCHAS.md` → `docs/KNOWN_GOTCHAS.md` (only if missing)
@@ -192,9 +195,9 @@ Produce a short report with:
 
 ## Done when
 
-- The target project has `AGENTS.md`, `CLAUDE.md`, `.claude/skills/<5>`, `plugins/sdd-workflow/`,
-  `docs/playbooks/<6>`, and seeded `docs/{SPEC,STATE,CHANGELOG,CONTEXT,STACK,KNOWN_GOTCHAS,
-  DECISIONS,PHASE_TEMPLATE}.md`.
+- The target project has `AGENTS.md`, `CLAUDE.md`, `.claude/skills/<7>`, `plugins/sdd-workflow/`,
+  `docs/playbooks/<8>`, and seeded `docs/{SPEC,STATE,CHANGELOG,CONTEXT,STACK,KNOWN_GOTCHAS,
+  DECISIONS,PHASE_TEMPLATE,PHASE_NOTES_TEMPLATE}.md`.
 - `docs/STACK.md` either has user-supplied gate commands or is flagged for the user to fill in.
 - The user has the exact "next steps" list and knows the cloned `sdd-workflow` checkout can be
   deleted.

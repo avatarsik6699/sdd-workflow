@@ -13,7 +13,10 @@
     "spec-init",
     "phase-init",
     "spec-sync",
-    "context7"
+    "context7",
+    "impl-brief",
+    "impl-assist",
+    "human-implementation"
   ],
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",
