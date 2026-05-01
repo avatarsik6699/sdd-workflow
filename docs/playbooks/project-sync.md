@@ -146,7 +146,7 @@ phase, key, and title). Print a summary count per operation type. Stop. Do not c
 Execute queued operations in this order: `create` → `update-title` → `archive` → `close` →
 `reopen` → `set-column`.
 
-**create**
+#### create
 
 ```bash
 gh issue create \
@@ -170,7 +170,7 @@ gh project item-edit --project-id <project_id> --id <item_id> \
   --field-id <status_field_id> --single-select-option-id <target_option_id>
 ```
 
-**update-title**
+#### update-title
 
 ```bash
 gh issue edit <number> --repo <owner>/<repo> --title "[PHASE_XX][KEY] <new_title>"
