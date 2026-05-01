@@ -32,11 +32,13 @@ This document is the single source of truth for the `workflow-init` workflow.
 
 Read the top of the target directory and classify:
 
-- **empty** — no source files, may have only `.git/`. Greenfield case.
+- **empty** — no source files, may have only `.git/`. Greenfield case. `stack_known` is
+  determined in step 3 preamble.
 - **existing** — has at least one of: `package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`,
   `pom.xml`, `build.gradle*`, `Gemfile`, `composer.json`, source directories with code.
+  `stack_known` is always `true`.
 - **partially initialized** — already has `AGENTS.md`, `docs/SPEC.md`, or `.claude/skills/` from a
-  previous run. Treat as **upgrade**.
+  previous run. Treat as **upgrade**. `stack_known` is always `true`.
 
 Record what was detected. Decisions later branch on this.
 
@@ -48,7 +50,16 @@ Ask the user for:
    `STATE.md`. If the target directory has an obvious name, propose it as the default.
 2. **One-line description** (optional) — for the SPEC seed.
 3. **Owner / architect name** — for `[OWNER]` placeholders.
-4. **Stack signals** (only ask the rows that apply — infer from project state where possible):
+4. **Stack signals** — before asking these, if the project state is **empty**, ask:
+
+   > "Do you know your tech stack already? Answer **yes** to provide gate commands now, or
+   > **no** to skip — you can fill `docs/STACK.md` after `/spec-init` determines the stack."
+
+   Record the answer as `stack_known`. If the answer is **no**, skip the rest of item 4 and
+   proceed to item 5.
+
+   If `stack_known` is **yes** (or the project is **existing** / **partially initialized**), ask
+   the rows that apply — infer from project state where possible:
    - infrastructure / bootstrap command
    - migrations command (or `n/a`)
    - backend / unit tests command
@@ -87,8 +98,13 @@ default if the user confirms in plain language). On `cancel`, abort.
 ### 5. Apply the copy
 
 Walk the `project-files/` tree and execute the planned actions. Substitute placeholders inline
-(`[PROJECT_NAME]`, `[OWNER]`, `[DOMAIN]`, `[DATE]`) with the values gathered in step 3 — use
-today's date for `[DATE]`. Make the substitution literal (search-and-replace), not regex-creative.
+(`[PROJECT_NAME]`, `[OWNER]`, `[DOMAIN]`, `[DATE]`, `[STACK_STATUS]`) with the values gathered in
+step 3 — use today's date for `[DATE]`. Make the substitution literal (search-and-replace), not
+regex-creative.
+
+Resolve `[STACK_STATUS]`:
+- `stack_known` is **true** → substitute `CONFIGURED`
+- `stack_known` is **false** → substitute `TBD — fill Gate Commands before running /phase-gate`
 
 Files to copy from `project-files/` to the target root, preserving structure:
 
@@ -112,10 +128,21 @@ Files to copy from `project-files/` to the target root, preserving structure:
 
 ### 6. Fill `docs/STACK.md` from gathered commands
 
-If `docs/STACK.md` was just created (step 5), substitute the gate-command rows under
-`## Gate Commands` with what the user entered in step 3. Leave `[bracketed placeholders]` for any
-row the user said `n/a` to, but mark the row's **Command** column with `n/a` so phase-gate reports
-it as `SKIPPED — n/a in STACK.md`.
+If `stack_known` is **false**: leave all Gate Commands rows as template placeholders — do not fill
+or replace them. The `[STACK_STATUS]` substitution in step 5 already inserted the TBD warning
+banner. Print:
+
+```
+docs/STACK.md has been left as a template.
+Fill the ## Gate Commands section before running /phase-gate.
+```
+
+Then skip the rest of this step.
+
+If `docs/STACK.md` was just created (step 5) and `stack_known` is **true**, substitute the
+gate-command rows under `## Gate Commands` with what the user entered in step 3. Leave
+`[bracketed placeholders]` for any row the user said `n/a` to, but mark the row's **Command**
+column with `n/a` so phase-gate reports it as `SKIPPED — n/a in STACK.md`.
 
 If `docs/STACK.md` already existed, do **not** edit it. Print a clear message:
 
@@ -136,12 +163,23 @@ Produce a short report with:
 - Files preserved as `.bak` (list)
 - Files skipped because they already existed (list)
 - Files left unchanged that the user should review (e.g. existing `STACK.md`)
-- The exact next-step commands:
+- The exact next-step commands. Use the appropriate variant:
+
+  **Stack configured** (`stack_known = true`):
   ```text
   Next steps:
     1. Review docs/STACK.md and ensure every Gate Commands row is correct.
     2. Run /spec-init "[your project brief]" to draft docs/SPEC.md.
     3. Run /phase-init 01 once SPEC.md is approved.
+  ```
+
+  **Stack deferred** (`stack_known = false`):
+  ```text
+  Next steps:
+    1. Run /spec-init "[your idea]" to draft docs/SPEC.md.
+    2. Once you've chosen your stack, fill docs/STACK.md → ## Gate Commands.
+    3. Review and approve docs/SPEC.md.
+    4. Run /phase-init 01 to scaffold the first phase.
   ```
 
 ## Rules

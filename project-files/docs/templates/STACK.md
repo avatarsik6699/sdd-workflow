@@ -5,6 +5,8 @@
 > The SDD pipeline (phases, gates, skills, contracts) is stack-agnostic. This file is the only
 > place where the workflow learns what to actually run. The `phase-gate` playbook reads
 > [`Gate Commands`](#gate-commands) below verbatim — keep that table accurate.
+>
+> **Stack status:** [STACK_STATUS]
 
 ---
 
