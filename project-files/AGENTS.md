@@ -91,18 +91,20 @@ When `docs/SPEC.md` is modified:
 
 ## Workflow Playbooks
 
-The six SDD workflows are defined in `docs/playbooks/`:
+The SDD workflows are defined in `docs/playbooks/`:
 
 - [`workflow-init`](docs/playbooks/workflow-init.md) — integrate the workflow into a project (only relevant when bootstrapping)
 - [`spec-init`](docs/playbooks/spec-init.md) — draft or refresh `docs/SPEC.md` from a project brief
-- [`phase-init`](docs/playbooks/phase-init.md) — scaffold a new `docs/PHASE_XX.md`
+- [`phase-init`](docs/playbooks/phase-init.md) — scaffold a new `docs/PHASE_XX.md` + `docs/PHASE_XX_NOTES.md`
 - [`phase-gate`](docs/playbooks/phase-gate.md) — validate a phase before commit (stack commands in [docs/STACK.md](docs/STACK.md#gate-commands))
 - [`spec-sync`](docs/playbooks/spec-sync.md) — propagate a `docs/SPEC.md` change
 - [`context-update`](docs/playbooks/context-update.md) — finalize a completed phase
+- [`impl-brief`](docs/playbooks/impl-brief.md) — generate a concrete implementation plan for phase tasks (optional)
+- [`impl-assist`](docs/playbooks/impl-assist.md) — implement uncompleted phase tasks (optional)
 
 Different runtimes expose them differently:
 
-- **Claude Code**: slash commands (`/spec-init`, `/phase-init`, `/phase-gate`, `/spec-sync`, `/context-update`) defined under `.claude/skills/`.
+- **Claude Code**: slash commands (`/spec-init`, `/phase-init`, `/phase-gate`, `/spec-sync`, `/context-update`, `/impl-brief`, `/impl-assist`) defined under `.claude/skills/`.
 - **Codex**: slash commands defined under `plugins/sdd-workflow/`.
 - **Other runtimes**: follow the markdown procedure in `docs/playbooks/` manually.
 
@@ -115,7 +117,10 @@ The runtime wrappers are thin stubs — all workflow logic lives in `docs/playbo
 2.  spec-init         → drafts/resets/continues docs/SPEC.md (`--new` or `--continue`)
 3.  phase-init N      → creates docs/PHASE_N.md scaffold
 4.  Architect fills Contracts + Files sections
-5.  AI implements scope on feat/phase-N branch
+5.  Implement scope on feat/phase-N branch:
+    - Human developer works against the Scope checklist in PHASE_N.md
+    - Optional: `/impl-brief N [task-id|group]`  → generates Implementation Plan in PHASE_N_NOTES.md
+    - Optional: `/impl-assist N [task-id|group]` → agent implements uncompleted tasks
 6.  phase-gate N      → automated baseline
 7.  Architect manual verification → add unchecked items to Architect Review Notes
 8.  phase-gate N      → ✅ PASS only when all automated checks green AND review notes all checked off
@@ -126,6 +131,36 @@ The runtime wrappers are thin stubs — all workflow logic lives in `docs/playbo
 13. phase-init N+1    → repeat
 ```
 
+### Implementation Path Guide
+
+**a. Agent-driven** — let the agent plan and implement:
+
+1. `/impl-brief N` (or `/impl-brief N [ID]` per task) — generates Implementation Plan
+2. Review the plans in `docs/PHASE_N_NOTES.md`
+3. `/impl-assist N` — agent implements all unchecked tasks and checks them off
+
+**b. Human-driven** — implement everything yourself:
+
+1. Optionally run `/impl-brief N [ID]` to get a reference plan before you start
+2. Implement each task against the Scope checklist in `docs/PHASE_N.md`
+3. Check off each task (`- [x]`) when done
+
+**c. Hybrid** — split tasks between human and agent:
+
+- For tasks the **agent** implements: `/impl-brief N [ID]` → review → `/impl-assist N [ID]`
+- For tasks **you** implement: work against the checklist; check off when done
+- Honour `Depends on:` order — a dependency task must be complete before its dependent starts
+
+**File ownership in `docs/PHASE_N_NOTES.md`:**
+
+| Section | Owner | Agent behaviour |
+|---------|-------|-----------------|
+| `### Implementation Plan` | Agent (impl-brief) | Written once; re-run with `--force` to overwrite |
+| `### Decisions & Notes` | Human only | Never read or written by any agent |
+
+`impl-assist` verifies completion by reading actual code — a checked checkbox is a hint, not
+proof. Running impl-assist on an already-implemented task is safe; it will skip.
+
 ## Document Roles
 
 | File | Role | Change cadence |
@@ -134,7 +169,8 @@ The runtime wrappers are thin stubs — all workflow logic lives in `docs/playbo
 | `docs/CONTEXT.md` | Living technical contract: DB schema, endpoints, types, env vars | After each phase via `context-update` |
 | `docs/STATE.md` | Operational tracker: phase statuses, blockers, feedback | Continuously |
 | `docs/CHANGELOG.md` | History of spec/architecture changes | On every SPEC.md or CONTEXT.md change |
-| `docs/PHASE_XX.md` | Mini-spec for AI: scope, files, contracts, gate checks | Created per phase via `phase-init` |
+| `docs/PHASE_XX.md` | Mini-spec: scope checklist (with task IDs), files, contracts, gate checks | Created per phase via `phase-init` |
+| `docs/PHASE_XX_NOTES.md` | Per-task implementation guide: how each task was built, decisions made | During and after implementation |
 | `docs/STACK.md` | Stack-specific setup, commands, layout, Gate Commands dispatch | When the stack changes |
 | `docs/DECISIONS.md` | ADR log | On each architecturally meaningful decision |
 | `docs/KNOWN_GOTCHAS.md` | Recurring pitfall log | When a new trap is discovered |

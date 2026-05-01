@@ -90,15 +90,15 @@ skill is idempotent and only overwrites versioned files (wrappers, playbooks).
 ```
 sdd-workflow/
 ├── docs/
-│   ├── playbooks/           # CANONICAL workflow procedures (6 files)
+│   ├── playbooks/           # CANONICAL workflow procedures (8 files)
 │   └── CONTRIBUTING.md
 ├── project-files/           # Source for everything /workflow-init copies into a target project
 │   ├── AGENTS.md
 │   ├── CLAUDE.md
 │   ├── .mcp.json
-│   ├── .claude/skills/<5>/SKILL.md
+│   ├── .claude/skills/<7>/SKILL.md
 │   ├── plugins/sdd-workflow/
-│   ├── docs/playbooks/<6>.md  (mirror of docs/playbooks/)
+│   ├── docs/playbooks/<8>.md  (mirror of docs/playbooks/)
 │   └── docs/templates/<8 doc scaffolds>
 ├── .claude/skills/workflow-init/SKILL.md
 ├── plugins/sdd-workflow/      # Bootstrap-only Codex plugin (just /workflow-init)
