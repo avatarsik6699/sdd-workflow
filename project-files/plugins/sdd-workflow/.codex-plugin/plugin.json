@@ -16,7 +16,10 @@
     "context7",
     "impl-brief",
     "impl-assist",
-    "human-implementation"
+    "human-implementation",
+    "project-sync",
+    "github-projects",
+    "kanban"
   ],
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",

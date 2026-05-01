@@ -16,6 +16,7 @@ This plugin makes the project's SDD workflow visible to Codex as native:
 - `/spec-sync`
 - `/impl-brief` — generate a concrete implementation plan for phase tasks (optional)
 - `/impl-assist` — implement uncompleted phase tasks (optional)
+- `/project-sync` — sync phase tasks to GitHub Issues + GitHub Projects board (optional, requires `gh` CLI + GitHub remote)
 
 The plugin mirrors the Claude Code wrappers in `.claude/skills/`. Both runtimes point at the same canonical playbooks under `docs/playbooks/`.
 

@@ -7,9 +7,9 @@ This file adds only Claude-specific notes.
 ## Scope reminder
 
 This repo IS the workflow bundle. Do not run `/spec-init`, `/phase-init`, `/phase-gate`,
-`/spec-sync`, `/context-update`, `/impl-brief`, or `/impl-assist` against this repo's `docs/` —
-those skills are shipped to integrated projects. The only skill that runs from here is
-`/workflow-init <target-path>`, and the target must be **outside** this repo.
+`/spec-sync`, `/context-update`, `/impl-brief`, `/impl-assist`, or `/project-sync` against this
+repo's `docs/` — those skills are shipped to integrated projects. The only skill that runs from
+here is `/workflow-init <target-path>`, and the target must be **outside** this repo.
 
 ## Skills shipped from this repo
 
@@ -23,6 +23,7 @@ those skills are shipped to integrated projects. The only skill that runs from h
 | `/context-update` (in integrated projects) | [`docs/playbooks/context-update.md`](docs/playbooks/context-update.md) |
 | `/impl-brief` (in integrated projects) | [`docs/playbooks/impl-brief.md`](docs/playbooks/impl-brief.md) |
 | `/impl-assist` (in integrated projects) | [`docs/playbooks/impl-assist.md`](docs/playbooks/impl-assist.md) |
+| `/project-sync` (in integrated projects) | [`docs/playbooks/project-sync.md`](docs/playbooks/project-sync.md) |
 
 Wrappers under `.claude/skills/` and `project-files/.claude/skills/` are intentionally thin —
 they just point at the playbooks above. To change workflow behavior, edit the playbook, never the

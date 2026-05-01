@@ -18,7 +18,7 @@ There is no CLI, no language runtime, no test suite. All artefacts are markdown,
 
 | Concern | Authoritative file |
 |---------|--------------------|
-| Workflow procedure (any of the 6 skills) | `docs/playbooks/<name>.md` |
+| Workflow procedure (any integrated-project skill) | `docs/playbooks/<name>.md` |
 | Agent rules shipped to integrated projects | `project-files/AGENTS.md` |
 | Doc scaffolds shipped to integrated projects | `project-files/docs/templates/<name>.md` |
 | Claude Code wrapper for an integrated-project skill | `project-files/.claude/skills/<name>/SKILL.md` |
@@ -30,9 +30,10 @@ If you find logic in a wrapper, push it to the playbook and shrink the wrapper b
 
 ## Don't run derived-project skills against this repo
 
-`/spec-init`, `/phase-init`, `/phase-gate`, `/spec-sync`, `/context-update` are intended for
-integrated projects. Do not invoke them against this repo's `docs/`. The only skill that runs from
-here is `/workflow-init`, and it must be run with a target path pointing **outside** this repo.
+`/spec-init`, `/phase-init`, `/phase-gate`, `/spec-sync`, `/context-update`, `/impl-brief`,
+`/impl-assist`, `/project-sync` are intended for integrated projects. Do not invoke them against
+this repo's `docs/`. The only skill that runs from here is `/workflow-init`, and it must be run
+with a target path pointing **outside** this repo.
 
 ## Editing rules
 
@@ -90,15 +91,15 @@ skill is idempotent and only overwrites versioned files (wrappers, playbooks).
 ```
 sdd-workflow/
 ├── docs/
-│   ├── playbooks/           # CANONICAL workflow procedures (8 files)
+│   ├── playbooks/           # CANONICAL workflow procedures (9 files)
 │   └── CONTRIBUTING.md
 ├── project-files/           # Source for everything /workflow-init copies into a target project
 │   ├── AGENTS.md
 │   ├── CLAUDE.md
 │   ├── .mcp.json
-│   ├── .claude/skills/<7>/SKILL.md
+│   ├── .claude/skills/<8>/SKILL.md
 │   ├── plugins/sdd-workflow/
-│   ├── docs/playbooks/<8>.md  (mirror of docs/playbooks/)
+│   ├── docs/playbooks/<9>.md  (mirror of docs/playbooks/)
 │   └── docs/templates/<8 doc scaffolds>
 ├── .claude/skills/workflow-init/SKILL.md
 ├── plugins/sdd-workflow/      # Bootstrap-only Codex plugin (just /workflow-init)
