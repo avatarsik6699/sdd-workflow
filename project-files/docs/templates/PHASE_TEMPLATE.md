@@ -34,10 +34,19 @@
 
 ## Scope
 
-<!-- Group tasks by area (Backend / Frontend / Infra / Data, etc.) or list flat — match what fits
-     this project. Each item is one checkbox. -->
+<!-- Group tasks by area (Backend / Frontend / Infra / Data, etc.).
+     ID scheme: B=Backend · F=Frontend · I=Infra · D=Data · T=other (ungrouped)
+     Each item: `ID` description — _Depends on:_ ID, ID or —
+     IDs are stable after assignment — never renumber. Mark removed tasks as ~~BN~~ (removed). -->
 
-- [ ] [task]
+### Backend
+- [ ] `B1` [task] — _Depends on:_ —
+
+### Frontend
+- [ ] `F1` [task] — _Depends on:_ —
+
+### Infra
+- [ ] `I1` [task] — _Depends on:_ —
 
 <!-- Test execution is governed by `## Gate Checks` below + docs/STACK.md § Gate Commands.
      Do not duplicate that list here. -->
@@ -91,6 +100,9 @@ None
 
 ## Gate Checks
 
+> **Before running gate:** confirm all Scope checkboxes are checked (or explicitly deferred in
+> Architect Review Notes). Unchecked items appear in the gate report as a warning, not a hard block.
+
 Run `/phase-gate [XX]` before committing.
 
 `/phase-gate` returns full PASS only when:
@@ -136,6 +148,8 @@ feat(phase-[XX]): [short description — what was built, not how]
 
 ## Post-Phase Checklist
 
+- [ ] All Scope checkboxes checked (or deferred in Architect Review Notes)
+- [ ] `docs/PHASE_[XX]_NOTES.md` complete — Implementation Plans filled, key decisions recorded
 - [ ] All automated gate checks green
 - [ ] All architect review notes resolved
 - [ ] `docs/CONTEXT.md` updated — run `/context-update [XX]`

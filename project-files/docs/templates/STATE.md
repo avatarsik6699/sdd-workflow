@@ -2,18 +2,20 @@
 
 > **Status legend**
 > `⏳ pending` — not started
-> `🔄 in-progress` — AI is actively implementing
+> `🔄 in-progress` — implementation in progress (human, agent, or both)
 > `✅ done` — gate checks passed, committed, merged
 > `⚠️ NEEDS_REVIEW` — spec changed, phase scope may be stale
 > `❌ blocked` — cannot proceed, see Blockers section
+>
+> **Impl By:** `👤 human` · `🤖 agent` · `🤝 hybrid` · `—` (not yet started)
 
 ---
 
 ## Phase Status
 
-| Phase    | Status     | Tag    | Gate | Expert | Notes |
-|----------|------------|--------|------|--------|-------|
-| -        | -          | -      | -    | -      | No phases yet — run `/phase-init 01` |
+| Phase    | Status     | Tag    | Gate | Impl By | Notes |
+|----------|------------|--------|------|---------|-------|
+| -        | -          | -      | -    | -       | No phases yet — run `/phase-init 01` |
 
 <!-- Add new rows here via /phase-init N -->
 

@@ -15,6 +15,7 @@ thin stubs — every workflow detail lives in this file.
 ## Required reads
 
 - `docs/PHASE_TEMPLATE.md`
+- `docs/PHASE_NOTES_TEMPLATE.md`
 - `docs/CONTEXT.md` — note current `_meta.version` and `phase_completed`
 - `docs/STATE.md` — find the previous phase status
 - `docs/SPEC.md` — read all sections, especially §3 (data model), §4 (API/backend), §5 (frontend), §6 (infra), §8 (phases plan)
@@ -51,7 +52,16 @@ If skipped: omit the `## Design References` section from the phase doc entirely.
 
 ### 4. Extract scope and contracts from `docs/SPEC.md`
 
-**Scope** (from §8): phase title and all scope items.
+**Scope** (from §8): phase title and all scope items. After extracting items, assign task IDs:
+
+1. Group items into: Backend, Frontend, Infra, Data, or ungrouped (Other).
+2. Assign IDs sequentially within each group: `B1`, `B2`… for Backend; `F1`, `F2`… for Frontend;
+   `I1`… for Infra; `D1`… for Data; `T1`… for ungrouped items.
+3. Detect logical dependencies within the phase: migrations before models, models before routes,
+   routes before tests. Express as `_Depends on:_ B1` or `—` for none.
+4. Format each item: `- [ ] \`B2\` [description] — _Depends on:_ \`B1\``
+
+IDs are stable once assigned. Never renumber. If a task is removed later, mark it `~~BN~~ (removed)`.
 
 **New DB tables / columns** (from §3): tables first introduced in this phase, matched against the scope description. Paste verbatim blocks. Do not include tables that already existed.
 
@@ -76,28 +86,54 @@ Copy `docs/PHASE_TEMPLATE.md` and substitute placeholders:
 | `v0.[XX].0` | Tag |
 | `PHASE_[XX-1]` | Previous phase |
 | `[VERSION]` | Current `_meta.version` from `docs/CONTEXT.md` |
-| Scope checkboxes | Items from §8 as `- [ ] [item]` |
+| Scope checkboxes | Items from §8 with task IDs assigned in step 4: `- [ ] \`B1\` [item] — _Depends on:_ —` |
 | Files | Explicit list from step 3 |
 | Contracts | Extracted sections from step 3 |
 | Atomic Commit Message | `feat(phase-[XX]): [phase title lowercased] — [2–4 key deliverables]`, under 72 chars |
 
 Use `[TODO: verify]` only for details genuinely absent from SPEC.md (e.g. a smoke-test response body example). Do not invent data.
 
-### 6. Append the phase row to `docs/STATE.md`
+### 6. Create `docs/PHASE_XX_NOTES.md`
+
+Copy `docs/PHASE_NOTES_TEMPLATE.md` and generate one task block per Scope item assigned in step 4:
+
+```markdown
+## [ID] — [task description]
+**Depends on:** [IDs or —]
+
+### Implementation Plan
+<!-- Run `/impl-brief [XX] [ID]` to generate. -->
+
+### Decisions & Notes
+<!-- Human writes here. Never overwritten by agent. -->
+```
+
+Save as `docs/PHASE_[XX]_NOTES.md`. Update the `_Generated:` date. Leave all sections empty —
+this is a stub. The Implementation Plans are populated later by `/impl-brief`.
+
+### 7. Append the phase row to `docs/STATE.md`
 
 Add to the Phase Status table:
 
 ```
-| PHASE_[XX] | ⏳ pending | v0.[XX].0 | ⬜ | - | [Phase Title] |
+| PHASE_[XX] | ⏳ pending | v0.[XX].0 | ⬜ | — | [Phase Title] |
 ```
 
-### 7. Report
+### 8. Report
 
 ```
 ## phase-init complete
 
 Created: docs/PHASE_[XX].md
+Created: docs/PHASE_[XX]_NOTES.md (stub — run /impl-brief [XX] to populate Implementation Plans)
 STATE.md: PHASE_[XX] row added (⏳ pending)
+
+Scope tasks assigned:
+- Backend:  [B1, B2, … or "none"]
+- Frontend: [F1, F2, … or "none"]
+- Infra:    [I1, … or "none"]
+- Data:     [D1, … or "none"]
+- Other:    [T1, … or "none"]
 
 Contracts filled from SPEC.md:
 - DB tables: [list or "none"]
@@ -107,7 +143,8 @@ Contracts filled from SPEC.md:
 - Env vars: [count]
 - Files: [count]
 
-Before handing to the implementing agent, verify any remaining [TODO: verify] markers and the Gate Checks smoke-test expected response.
+Before implementation, verify any remaining [TODO: verify] markers and the Gate Checks smoke-test expected response.
+Run /impl-brief [XX] (or /impl-brief [XX] [ID]) to generate concrete Implementation Plans.
 
 CONTEXT.md version at time of init: [version]
 ```
@@ -120,5 +157,6 @@ CONTEXT.md version at time of init: [version]
 
 ## Done when
 
-- `docs/PHASE_XX.md` exists and is filled from `docs/SPEC.md`.
+- `docs/PHASE_XX.md` exists and is filled from `docs/SPEC.md` with task IDs in Scope.
+- `docs/PHASE_XX_NOTES.md` exists as a stub with one block per Scope task.
 - `docs/STATE.md` contains the new pending row.

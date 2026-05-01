@@ -6,10 +6,10 @@ There are two audiences:
 
 1. **The `sdd-workflow` repo itself.** Only one playbook is reachable from here:
    [workflow-init.md](./workflow-init.md). It describes how an agent integrates this workflow into
-   a target project. The other five playbooks are shipped to the target project by `workflow-init`
+   a target project. The other playbooks are shipped to the target project by `workflow-init`
    and become reachable there.
 2. **An integrated project.** After `/workflow-init` has run, the target project gets a copy of all
-   six playbooks under `docs/playbooks/`, plus thin wrapper skills/commands under `.claude/skills/`
+   eight playbooks under `docs/playbooks/`, plus thin wrapper skills/commands under `.claude/skills/`
    and `plugins/sdd-workflow/`. Those wrappers do not contain workflow logic — they point here.
 
 To change a workflow, edit only the playbook file. The wrappers stay one-line stubs.
@@ -18,10 +18,12 @@ To change a workflow, edit only the playbook file. The wrappers stay one-line st
 
 - [workflow-init.md](./workflow-init.md) — integrate the SDD workflow into a target project (new or existing)
 - [spec-init.md](./spec-init.md) — draft or refresh `docs/SPEC.md` from a product brief
-- [phase-init.md](./phase-init.md) — scaffold a new `docs/PHASE_XX.md`
+- [phase-init.md](./phase-init.md) — scaffold a new `docs/PHASE_XX.md` + `docs/PHASE_XX_NOTES.md`
 - [phase-gate.md](./phase-gate.md) — validate a phase before commit (commands live in `docs/STACK.md`)
 - [spec-sync.md](./spec-sync.md) — propagate a `docs/SPEC.md` change
 - [context-update.md](./context-update.md) — finalize a completed phase
+- [impl-brief.md](./impl-brief.md) — generate a concrete implementation plan for phase tasks (optional)
+- [impl-assist.md](./impl-assist.md) — implement uncompleted phase tasks (optional)
 
 ## Stack-specific commands
 
