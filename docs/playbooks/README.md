@@ -9,7 +9,7 @@ There are two audiences:
    a target project. The other playbooks are shipped to the target project by `workflow-init`
    and become reachable there.
 2. **An integrated project.** After `/workflow-init` has run, the target project gets a copy of all
-   eight playbooks under `docs/playbooks/`, plus thin wrapper skills/commands under `.claude/skills/`
+   nine playbooks under `docs/playbooks/`, plus thin wrapper skills/commands under `.claude/skills/`
    and `plugins/sdd-workflow/`. Those wrappers do not contain workflow logic — they point here.
 
 To change a workflow, edit only the playbook file. The wrappers stay one-line stubs.
@@ -24,6 +24,7 @@ To change a workflow, edit only the playbook file. The wrappers stay one-line st
 - [context-update.md](./context-update.md) — finalize a completed phase
 - [impl-brief.md](./impl-brief.md) — generate a concrete implementation plan for phase tasks (optional)
 - [impl-assist.md](./impl-assist.md) — implement uncompleted phase tasks (optional)
+- [project-sync.md](./project-sync.md) — sync phase tasks to GitHub Issues + GitHub Projects board (optional, GitHub-specific)
 
 ## Stack-specific commands
 

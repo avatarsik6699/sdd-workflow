@@ -101,10 +101,11 @@ The SDD workflows are defined in `docs/playbooks/`:
 - [`context-update`](docs/playbooks/context-update.md) — finalize a completed phase
 - [`impl-brief`](docs/playbooks/impl-brief.md) — generate a concrete implementation plan for phase tasks (optional)
 - [`impl-assist`](docs/playbooks/impl-assist.md) — implement uncompleted phase tasks (optional)
+- [`project-sync`](docs/playbooks/project-sync.md) — sync phase tasks to GitHub Issues + GitHub Projects board (optional; requires `gh` CLI and a GitHub remote)
 
 Different runtimes expose them differently:
 
-- **Claude Code**: slash commands (`/spec-init`, `/phase-init`, `/phase-gate`, `/spec-sync`, `/context-update`, `/impl-brief`, `/impl-assist`) defined under `.claude/skills/`.
+- **Claude Code**: slash commands (`/spec-init`, `/phase-init`, `/phase-gate`, `/spec-sync`, `/context-update`, `/impl-brief`, `/impl-assist`, `/project-sync`) defined under `.claude/skills/`.
 - **Codex**: slash commands defined under `plugins/sdd-workflow/`.
 - **Other runtimes**: follow the markdown procedure in `docs/playbooks/` manually.
 
