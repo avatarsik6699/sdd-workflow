@@ -10,6 +10,8 @@ This file only adds Claude-specific items.
 |---------|-------------|----------------|
 | `/spec-init [--new\|--continue] [project brief]` | Draft, reset, or continue `docs/SPEC.md` from high-level requirements | [docs/playbooks/spec-init.md](docs/playbooks/spec-init.md) |
 | `/phase-init [N]` | Scaffold the next `docs/PHASE_XX.md` from SPEC | [docs/playbooks/phase-init.md](docs/playbooks/phase-init.md) |
+| `/impl-brief [N] [ID\|group]` | Before implementing: generate a concrete Implementation Plan per task in `docs/PHASE_N_NOTES.md` | [docs/playbooks/impl-brief.md](docs/playbooks/impl-brief.md) |
+| `/impl-assist [N] [ID\|group]` | Have the agent implement uncompleted tasks (reads plan from `PHASE_N_NOTES.md`) | [docs/playbooks/impl-assist.md](docs/playbooks/impl-assist.md) |
 | `/phase-gate [N]` | Validate a phase before committing | [docs/playbooks/phase-gate.md](docs/playbooks/phase-gate.md) |
 | `/spec-sync [description]` | Immediately after editing `docs/SPEC.md` | [docs/playbooks/spec-sync.md](docs/playbooks/spec-sync.md) |
 | `/context-update [N]` | After the gate passes | [docs/playbooks/context-update.md](docs/playbooks/context-update.md) |
