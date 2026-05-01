@@ -6,6 +6,8 @@
 > place where the workflow learns what to actually run. The `phase-gate` playbook reads
 > [`Gate Commands`](#gate-commands) below verbatim — keep that table accurate.
 
+> **Stack status:** [STACK_STATUS]
+
 ---
 
 ## Stack
