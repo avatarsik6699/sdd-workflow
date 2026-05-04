@@ -15,11 +15,40 @@ It defines a documentation contract, a repeatable phase loop, and clear gate cri
 
 ## Getting started
 
+### 1. Clone the workflow bundle
+
 ```bash
 git clone https://github.com/avatarsik6699/sdd-workflow.git /tmp/sdd-workflow
-cd /tmp/sdd-workflow
-# Run in your agent session:
-/workflow-init /path/to/your-project
+```
+
+### 2. Bootstrap into your project
+
+Open an AI agent session with `/tmp/sdd-workflow` as the working directory, then pick one option:
+
+**Option A — slash command** (Claude Code CLI or Codex with the plugin loaded)
+
+```
+/workflow-init /absolute/path/to/your-project
+```
+
+**Option B — bootstrap prompt** (any AI: claude.ai chat, Cursor, Copilot, etc.)
+
+Paste the following into the chat:
+
+```
+Read docs/playbooks/workflow-init.md and execute the workflow-init procedure.
+Target project path: /absolute/path/to/your-project
+```
+
+> **Why two options?** `/workflow-init` is a slash command that auto-loads only when the agent
+> runtime reads `.claude/skills/workflow-init/SKILL.md` at session start — this happens reliably
+> in Claude Code CLI but may not happen in chat interfaces or other tools. The bootstrap prompt
+> reads the same canonical playbook directly and produces the same result without relying on
+> skill registration.
+
+### 3. Enter your target project and run the delivery loop
+
+```bash
 cd /path/to/your-project
 ```
 
@@ -69,6 +98,12 @@ This structure keeps scope controlled and gives contributors a consistent way to
 - [.claude/skills/workflow-init/](.claude/skills/workflow-init/) — bootstrap wrapper for this repo.
 - [plugins/sdd-workflow/](plugins/sdd-workflow/) — bootstrap plugin for Codex.
 - [AGENTS.md](AGENTS.md) — rules for working on this repository.
+
+> **Note on visible skills:** from this repository only `/workflow-init` is registered as a
+> slash command. The 9 workflow skills (`/spec-init`, `/phase-init`, `/phase-explore`, etc.)
+> live in `project-files/.claude/skills/` — they are templates copied into target projects by
+> `/workflow-init`, and become available only when an agent session is opened inside that target
+> project.
 
 ## License
 
