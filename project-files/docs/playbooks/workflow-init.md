@@ -155,7 +155,6 @@ If `docs/STACK.md` already existed, do **not** edit it. Print a clear message:
 
 ### 7. Stamp metadata
 
-- In `docs/STATE.md`, fill the `Change Log` table's first row date with today.
 - In `docs/CHANGELOG.md`, fill `[DATE]` and `[OWNER]` in the seed entry.
 - In `docs/CONTEXT.md`, fill `captured_at` with today's date.
 

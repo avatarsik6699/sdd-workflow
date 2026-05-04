@@ -1,9 +1,7 @@
 {
   "_meta": {
-    "version": "v1.0",
     "format": "SDD CONTEXT.md — Single Source of Truth for AI agent",
-    "update_rule": "Bump version on schema/API/type changes. Use /context-update skill after each phase.",
-    "version_scheme": "patch (v1.0→v1.1) = additive only; minor (v1.1→v1.2) = breaking change"
+    "update_rule": "Append contracts after each phase via /context-update. Never remove existing entries."
   },
 
   "captured_at": "[DATE]",

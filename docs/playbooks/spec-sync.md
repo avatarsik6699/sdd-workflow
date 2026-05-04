@@ -11,7 +11,7 @@ This document is the single source of truth for the `spec-sync` workflow. Runtim
 ## Required reads
 
 - `docs/SPEC.md` (updated)
-- `docs/CONTEXT.md` — note `_meta.version`
+- `docs/CONTEXT.md` — current contracts (models, endpoints, types, env vars)
 - `docs/STATE.md` — current phase statuses
 - `docs/CHANGELOG.md`
 - All `docs/PHASE_*.md` files
@@ -34,18 +34,19 @@ Identify which domains changed:
 
 For each changed domain, list affected phase files with precise reasons. **False-positive rule**: if unsure whether a phase is affected, mark it `⚠️ NEEDS_REVIEW`. A false positive is safer than a missed dependency.
 
-### 2. Determine version bump
+### 2. Determine if contracts changed
 
-- Additive contract change (new tables / endpoints / types / env vars): **patch bump** (`v1.1` → `v1.2`).
-- Breaking contract change (renamed, removed, retyped): **minor bump** (`v1.2` → `v2.0`).
-- No contract change (docs-only, non-functional only): **no bump** — use current version in the CHANGELOG entry heading.
+- **Contracts changed**: new / renamed / removed tables, endpoints, types, or env vars → proceed
+  with steps 3 and 4.
+- **No contract change** (docs-only, non-functional only): skip steps 3 and 4 and note "no
+  contract change" in the report.
 
-### 3. Prepend to `docs/CHANGELOG.md`
+### 3. Prepend to `docs/CHANGELOG.md` (only if contracts changed)
 
 Immediately after the `# CHANGELOG` heading and its intro lines, before any previous entry:
 
 ```markdown
-## [new or current CONTEXT version] — [YYYY-MM-DD] — [Short Title]
+## [YYYY-MM-DD] — [Short Title]
 
 **Type**: spec-change
 **Author**: AI (spec-sync)
@@ -59,7 +60,6 @@ Immediately after the `# CHANGELOG` heading and its intro lines, before any prev
 - (or: None — change has no impact on existing phases)
 
 ### Contract Updates
-- `CONTEXT.md` bumped from `vX.Y` to `vX.Z` (if applicable)
 - [renamed endpoints, new tables, etc.]
 - (or: No contract change — docs-only)
 
@@ -67,14 +67,12 @@ Immediately after the `# CHANGELOG` heading and its intro lines, before any prev
 [Any relevant trade-offs, decisions, or context.]
 ```
 
-### 4. Update `docs/CONTEXT.md` (only if contract changed)
+### 4. Update `docs/CONTEXT.md` (only if contracts changed)
 
-1. Increment `_meta.version` per step 2.
-2. Update `captured_at` to today (`YYYY-MM-DD`).
-3. Edit only the sections that changed: `core_models`, `endpoints_active`, `db_schema.tables`, `env_config.keys`.
-4. Update `notes` with one sentence about the spec change.
+1. Edit only the sections that changed: `core_models`, `endpoints_active`, `db_schema.tables`, `env_config.keys`.
+2. Update `notes` with one sentence about the spec change.
 
-If no contract change: leave CONTEXT.md untouched; note "no contract change" in the CHANGELOG entry.
+If no contract change: leave CONTEXT.md untouched.
 
 ### 5. Mark affected phases in `docs/STATE.md`
 
@@ -106,8 +104,8 @@ For each affected phase:
 ```
 ## spec-sync complete
 
-CHANGELOG.md: new entry added (v[old] → v[new] / no bump)
-CONTEXT.md:   [bumped to vX.Z / unchanged] — [reason]
+CHANGELOG.md: new entry added / no entry needed — [reason]
+CONTEXT.md:   contracts updated / unchanged — [reason]
 STATE.md:     phases marked ⚠️ NEEDS_REVIEW — [list / none]
 PHASE files patched: [list / none]
 Unaffected phases:   [list / none]

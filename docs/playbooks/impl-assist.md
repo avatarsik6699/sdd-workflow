@@ -88,6 +88,15 @@ After all target tasks are implemented:
 - Re-read the implemented files and confirm the contracts from `docs/PHASE_XX.md` are satisfied.
 - If any contract is unsatisfied, fix it before reporting success.
 
+### 6a. Record new gotchas (if any)
+
+If during implementation you encountered a non-obvious constraint, workaround, or failure mode
+that could affect future tasks or phases:
+
+- Add an entry to `docs/KNOWN_GOTCHAS.md` before writing the report.
+- Match the format of existing entries: Symptoms / Root cause / Fix / Agent protocol.
+- Skip this step if nothing novel was discovered — do not add redundant entries.
+
 ### 7. Report
 
 ```

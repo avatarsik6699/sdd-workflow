@@ -11,7 +11,7 @@ This document is the single source of truth for the `context-update` workflow. R
 ## Required reads
 
 - `docs/PHASE_XX.md` — focus on the **Contracts** section
-- `docs/CONTEXT.md` — note `_meta.version`
+- `docs/CONTEXT.md` — current contracts (models, endpoints, schema, env vars)
 - `docs/STATE.md` — current phase statuses
 - `docs/CHANGELOG.md`
 
@@ -36,33 +36,29 @@ From the **Contracts** section, extract:
 
 If every Contracts subsection is `None`: no version bump needed. Skip to step 6 (STATE.md update).
 
-### 3. Determine version bump
+### 3. Determine if contracts changed
 
-- **No bump**: all subsections `None` (docs-only phase).
-- **Patch** (`v1.0` → `v1.1`): additive only — new tables, endpoints, types, or env vars; nothing removed or renamed.
-- **Minor** (`v1.1` → `v1.2`): breaking — renamed endpoints, removed fields, changed request/response shape, column type changes.
-
-State which bump applies and why before editing.
+- If every Contracts subsection is `None`: no contracts changed → skip steps 4 and 5; go directly
+  to step 6 (STATE.md update).
+- Otherwise: contracts changed → proceed with steps 4 and 5.
 
 ### 4. Update `docs/CONTEXT.md`
 
 Surgical edits:
 
-1. Increment `_meta.version` (if bump).
-2. Update `captured_at` to today (`YYYY-MM-DD`).
-3. Set `phase_completed` to the phase number (e.g. `"01"`).
-4. Set `phase_in_progress` to next phase number or `null`.
-5. **Append** to `core_models` — do NOT remove existing.
-6. **Append** to `endpoints_active` — do NOT remove existing.
-7. **Append** to `db_schema.tables`.
-8. Update `db_schema.current_head` to the latest alembic revision name (if backend-bearing).
-9. **Append** to `env_config.keys`.
-10. Update `notes`: one sentence, "Phase XX complete. [What was added]."
+1. Set `phase_completed` to the phase number (e.g. `"01"`).
+2. Set `phase_in_progress` to next phase number or `null`.
+3. **Append** to `core_models` — do NOT remove existing.
+4. **Append** to `endpoints_active` — do NOT remove existing.
+5. **Append** to `db_schema.tables`.
+6. Update `db_schema.current_head` to the latest alembic revision name (if backend-bearing).
+7. **Append** to `env_config.keys`.
+8. Update `notes`: one sentence, "Phase XX complete. [What was added]."
 
-### 5. Prepend to `docs/CHANGELOG.md` (only if version bumped)
+### 5. Prepend to `docs/CHANGELOG.md` (only if contracts changed)
 
 ```markdown
-## [new version] — [YYYY-MM-DD] — Phase [XX] complete
+## [YYYY-MM-DD] — Phase [XX] complete
 
 **Type**: phase-completion
 **Author**: AI (context-update)
@@ -75,27 +71,25 @@ Surgical edits:
 - None (additive change)
 
 ### Contract Updates
-- `CONTEXT.md` bumped from `vX.Y` to `vX.Z`
 - [new tables, endpoints, env vars]
 
 ### Notes
 [Notable decisions made during this phase.]
 ```
 
-If no version bump: no CHANGELOG entry.
+If no contracts changed: no CHANGELOG entry.
 
 ### 6. Update `docs/STATE.md`
 
 1. Change the `PHASE_[XX]` row status to `✅ done`.
 2. Change its Gate column from `⬜` to `✅`.
-3. Add a Change Log row: `| [YYYY-MM-DD] | PHASE_[XX] completed — CONTEXT.md bumped to vX.Z |` (or `— no bump` if applicable).
 
 ### 7. Report
 
 ```
 ## context-update complete — PHASE_[XX]
 
-CONTEXT.md:  bumped vX.Y → vX.Z / no bump — [reason]
+CONTEXT.md:  contracts appended / no change — [reason]
 STATE.md:    PHASE_[XX] marked ✅ done
 CHANGELOG.md: entry added / no entry needed
 
@@ -107,7 +101,6 @@ Next: /phase-init [XX+1] to scaffold the next phase.
 - Never remove existing entries from CONTEXT.md arrays — append only.
 - If the Contracts section is incomplete, stop and ask the architect to fill it in.
 - Do not commit.
-- `_meta.version` in CONTEXT.md is the source of truth; CHANGELOG entries derive from it.
 
 ## Done when
 
