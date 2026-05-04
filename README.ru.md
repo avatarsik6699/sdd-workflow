@@ -15,11 +15,40 @@
 
 ## Начало работы
 
+### 1. Клонировать bundle workflow
+
 ```bash
 git clone https://github.com/avatarsik6699/sdd-workflow.git /tmp/sdd-workflow
-cd /tmp/sdd-workflow
-# Запускать в сессии агента:
-/workflow-init /path/to/your-project
+```
+
+### 2. Запустить bootstrap в целевой проект
+
+Откройте сессию агента с рабочей директорией `/tmp/sdd-workflow` и выберите один из вариантов:
+
+**Вариант А — slash-команда** (Claude Code CLI или Codex с загруженным плагином)
+
+```
+/workflow-init /absolute/path/to/your-project
+```
+
+**Вариант Б — bootstrap-промпт** (любой ИИ: claude.ai, Cursor, Copilot и т.д.)
+
+Вставьте в чат следующий текст:
+
+```
+Read docs/playbooks/workflow-init.md and execute the workflow-init procedure.
+Target project path: /absolute/path/to/your-project
+```
+
+> **Почему два варианта?** `/workflow-init` — это slash-команда, которая загружается
+> автоматически только когда агент читает `.claude/skills/workflow-init/SKILL.md` при старте
+> сессии. В Claude Code CLI это происходит надёжно, но в чат-интерфейсах и других инструментах —
+> нет. Bootstrap-промпт читает тот же канонический playbook напрямую и даёт тот же результат
+> без зависимости от регистрации skill.
+
+### 3. Перейти в целевой проект и запустить цикл поставки
+
+```bash
 cd /path/to/your-project
 ```
 
@@ -69,6 +98,12 @@ cd /path/to/your-project
 - [.claude/skills/workflow-init/](.claude/skills/workflow-init/) — bootstrap-обёртка для этого репозитория.
 - [plugins/sdd-workflow/](plugins/sdd-workflow/) — bootstrap-плагин для Codex.
 - [AGENTS.md](AGENTS.md) — правила работы с этим репозиторием.
+
+> **Примечание о видимых skills:** из этого репозитория зарегистрирована только команда
+> `/workflow-init`. Остальные 9 skills (`/spec-init`, `/phase-init`, `/phase-explore` и т.д.)
+> находятся в `project-files/.claude/skills/` — это шаблоны, которые `/workflow-init` копирует
+> в целевой проект. Они становятся доступны только после открытия сессии агента внутри целевого
+> проекта.
 
 ## Лицензия
 

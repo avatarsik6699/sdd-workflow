@@ -4,9 +4,26 @@
 
 ```bash
 git clone https://github.com/avatarsik6699/sdd-workflow.git /tmp/sdd-workflow
-cd /tmp/sdd-workflow
-/workflow-init /path/to/target-project
 ```
+
+Open an AI agent session with `/tmp/sdd-workflow` as the working directory, then choose one of these options:
+
+**Option A — slash command** (Claude Code CLI or Codex with the plugin loaded)
+
+```
+/workflow-init /absolute/path/to/target-project
+```
+
+**Option B — bootstrap prompt** (any AI: claude.ai chat, Cursor, Copilot, etc.)
+
+```
+Read docs/playbooks/workflow-init.md and execute the workflow-init procedure.
+Target project path: /absolute/path/to/target-project
+```
+
+> The `/workflow-init` slash command auto-loads only when the agent runtime reads
+> `.claude/skills/workflow-init/SKILL.md` at session start. The bootstrap prompt achieves the
+> same result in any AI that has filesystem access to the cloned repo.
 
 ## 2. Enter your target project
 
@@ -22,7 +39,7 @@ cd /path/to/target-project
 2. `/phase-init 01` — scaffold `docs/PHASE_01.md` + `docs/PHASE_01_NOTES.md` with task IDs
 3. **Implement the scope** (see implementation paths below)
 4. `/phase-gate 01` — validate automated checks + architect review notes
-5. `/context-update 01` — mark phase done, bump CONTEXT.md version
+5. `/context-update 01` — mark phase done, sync CONTEXT.md and CHANGELOG.md
 
 ### Optional: before-implementation planning
 
