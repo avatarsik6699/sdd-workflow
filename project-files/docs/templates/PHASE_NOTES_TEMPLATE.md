@@ -5,6 +5,7 @@
   HOW it was built → this file         (plans, decisions, rationale)
 
   Ownership rules:
+  - ### Exploration          — written by agent (/phase-explore). Optional; skip for simple tasks.
   - ### Implementation Plan  — written by agent (/impl-brief). Agent may update only this section.
   - ### Decisions & Notes    — written by human. NEVER overwritten by agent.
 
@@ -21,6 +22,11 @@ _Phase:_ `[XX]` · _Generated:_ `[DATE]`
 
 ## [B1] — [task name]
 **Depends on:** —
+
+### Exploration
+<!-- Optional. Run `/phase-explore [XX] B1` to populate.
+     When filled, impl-brief uses this instead of re-reading the codebase from scratch.
+     Leave empty for simple additive tasks. -->
 
 ### Implementation Plan
 <!-- Run `/impl-brief [XX] B1` to generate. Output includes: Done when / Follows pattern / steps. -->

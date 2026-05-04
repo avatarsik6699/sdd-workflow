@@ -46,7 +46,16 @@ thin stubs — every workflow detail lives in this file.
 
 ### 2. Read context
 
-For each target task:
+**Check for existing exploration first**: For each target task, check whether `### Exploration`
+in `docs/PHASE_XX_NOTES.md` is non-empty.
+
+- If non-empty: read the exploration findings (patterns, constraints, risks) and use them as the
+  primary codebase context for this task. Skip re-reading source files already documented in the
+  exploration. If the verdict line contains `needs-clarification`, stop immediately, report the
+  open question, and do not generate a plan for this task.
+- If empty or absent: proceed with the inline reads below.
+
+For each target task (where exploration was absent or incomplete):
 - Extract the task description and `Depends on:` field from `docs/PHASE_XX.md` § Scope.
 - Extract relevant contracts from `docs/PHASE_XX.md` (schemas, endpoints, types, env vars) that
   apply to this task.

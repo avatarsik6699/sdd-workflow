@@ -19,7 +19,8 @@
     "human-implementation",
     "project-sync",
     "github-projects",
-    "kanban"
+    "kanban",
+    "phase-explore"
   ],
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",

@@ -10,6 +10,7 @@ This file only adds Claude-specific items.
 |---------|-------------|----------------|
 | `/spec-init [--new\|--continue] [project brief]` | Draft, reset, or continue `docs/SPEC.md` from high-level requirements | [docs/playbooks/spec-init.md](docs/playbooks/spec-init.md) |
 | `/phase-init [N]` | Scaffold the next `docs/PHASE_XX.md` from SPEC | [docs/playbooks/phase-init.md](docs/playbooks/phase-init.md) |
+| `/phase-explore [N] [ID\|group]` | Before planning: explore codebase in task context, capture patterns/constraints/risks | [docs/playbooks/phase-explore.md](docs/playbooks/phase-explore.md) |
 | `/impl-brief [N] [ID\|group]` | Before implementing: generate a concrete Implementation Plan per task in `docs/PHASE_N_NOTES.md` | [docs/playbooks/impl-brief.md](docs/playbooks/impl-brief.md) |
 | `/impl-assist [N] [ID\|group]` | Have the agent implement uncompleted tasks (reads plan from `PHASE_N_NOTES.md`) | [docs/playbooks/impl-assist.md](docs/playbooks/impl-assist.md) |
 | `/project-sync [XX] [--dry-run\|--setup]` | Sync phase task checkboxes to GitHub Issues + GitHub Projects Kanban board (requires `gh` CLI + GitHub remote) | [docs/playbooks/project-sync.md](docs/playbooks/project-sync.md) |

@@ -6,7 +6,7 @@ This file adds only Claude-specific notes.
 
 ## Scope reminder
 
-This repo IS the workflow bundle. Do not run `/spec-init`, `/phase-init`, `/phase-gate`,
+This repo IS the workflow bundle. Do not run `/spec-init`, `/phase-init`, `/phase-explore`, `/phase-gate`,
 `/spec-sync`, `/context-update`, `/impl-brief`, `/impl-assist`, or `/project-sync` against this
 repo's `docs/` — those skills are shipped to integrated projects. The only skill that runs from
 here is `/workflow-init <target-path>`, and the target must be **outside** this repo.
@@ -18,6 +18,7 @@ here is `/workflow-init <target-path>`, and the target must be **outside** this 
 | `/workflow-init` | [`docs/playbooks/workflow-init.md`](docs/playbooks/workflow-init.md) |
 | `/spec-init` (in integrated projects) | [`docs/playbooks/spec-init.md`](docs/playbooks/spec-init.md) |
 | `/phase-init` (in integrated projects) | [`docs/playbooks/phase-init.md`](docs/playbooks/phase-init.md) |
+| `/phase-explore` (in integrated projects) | [`docs/playbooks/phase-explore.md`](docs/playbooks/phase-explore.md) |
 | `/phase-gate` (in integrated projects) | [`docs/playbooks/phase-gate.md`](docs/playbooks/phase-gate.md) |
 | `/spec-sync` (in integrated projects) | [`docs/playbooks/spec-sync.md`](docs/playbooks/spec-sync.md) |
 | `/context-update` (in integrated projects) | [`docs/playbooks/context-update.md`](docs/playbooks/context-update.md) |
