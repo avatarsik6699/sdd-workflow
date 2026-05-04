@@ -30,8 +30,8 @@ If you find logic in a wrapper, push it to the playbook and shrink the wrapper b
 
 ## Don't run derived-project skills against this repo
 
-`/spec-init`, `/phase-init`, `/phase-gate`, `/spec-sync`, `/context-update`, `/impl-brief`,
-`/impl-assist`, `/project-sync` are intended for integrated projects. Do not invoke them against
+`/spec-init`, `/phase-init`, `/phase-explore`, `/phase-gate`, `/spec-sync`, `/context-update`,
+`/impl-brief`, `/impl-assist`, `/project-sync` are intended for integrated projects. Do not invoke them against
 this repo's `docs/`. The only skill that runs from here is `/workflow-init`, and it must be run
 with a target path pointing **outside** this repo.
 
@@ -91,15 +91,15 @@ skill is idempotent and only overwrites versioned files (wrappers, playbooks).
 ```
 sdd-workflow/
 ├── docs/
-│   ├── playbooks/           # CANONICAL workflow procedures (9 files)
+│   ├── playbooks/           # CANONICAL workflow procedures (10 files)
 │   └── CONTRIBUTING.md
 ├── project-files/           # Source for everything /workflow-init copies into a target project
 │   ├── AGENTS.md
 │   ├── CLAUDE.md
 │   ├── .mcp.json
-│   ├── .claude/skills/<8>/SKILL.md
+│   ├── .claude/skills/<9>/SKILL.md
 │   ├── plugins/sdd-workflow/
-│   ├── docs/playbooks/<9>.md  (mirror of docs/playbooks/)
+│   ├── docs/playbooks/<10>.md  (mirror of docs/playbooks/)
 │   └── docs/templates/<8 doc scaffolds>
 ├── .claude/skills/workflow-init/SKILL.md
 ├── plugins/sdd-workflow/      # Bootstrap-only Codex plugin (just /workflow-init)

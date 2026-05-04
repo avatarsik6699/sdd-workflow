@@ -100,6 +100,7 @@ The SDD workflows are defined in `docs/playbooks/`:
 - [`spec-sync`](docs/playbooks/spec-sync.md) — propagate a `docs/SPEC.md` change
 - [`context-update`](docs/playbooks/context-update.md) — finalize a completed phase
 - [`impl-brief`](docs/playbooks/impl-brief.md) — generate a concrete implementation plan for phase tasks (optional)
+- [`phase-explore`](docs/playbooks/phase-explore.md) — explore the codebase for task context before planning (optional)
 - [`impl-assist`](docs/playbooks/impl-assist.md) — implement uncompleted phase tasks (optional)
 - [`project-sync`](docs/playbooks/project-sync.md) — sync phase tasks to GitHub Issues + GitHub Projects board (optional; requires `gh` CLI and a GitHub remote)
 
@@ -120,6 +121,8 @@ The runtime wrappers are thin stubs — all workflow logic lives in `docs/playbo
 4.  Architect fills Contracts + Files sections
 5.  Implement scope on feat/phase-N branch:
     - Human developer works against the Scope checklist in PHASE_N.md
+    - Optional: `/phase-explore N [task-id|group]` → explores codebase in task context, writes
+      Exploration findings to PHASE_N_NOTES.md; emits verdict `ready` or `needs-clarification`
     - Optional: `/impl-brief N [task-id|group]`  → generates Implementation Plan in PHASE_N_NOTES.md
     - Optional: `/impl-assist N [task-id|group]` → agent implements uncompleted tasks
 6.  phase-gate N      → automated baseline
@@ -156,6 +159,7 @@ The runtime wrappers are thin stubs — all workflow logic lives in `docs/playbo
 
 | Section | Owner | Agent behaviour |
 |---------|-------|-----------------|
+| `### Exploration` | Agent (phase-explore) | Written once; re-run with `--force` to overwrite |
 | `### Implementation Plan` | Agent (impl-brief) | Written once; re-run with `--force` to overwrite |
 | `### Decisions & Notes` | Human only | Never read or written by any agent |
 
