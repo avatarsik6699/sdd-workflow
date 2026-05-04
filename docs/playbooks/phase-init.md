@@ -85,7 +85,6 @@ Copy `docs/PHASE_TEMPLATE.md` and substitute placeholders:
 | `[Phase Title]` | From SPEC.md §8 |
 | `v0.[XX].0` | Tag |
 | `PHASE_[XX-1]` | Previous phase |
-| `[VERSION]` | Current `_meta.version` from `docs/CONTEXT.md` |
 | Scope checkboxes | Items from §8 with task IDs assigned in step 4: `- [ ] \`B1\` [item] — _Depends on:_ —` |
 | Files | Explicit list from step 3 |
 | Contracts | Extracted sections from step 3 |
@@ -145,8 +144,6 @@ Contracts filled from SPEC.md:
 
 Before implementation, verify any remaining [TODO: verify] markers and the Gate Checks smoke-test expected response.
 Run /impl-brief [XX] (or /impl-brief [XX] [ID]) to generate concrete Implementation Plans.
-
-CONTEXT.md version at time of init: [version]
 ```
 
 ## Rules

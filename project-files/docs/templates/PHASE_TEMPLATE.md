@@ -11,7 +11,6 @@
 | Status | `⏳ pending` |
 | Tag | `v0.[XX].0` |
 | Depends on | PHASE_[XX-1] gate passing |
-| CONTEXT.md version | `[VERSION — snapshot at time of writing, e.g. v1.1]` |
 
 ---
 
@@ -154,6 +153,6 @@ feat(phase-[XX]): [short description — what was built, not how]
 - [ ] All architect review notes resolved
 - [ ] `docs/CONTEXT.md` updated — run `/context-update [XX]`
 - [ ] `docs/STATE.md` phase row updated to `✅ done`
-- [ ] `docs/CHANGELOG.md` entry added (if CONTEXT.md version bumped)
+- [ ] `docs/CHANGELOG.md` entry added (if contracts changed)
 - [ ] Committed atomically on `feat/phase-[XX]` branch
 - [ ] Tag created after merge to develop: `git tag -a v0.[XX].0 -m "Phase [XX]: [title]"`

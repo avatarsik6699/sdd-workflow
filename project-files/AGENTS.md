@@ -80,15 +80,6 @@ When `docs/SPEC.md` is modified:
 3. **Review** all changes before committing.
 4. **Do not implement** any phase marked `⚠️ NEEDS_REVIEW` until resolved.
 
-## CONTEXT.md Version Rules
-
-- **Format**: `vMAJOR.MINOR` (e.g. `v1.2`).
-- **Patch bump** (`v1.0` → `v1.1`): additive only — new endpoints, models, env vars.
-- **Minor bump** (`v1.1` → `v1.2`): breaking — renamed/removed endpoints, schema or type changes.
-- **No bump**: docs-only phase, zero contract changes.
-- Always update `captured_at` when the version changes.
-- `CONTEXT.md` is the Single Source of Truth for AI — never let it fall more than one phase behind.
-
 ## Workflow Playbooks
 
 The SDD workflows are defined in `docs/playbooks/`:
