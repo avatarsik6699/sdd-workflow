@@ -45,12 +45,3 @@ None
 
 <!-- Document here if a phase was rolled back or a migration reversed. -->
 
----
-
-## Change Log
-
-| Date   | Event |
-|--------|-------|
-| [DATE] | Project initialized with SDD workflow |
-
-<!-- Add entries: [date]: PHASE_N completed / spec changed / blocker resolved -->
