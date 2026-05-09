@@ -10,7 +10,8 @@
   - ### Decisions & Notes    — written by human. NEVER overwritten by agent.
 
   Sync rule: task IDs (B1, F1, I1 …) must match the Scope checklist in PHASE_[XX].md.
-  To add stubs for tasks added manually to PHASE_[XX].md, run /impl-brief [XX] for the new ID.
+  To add an unplanned task discovered mid-phase, run /phase-add-task [XX] "description" — it
+  assigns the next ID, derives contracts, and generates explore + impl-brief automatically.
   To mark a removed task: prefix its heading with ~~, e.g. ## ~~B3~~ (removed). Do not delete.
 -->
 

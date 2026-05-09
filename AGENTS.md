@@ -31,7 +31,7 @@ If you find logic in a wrapper, push it to the playbook and shrink the wrapper b
 ## Don't run derived-project skills against this repo
 
 `/spec-init`, `/phase-init`, `/phase-explore`, `/phase-gate`, `/spec-sync`, `/context-update`,
-`/impl-brief`, `/impl-assist`, `/project-sync` are intended for integrated projects. Do not invoke them against
+`/impl-brief`, `/impl-assist`, `/phase-add-task`, `/project-sync` are intended for integrated projects. Do not invoke them against
 this repo's `docs/`. The only skill that runs from here is `/workflow-init`, and it must be run
 with a target path pointing **outside** this repo.
 

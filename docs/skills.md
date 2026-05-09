@@ -22,6 +22,38 @@
 - Assigns task IDs (`B1`, `F1`, `I1`, `D1`…) with `Depends on:` chains.
 - Use when: you are preparing the next implementation slice.
 
+### `/phase-explore`
+
+- Purpose: explore the codebase in the context of phase tasks and record findings in
+  `### Exploration` sections of `docs/PHASE_XX_NOTES.md`.
+- Input:
+  - `/phase-explore [XX]` — full phase (all tasks)
+  - `/phase-explore [XX] [ID]` — single task, e.g. `B3`
+  - `/phase-explore [XX] [group]` — group prefix: `backend`, `frontend`, `infra`, `data`
+  - `--force` — overwrite existing Exploration
+- Output: filled `### Exploration` blocks with: *Relevant patterns*, *Constraints discovered*,
+  *Spec/contract gaps*, *Risk areas*, and a verdict (`ready` or `needs-clarification: [question]`).
+- Use when: before `/impl-brief` for non-trivial tasks that touch unfamiliar code or have
+  cross-cutting concerns. Skip for simple additive tasks with a clear analogue.
+- Rules: never writes to `### Implementation Plan` or `### Decisions & Notes`; never modifies
+  `PHASE_XX.md`, `SPEC.md`, or `CONTEXT.md`; stops if verdict is `needs-clarification`.
+
+### `/phase-add-task`
+
+- Purpose: add an unplanned task to an in-progress phase from a one-line description.
+  Handles ID assignment, contract derivation, scope and notes updates, exploration, and planning.
+- Input:
+  - `/phase-add-task [XX] "description"` — infer group and contracts automatically
+  - `--group backend|frontend|infra|data` — override inferred group
+  - `--skip-explore` — skip the phase-explore step
+  - `--skip-brief` — skip the impl-brief step
+- Output: updated `PHASE_XX.md` (new task + any contracts), updated `PHASE_XX_NOTES.md`
+  (stub block), filled `### Exploration` and `### Implementation Plan`.
+- Use when: you discover a required task during implementation that was not in the original
+  phase scope. Provide a short description — the skill infers everything else.
+- Rules: never modifies `SPEC.md` or `CONTEXT.md`; never renumbers existing IDs; never writes
+  to `### Decisions & Notes`; warns when contracts are significant enough to warrant `/spec-sync`.
+
 ### `/phase-gate`
 
 - Purpose: run configured checks and completion criteria (commands from `docs/STACK.md`).
