@@ -43,15 +43,29 @@ cd /path/to/target-project
 
 ### Optional: before-implementation planning
 
-Before step 3, generate concrete per-task plans:
+Before step 3, explore the codebase per task and generate concrete plans:
 
 ```
-/impl-brief 01           # all tasks in phase 01
+/phase-explore 01        # explore all tasks (records patterns, constraints, risks)
+/phase-explore 01 B3     # single task
+/impl-brief 01           # generate implementation plans for all tasks in phase 01
 /impl-brief 01 B3        # single task
 /impl-brief 01 backend   # all backend tasks
 ```
 
-Plans are written to `docs/PHASE_01_NOTES.md § Implementation Plan` and can be reviewed before any code is written.
+`/phase-explore` runs before `/impl-brief` for non-trivial tasks. Plans are written to
+`docs/PHASE_01_NOTES.md § Implementation Plan` and can be reviewed before any code is written.
+
+### Optional: add unplanned tasks mid-phase
+
+When you discover a task that was not in the original scope, describe it in one sentence:
+
+```
+/phase-add-task 01 "add filter by status to the user list endpoint"
+```
+
+The skill assigns the next task ID, derives any new contracts (DB columns, endpoints, types),
+updates `PHASE_01.md` and `PHASE_01_NOTES.md`, then runs explore + impl-brief automatically.
 
 ### Optional: agent-assisted implementation
 
@@ -84,9 +98,10 @@ Sync task checkboxes to GitHub Issues and a Projects v2 Kanban board:
 
 | Mode | Steps |
 | ---- | ----- |
-| **Agent-driven** | `/impl-brief 01` → review plans → `/impl-assist 01` |
+| **Agent-driven** | `/phase-explore 01` → `/impl-brief 01` → review plans → `/impl-assist 01` |
 | **Human-driven** | implement against scope checklist; check off tasks |
 | **Hybrid** | agent: `/impl-brief 01 [ID]` → `/impl-assist 01 [ID]`; human: work directly |
+| **Mid-phase discovery** | `/phase-add-task 01 "description"` → implement or `/impl-assist 01 [ID]` |
 
 ## Typical session
 
@@ -94,10 +109,12 @@ Sync task checkboxes to GitHub Issues and a Projects v2 Kanban board:
 /workflow-init /tmp/acme-app
 /spec-init "B2B dashboard with billing and RBAC"
 /phase-init 01
+/phase-explore 01 backend   # optional: explore before planning
 /impl-brief 01
 # review plans in docs/PHASE_01_NOTES.md
 /impl-assist 01 backend
 # implement frontend tasks yourself, check off as you go
+/phase-add-task 01 "add CSV export to user list"  # optional: unplanned task discovered mid-phase
 /phase-gate 01
 /context-update 01
 /project-sync           # optional: push to GitHub board

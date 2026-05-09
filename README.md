@@ -56,12 +56,14 @@ Initialize the workflow in your target project once, then run this delivery loop
 
 1. `/spec-init` — draft or refresh `docs/SPEC.md`
 2. `/phase-init 01` — scaffold `docs/PHASE_01.md` + per-task `docs/PHASE_01_NOTES.md`
-3. *(optional)* `/impl-brief 01` — generate concrete per-task implementation plans
-4. Implement the scoped phase (manually, via agent, or hybrid)
-5. *(optional)* `/impl-assist 01` — let the agent implement unchecked tasks
-6. `/phase-gate 01` — run checks and validate architect review notes
-7. `/context-update 01` — finalize the phase and sync context documents
-8. *(optional)* `/project-sync` — mirror task statuses to GitHub Issues + Projects Kanban board
+3. *(optional)* `/phase-explore 01` — explore codebase per task before planning; records patterns, constraints, and risks
+4. *(optional)* `/impl-brief 01` — generate concrete per-task implementation plans
+5. Implement the scoped phase (manually, via agent, or hybrid)
+6. *(optional)* `/phase-add-task 01 "description"` — add an unplanned task mid-phase; auto-assigns ID, derives contracts, plans
+7. *(optional)* `/impl-assist 01` — let the agent implement unchecked tasks
+8. `/phase-gate 01` — run checks and validate architect review notes
+9. `/context-update 01` — finalize the phase and sync context documents
+10. *(optional)* `/project-sync` — mirror task statuses to GitHub Issues + Projects Kanban board
 
 ## Workflow map
 
