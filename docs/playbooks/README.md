@@ -1,33 +1,18 @@
-# Workflow Playbooks
+# SDD Workflow Playbooks
 
-These files are the **canonical source of truth** for the SDD workflow procedures.
+These playbooks are the canonical source of truth for the workflow. Runtime wrappers under
+`.claude/skills/` and `plugins/sdd-workflow/` must stay thin and point here.
 
-There are two audiences:
+## Bootstrap
 
-1. **The `sdd-workflow` repo itself.** Only one playbook is reachable from here:
-   [workflow-init.md](./workflow-init.md). It describes how an agent integrates this workflow into
-   a target project. The other playbooks are shipped to the target project by `workflow-init`
-   and become reachable there.
-2. **An integrated project.** After `/workflow-init` has run, the target project gets a copy of all
-   nine playbooks under `docs/playbooks/`, plus thin wrapper skills/commands under `.claude/skills/`
-   and `plugins/sdd-workflow/`. Those wrappers do not contain workflow logic — they point here.
+- [workflow-init.md](./workflow-init.md) — integrate the workflow into a target project
 
-To change a workflow, edit only the playbook file. The wrappers stay one-line stubs.
+## Integrated-project workflow
 
-## Playbooks
-
-- [workflow-init.md](./workflow-init.md) — integrate the SDD workflow into a target project (new or existing)
-- [spec-init.md](./spec-init.md) — draft or refresh `docs/SPEC.md` from a product brief
-- [phase-init.md](./phase-init.md) — scaffold a new `docs/PHASE_XX.md` + `docs/PHASE_XX_NOTES.md`
-- [phase-gate.md](./phase-gate.md) — validate a phase before commit (commands live in `docs/STACK.md`)
-- [spec-sync.md](./spec-sync.md) — propagate a `docs/SPEC.md` change
-- [context-update.md](./context-update.md) — finalize a completed phase
-- [impl-brief.md](./impl-brief.md) — generate a concrete implementation plan for phase tasks (optional)
-- [impl-assist.md](./impl-assist.md) — implement uncompleted phase tasks (optional)
-- [project-sync.md](./project-sync.md) — sync phase tasks to GitHub Issues + GitHub Projects board (optional, GitHub-specific)
-
-## Stack-specific commands
-
-`phase-gate` reads its commands from `docs/STACK.md#gate-commands` in the integrated project.
-There is no global manifest, no CLI helper, and no template registry. When a project's stack
-changes, edit `docs/STACK.md` — the playbook stays untouched.
+- [spec-init.md](./spec-init.md) — draft or refresh `docs/SPEC.md`
+- [spec-sync.md](./spec-sync.md) — propagate approved spec changes into project memory
+- [phase-init.md](./phase-init.md) — scaffold `docs/PHASE_XX.md` and agent execution memory
+- [impl-assist.md](./impl-assist.md) — implement phase tasks through the agent execution loop
+- [impl-review-notes.md](./impl-review-notes.md) — fix unchecked Architect Review Notes
+- [phase-gate.md](./phase-gate.md) — validate gate commands and unresolved review notes
+- [context-update.md](./context-update.md) — finalize phase context after the gate passes

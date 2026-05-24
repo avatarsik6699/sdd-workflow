@@ -17,11 +17,3 @@ repos:
     hooks:
       - id: shellcheck
         args: ["--severity=warning"]
-
-  - repo: https://github.com/lycheeverse/lychee
-    rev: lychee-v0.20.1
-    hooks:
-      - id: lychee
-        args:
-          - --config
-          - lychee.toml

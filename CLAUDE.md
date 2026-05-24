@@ -2,30 +2,23 @@
 
 **Start here:** read [`AGENTS.md`](AGENTS.md). It is the source of truth for working on this repo.
 
-This file adds only Claude-specific notes.
-
 ## Scope reminder
 
-This repo IS the workflow bundle. Do not run `/spec-init`, `/phase-init`, `/phase-explore`, `/phase-gate`,
-`/spec-sync`, `/context-update`, `/impl-brief`, `/impl-assist`, or `/project-sync` against this
-repo's `docs/` — those skills are shipped to integrated projects. The only skill that runs from
-here is `/workflow-init <target-path>`, and the target must be **outside** this repo.
+This repo is the workflow bundle. Do not run integrated-project skills against this repo's `docs/`.
+Only `/workflow-init <target-path>` runs from here, and the target must be outside this repo.
 
 ## Skills shipped from this repo
 
 | Skill | Canonical playbook |
 |-------|--------------------|
 | `/workflow-init` | [`docs/playbooks/workflow-init.md`](docs/playbooks/workflow-init.md) |
-| `/spec-init` (in integrated projects) | [`docs/playbooks/spec-init.md`](docs/playbooks/spec-init.md) |
-| `/phase-init` (in integrated projects) | [`docs/playbooks/phase-init.md`](docs/playbooks/phase-init.md) |
-| `/phase-explore` (in integrated projects) | [`docs/playbooks/phase-explore.md`](docs/playbooks/phase-explore.md) |
-| `/phase-gate` (in integrated projects) | [`docs/playbooks/phase-gate.md`](docs/playbooks/phase-gate.md) |
-| `/spec-sync` (in integrated projects) | [`docs/playbooks/spec-sync.md`](docs/playbooks/spec-sync.md) |
-| `/context-update` (in integrated projects) | [`docs/playbooks/context-update.md`](docs/playbooks/context-update.md) |
-| `/impl-brief` (in integrated projects) | [`docs/playbooks/impl-brief.md`](docs/playbooks/impl-brief.md) |
-| `/impl-assist` (in integrated projects) | [`docs/playbooks/impl-assist.md`](docs/playbooks/impl-assist.md) |
-| `/project-sync` (in integrated projects) | [`docs/playbooks/project-sync.md`](docs/playbooks/project-sync.md) |
+| `/spec-init` (integrated projects) | [`docs/playbooks/spec-init.md`](docs/playbooks/spec-init.md) |
+| `/spec-sync` (integrated projects) | [`docs/playbooks/spec-sync.md`](docs/playbooks/spec-sync.md) |
+| `/phase-init` (integrated projects) | [`docs/playbooks/phase-init.md`](docs/playbooks/phase-init.md) |
+| `/impl-assist` (integrated projects) | [`docs/playbooks/impl-assist.md`](docs/playbooks/impl-assist.md) |
+| `/impl-review-notes` (integrated projects) | [`docs/playbooks/impl-review-notes.md`](docs/playbooks/impl-review-notes.md) |
+| `/phase-gate` (integrated projects) | [`docs/playbooks/phase-gate.md`](docs/playbooks/phase-gate.md) |
+| `/context-update` (integrated projects) | [`docs/playbooks/context-update.md`](docs/playbooks/context-update.md) |
 
-Wrappers under `.claude/skills/` and `project-files/.claude/skills/` are intentionally thin —
-they just point at the playbooks above. To change workflow behavior, edit the playbook, never the
-wrapper.
+Wrappers under `.claude/skills/` and `project-files/.claude/skills/` are intentionally thin.
+Change workflow behavior in the playbooks, then mirror them into `project-files/docs/playbooks/`.

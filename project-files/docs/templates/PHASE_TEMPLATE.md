@@ -128,10 +128,16 @@ If this phase needs a custom smoke target or other phase-specific note, record i
 
 ## Architect Review Notes
 
-Use this section after manual verification. Add one checkbox item per issue the architect wants
-fixed before the phase can close. Leave the item unchecked while it is still open. Check it off
-only after the fix is implemented and re-verified.
-If manual verification found nothing, keep the default checked line below.
+Use this section after manual product, UX, API, or workflow verification. This is the human-facing
+channel for post-implementation fixes.
+
+Add one unchecked checkbox per issue the agent must fix before the phase can close. Keep each item
+independently fixable and describe observed behavior plus expected behavior. If the fix may change
+SPEC/API/schema/security behavior, say so explicitly in the note.
+
+The agent resolves these items through `/impl-review-notes [XX]`. Leave an item unchecked while it
+is still open. Check it off only after the fix is implemented and re-verified. If manual
+verification found nothing, keep the default checked line below.
 
 - [x] No architect review issues recorded
 
@@ -148,7 +154,7 @@ feat(phase-[XX]): [short description — what was built, not how]
 ## Post-Phase Checklist
 
 - [ ] All Scope checkboxes checked (or deferred in Architect Review Notes)
-- [ ] `docs/PHASE_[XX]_NOTES.md` complete — Implementation Plans filled, key decisions recorded
+- [ ] `docs/PHASE_[XX]_NOTES.md` complete — agent execution memory recorded
 - [ ] All automated gate checks green
 - [ ] All architect review notes resolved
 - [ ] `docs/CONTEXT.md` updated — run `/context-update [XX]`

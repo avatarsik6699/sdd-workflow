@@ -1,6 +1,6 @@
 ---
 name: impl-assist
-description: Implement uncompleted phase tasks. Verifies completion by reading actual code, respects human Decisions & Notes, checks task dependencies, implements remaining work, and updates the Scope checklist. Use when a developer wants the agent to complete or fill in tasks.
+description: Implement phase tasks through the agent execution loop. Explores code, records PHASE_XX_NOTES.md execution memory, plans, implements, verifies, and updates the Scope checklist.
 metadata:
   priority: 5
   pathPatterns:
@@ -15,6 +15,7 @@ metadata:
       - "complete task"
       - "finish implementation"
       - "implement remaining"
+      - "agent execution"
     allOf:
       - [impl, assist]
       - [implement, task]
@@ -29,7 +30,7 @@ retrieval:
     - sdd impl assist
     - implement phase task
   intents:
-    - implement uncompleted phase tasks
+    - implement phase tasks through the agent execution loop
     - have agent complete remaining implementation
   entities:
     - PHASE_XX.md
@@ -38,4 +39,4 @@ retrieval:
 
 # impl-assist
 
-Execute the canonical playbook in [docs/playbooks/impl-assist.md](../../../../docs/playbooks/impl-assist.md). That file is the source of truth for dependency checks, completion verification, and the final report format.
+Execute the canonical playbook in [docs/playbooks/impl-assist.md](../../../../docs/playbooks/impl-assist.md). That file is the source of truth for dependency checks, execution memory, implementation, verification, and the final report format.
