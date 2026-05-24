@@ -1,133 +1,194 @@
 # impl-assist — Canonical Playbook
 
-Implement one or more uncompleted tasks from a phase, verify completion by reading actual code
-(not just checkbox state), and update the Scope checklist in `docs/PHASE_XX.md`.
+Implement one or more uncompleted tasks from a phase through a deterministic agent-only cycle:
+read the phase contract, explore the codebase, record execution memory, implement, verify, and
+update the Scope checklist only after the code satisfies the task contract.
 
 This document is the single source of truth for the `impl-assist` workflow.
 
-In an integrated project, runtime wrappers under `.claude/skills/impl-assist/SKILL.md` (Claude Code)
-and `plugins/sdd-workflow/{commands,skills}/impl-assist/…` (Codex) point here. The wrappers are
-thin stubs — every workflow detail lives in this file.
+In an integrated project, runtime wrappers under `.claude/skills/impl-assist/SKILL.md` (Claude
+Code) and `plugins/sdd-workflow/{commands,skills}/impl-assist/...` (Codex) point here. The wrappers
+are thin stubs — every workflow detail lives in this file.
 
 ## Input
 
-```
+```text
 /impl-assist [XX]                 — full phase (all unchecked tasks)
 /impl-assist [XX] [ID]            — single task, e.g. B3
 /impl-assist [XX] [group]         — group, e.g. backend | frontend | infra | data
-/impl-assist [XX] [ID] --force    — implement even if checkbox is checked
+/impl-assist [XX] [ID] --force    — revisit even if checkbox is checked
 ```
 
 - `XX` — zero-padded phase number
-- `ID` — task identifier from the Scope checklist (e.g. `B3`, `F1`)
-- Group names resolve to prefix: `backend`→`B*`, `frontend`→`F*`, `infra`→`I*`, `data`→`D*`
-- `--force` — implement even if the checkbox is checked (useful for re-implementation)
+- `ID` — task identifier from the Scope checklist, e.g. `B3`, `F1`
+- Group names resolve by prefix: `backend` -> `B*`, `frontend` -> `F*`, `infra` -> `I*`,
+  `data` -> `D*`, `other` -> `T*`
+- `--force` — include checked tasks and re-verify/rework them if needed
 
 ## Required reads
 
-- `docs/PHASE_XX.md` — scope checklist, contracts, `Depends on:` fields
-- `docs/PHASE_XX_NOTES.md` — Implementation Plan and Decisions & Notes for each task
-- `docs/CONTEXT.md` — current code state
-- `docs/STACK.md` — stack conventions, test commands, file layout
+- `docs/PHASE_XX.md` — scope checklist, contracts, files, dependencies, gate notes
+- `docs/PHASE_XX_NOTES.md` — agent-owned execution memory for this phase
+- `docs/CONTEXT.md` — current technical contract
+- `docs/STACK.md` — stack conventions, command rules, file layout, gate commands
 - `docs/KNOWN_GOTCHAS.md` — project pitfalls
-- Relevant source files — to verify current implementation state
+- Relevant source files — verify current implementation before editing
 
 ## Procedure
 
 ### 1. Validate input
 
-- If no phase number, ask: "Which phase? e.g. /impl-assist 01 B3"
-- Normalize phase number to two digits.
-- Resolve target task list from the input scope argument.
+- If no phase number, ask: "Which phase? e.g. /impl-assist 01 or /impl-assist 01 B3"
+- Normalize the phase number to two digits.
+- If `docs/PHASE_XX.md` does not exist, stop and report the missing file.
+- If `docs/PHASE_XX_NOTES.md` does not exist, create it from `docs/PHASE_NOTES_TEMPLATE.md` and
+  generate one task block per Scope item.
+- Resolve the target task list from the optional ID/group argument. Default to all unchecked tasks.
 
 ### 2. Dependency check
 
-For each target task: read its `Depends on:` field from `docs/PHASE_XX.md`.
-- If any declared dependency task is **unchecked** in the Scope checklist AND not in the current
-  target list: report the blocking dependency and skip the dependent task.
-  ```
-  ⚠ B3 blocked — depends on B2 (unchecked). Run /impl-assist [XX] B2 first, or include B2 in scope.
-  ```
-- Do not add dependency tasks to the implementation queue automatically — make it explicit.
+For each target task, read its `Depends on:` field from `docs/PHASE_XX.md`.
 
-### 3. Completion verification
+- If a dependency task is unchecked and not part of the current target list, skip the dependent
+  task and report it as blocked.
+- Do not silently add dependency tasks to the queue. The implementation scope must stay explicit.
+- Implement target tasks in dependency order when dependencies are included in the same run.
 
-For each target task (in dependency order — dependencies first):
+### 3. Prepare execution memory
 
-**Do not trust the checkbox alone.** Verify actual code state:
-- Identify the files declared or implied by the Implementation Plan in `docs/PHASE_XX_NOTES.md`.
-- If no Implementation Plan exists for this task, generate one inline using the same logic as
-  `impl-brief` (read contracts, context, existing code) before proceeding.
-- Read each relevant file. Check whether the contracts from `docs/PHASE_XX.md` are concretely
-  implemented: required functions/routes/components exist, schemas match, tests exist.
-- Determine status:
-  - **Implemented**: contracts satisfied in code → skip (unless `--force`).
-  - **Skeleton/partial**: file exists but implementation is incomplete → implement remaining parts.
-  - **Not started**: file absent or contract not implemented → implement in full.
+For every target task, ensure `docs/PHASE_XX_NOTES.md` has this block:
 
-### 4. Read Decisions & Notes
+```markdown
+## B1 — task name
 
-Before writing any code for a task: read its `### Decisions & Notes` section in
-`docs/PHASE_XX_NOTES.md`. If the human has documented decisions (alternative approaches chosen,
-constraints, deviations from the plan), honour those decisions over the Implementation Plan.
+**Status:** open
+**Depends on:** —
 
-### 5. Implement
+### Contract Snapshot
 
-For each task requiring implementation (skeleton or not-started status):
-- Follow the Implementation Plan from `docs/PHASE_XX_NOTES.md` (adjusted for Decisions & Notes).
-- Match the project's naming conventions, import style, and patterns observed in existing code.
-- Write tests alongside implementation code — do not treat them as a separate task.
-- After implementing each individual task: check off its checkbox in `docs/PHASE_XX.md`
-  (`- [ ]` → `- [x]`).
-- Commit atomically per task following the Atomic Commits rule in `AGENTS.md`:
-  `feat|fix|chore(phase-[XX]): [task ID] [short description]`
+### Exploration
 
-### 6. Post-implementation check
+### Plan
 
-After all target tasks are implemented:
-- Re-read the implemented files and confirm the contracts from `docs/PHASE_XX.md` are satisfied.
-- If any contract is unsatisfied, fix it before reporting success.
+### Implementation Log
 
-### 6a. Record new gotchas (if any)
+### Verification
 
-If during implementation you encountered a non-obvious constraint, workaround, or failure mode
-that could affect future tasks or phases:
-
-- Add an entry to `docs/KNOWN_GOTCHAS.md` before writing the report.
-- Match the format of existing entries: Symptoms / Root cause / Fix / Agent protocol.
-- Skip this step if nothing novel was discovered — do not add redundant entries.
-
-### 7. Report
-
+### Residual Risks
 ```
+
+Rules for this file:
+
+- It is agent-owned execution memory, not a human review document.
+- Update it before and after code changes so future agent sessions can resume safely.
+- Preserve existing useful execution history; append concise updates rather than erasing context.
+- Never write speculative claims. Record only inspected files, actual edits, commands run, and
+  explicit residual risks.
+
+### 4. Verify current implementation
+
+Before planning code changes for a task:
+
+1. Read the task contract from `docs/PHASE_XX.md`: scope item, dependencies, files, and relevant
+   Contracts subsections.
+2. Read any existing task block in `docs/PHASE_XX_NOTES.md`.
+3. Inspect the relevant source files and tests.
+4. Decide the current state:
+   - `implemented` — contract is satisfied in code; skip unless `--force`.
+   - `partial` — some implementation exists but misses contract details.
+   - `not-started` — required code/tests are absent.
+   - `blocked` — cannot proceed without clarification or missing dependency.
+
+Record a concise `### Contract Snapshot` and `### Exploration` entry before editing code.
+
+### 5. Safety check
+
+Stop and ask for architect confirmation before implementation if the task requires changing any of:
+
+- `docs/SPEC.md` behavior
+- persistent data schema beyond the phase contract
+- public API request/response contract beyond the phase contract
+- auth, authorization, secrets, or security behavior
+- cross-phase architecture assumptions
+
+Do not run `spec-sync`, `context-update`, or `phase-gate` automatically from this workflow.
+
+### 6. Plan
+
+For each task that is `partial` or `not-started`, write `### Plan` before editing code:
+
+- **Done when:** concrete completion condition
+- **Files:** exact paths expected to change
+- **Steps:** short ordered implementation steps
+- **Checks:** focused commands/tests to run
+
+The plan must stay inside the active phase contract. Do not implement future phase scope.
+
+### 7. Implement
+
+For each planned task:
+
+- Apply the smallest complete implementation that satisfies the contract.
+- Match existing project conventions and patterns observed during exploration.
+- Add or update focused tests when behavior is testable at reasonable cost.
+- If a non-obvious pitfall is discovered, update `docs/KNOWN_GOTCHAS.md`.
+- Record `### Implementation Log` with files changed and any intentional deviation from the plan.
+
+### 8. Verify and mark complete
+
+After implementing each task:
+
+1. Re-read the changed files and confirm the task contract is satisfied.
+2. Run the focused checks listed in `### Plan` when available.
+3. Record `### Verification` with command results. If a check was not run, record the reason.
+4. Record `### Residual Risks`; write `None` if none are known.
+5. Change the task status in `docs/PHASE_XX_NOTES.md` to `implemented`, `blocked`, or `skipped`.
+6. Check off the matching Scope item in `docs/PHASE_XX.md` only after verification succeeds or the
+   task is explicitly already implemented.
+
+Do not run the full phase gate. That is `/phase-gate`.
+
+### 9. Report
+
+```text
 ## impl-assist complete
 
 Phase: PHASE_[XX]
 Scope: [resolved task list]
 
 Implemented:
-  [ID] — [task name]: ✅ committed as [commit hash]
+  [ID] — [task name]: checked off in docs/PHASE_[XX].md
 
-Skipped (already implemented):
-  [ID] — [task name]
+Skipped:
+  [ID] — already implemented
 
-Blocked (dependency unchecked):
-  [ID] — [task name]: depends on [dep ID]
+Blocked:
+  [ID] — [reason]
 
-Next: run `/phase-gate [XX]` to validate the full phase.
+Checks:
+  [command] — PASS
+  [command] — not run ([reason])
+
+Next: manually verify the product, add any findings to Architect Review Notes, then run
+`/impl-review-notes [XX]` or `/phase-gate [XX]`.
 ```
 
 ## Rules
 
-- Never write to `### Decisions & Notes` sections in `docs/PHASE_XX_NOTES.md`.
-- Verify by code, not by checkbox. A checked box is a hint, not proof.
-- Honour `### Decisions & Notes` over `### Implementation Plan` when they conflict.
-- Do not implement tasks whose declared dependencies are unchecked (unless `--force`).
-- Do not run gate — that is a separate step.
-- Follow all rules in `AGENTS.md` (no hardcoded secrets, no push to main, atomic commits).
+- Treat `docs/PHASE_XX.md` as the source of truth for what to build.
+- Treat `docs/PHASE_XX_NOTES.md` as agent-owned execution memory.
+- Verify by reading actual code. A checked checkbox is a hint, not proof.
+- Do not wait for human approval after writing a plan unless the safety check triggers or the
+  phase explicitly requires confirmation.
+- Do not broaden scope beyond the active phase contract.
+- Do not run `/phase-gate`, `/context-update`, or `/spec-sync`.
+- Do not commit automatically.
+- Follow all rules in `AGENTS.md` and stack-specific rules in `docs/STACK.md`.
 
 ## Done when
 
-- All targeted tasks are either implemented (and committed) or explicitly reported as skipped/blocked.
-- All implemented tasks have their checkboxes checked in `docs/PHASE_XX.md`.
-- The report clearly lists every task outcome.
+- Every targeted task is implemented, skipped as already implemented, or reported as blocked.
+- Implemented tasks have Scope checkboxes checked in `docs/PHASE_XX.md`.
+- `docs/PHASE_XX_NOTES.md` records contract snapshot, exploration, plan, implementation log,
+  verification, and residual risks for each targeted task.
+- The final report lists checks run and remaining manual next steps.

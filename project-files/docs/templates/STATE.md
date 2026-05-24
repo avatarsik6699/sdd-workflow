@@ -2,12 +2,12 @@
 
 > **Status legend**
 > `⏳ pending` — not started
-> `🔄 in-progress` — implementation in progress (human, agent, or both)
+> `🔄 in-progress` — agent implementation in progress
 > `✅ done` — gate checks passed, committed, merged
 > `⚠️ NEEDS_REVIEW` — spec changed, phase scope may be stale
 > `❌ blocked` — cannot proceed, see Blockers section
 >
-> **Impl By:** `👤 human` · `🤖 agent` · `🤝 hybrid` · `—` (not yet started)
+> **Impl By:** `🤖 agent` · `—` (not yet started)
 
 ---
 

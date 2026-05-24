@@ -1,7 +1,7 @@
 {
   "name": "sdd-workflow",
   "version": "1.0.0",
-  "description": "Project-local SDD workflow plugin for spec drafting, phase initialization, gate checks, context updates, and spec synchronization.",
+  "description": "Project-local SDD workflow plugin for agent-only phase implementation, review-note fixes, gates, and contract sync.",
   "author": {
     "name": "Local Project Plugin"
   },
@@ -14,20 +14,16 @@
     "phase-init",
     "spec-sync",
     "context7",
-    "impl-brief",
     "impl-assist",
-    "human-implementation",
-    "project-sync",
-    "github-projects",
-    "kanban",
-    "phase-explore"
+    "impl-review-notes",
+    "agent-only"
   ],
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "SDD Workflow",
-    "shortDescription": "Phase workflow, gates, and contract sync for this repo",
-    "longDescription": "Workspace-local Codex plugin that exposes the project's SDD workflow as native Codex skills and slash commands, while also declaring project-local Context7 MCP expectations.",
+    "shortDescription": "Agent-only phase workflow, gates, and contract sync",
+    "longDescription": "Workspace-local Codex plugin that exposes the project's SDD workflow as native Codex skills and slash commands, while also declaring project-local docs MCP expectations.",
     "developerName": "Local Project",
     "category": "Coding",
     "capabilities": [
@@ -38,6 +34,8 @@
     "defaultPrompt": [
       "Draft SPEC.md from a high-level project brief",
       "Initialize the next project phase from SPEC.md",
+      "Implement scoped phase tasks through the agent execution loop",
+      "Fix unchecked Architect Review Notes",
       "Run the phase gate checks for the current phase",
       "Sync CONTEXT.md and STATE.md after a phase completes"
     ],

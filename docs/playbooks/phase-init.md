@@ -98,17 +98,28 @@ Copy `docs/PHASE_NOTES_TEMPLATE.md` and generate one task block per Scope item a
 
 ```markdown
 ## [ID] — [task description]
+
+**Status:** open
 **Depends on:** [IDs or —]
 
-### Implementation Plan
-<!-- Run `/impl-brief [XX] [ID]` to generate. -->
+### Contract Snapshot
 
-### Decisions & Notes
-<!-- Human writes here. Never overwritten by agent. -->
+### Exploration
+
+### Plan
+
+### Implementation Log
+
+### Verification
+
+### Residual Risks
+
+None
 ```
 
-Save as `docs/PHASE_[XX]_NOTES.md`. Update the `_Generated:` date. Leave all sections empty —
-this is a stub. The Implementation Plans are populated later by `/impl-brief`.
+Save as `docs/PHASE_[XX]_NOTES.md`. Update the `_Generated:` date. Leave execution sections empty
+except `Status`, `Depends on`, and `Residual Risks: None`. The file is agent-owned execution memory
+populated by `/impl-assist` and `/impl-review-notes`.
 
 ### 7. Append the phase row to `docs/STATE.md`
 
@@ -124,7 +135,7 @@ Add to the Phase Status table:
 ## phase-init complete
 
 Created: docs/PHASE_[XX].md
-Created: docs/PHASE_[XX]_NOTES.md (stub — run /impl-brief [XX] to populate Implementation Plans)
+Created: docs/PHASE_[XX]_NOTES.md (agent execution memory stub)
 STATE.md: PHASE_[XX] row added (⏳ pending)
 
 Scope tasks assigned:
@@ -143,7 +154,7 @@ Contracts filled from SPEC.md:
 - Files: [count]
 
 Before implementation, verify any remaining [TODO: verify] markers and the Gate Checks smoke-test expected response.
-Run /impl-brief [XX] (or /impl-brief [XX] [ID]) to generate concrete Implementation Plans.
+Run /impl-assist [XX] (or /impl-assist [XX] [ID]) to implement the phase through the agent execution loop.
 ```
 
 ## Rules

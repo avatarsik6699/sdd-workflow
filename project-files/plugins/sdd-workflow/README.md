@@ -1,49 +1,37 @@
 # SDD Workflow Codex Plugin
 
-This plugin makes the project's SDD workflow visible to Codex as native:
+This plugin exposes the project-local SDD workflow to Codex as native slash commands and skills.
+All workflow logic lives in `docs/playbooks/`; plugin files are thin wrappers.
 
-- skills under `skills/`
-- slash commands under `commands/`
-- project-local MCP expectations via `.mcp.json`
-- a reference Codex hook config in `hooks.json`
+## Commands
 
-## What this adds
-
-- `/spec-init`
-- `/phase-init`
-- `/phase-gate`
-- `/context-update`
-- `/spec-sync`
-- `/impl-brief` — generate a concrete implementation plan for phase tasks (optional)
-- `/impl-assist` — implement uncompleted phase tasks (optional)
-- `/project-sync` — sync phase tasks to GitHub Issues + GitHub Projects board (optional, requires `gh` CLI + GitHub remote)
-
-The plugin mirrors the Claude Code wrappers in `.claude/skills/`. Both runtimes point at the same canonical playbooks under `docs/playbooks/`.
+- `/spec-init` — draft or refresh `docs/SPEC.md`
+- `/spec-sync` — propagate approved spec changes
+- `/phase-init` — scaffold a phase contract and agent execution memory
+- `/impl-assist` — implement scoped phase tasks through the agent execution loop
+- `/impl-review-notes` — fix unchecked Architect Review Notes
+- `/phase-gate` — validate automated checks and unresolved review notes
+- `/context-update` — finalize completed phase memory
 
 ## Hooks
 
-The plugin-local [`hooks.json`](./hooks.json) is a reference policy for the workflow bundle. Current Codex plugin manifests do not load hooks directly — if your workspace uses project-scoped Codex hook config, point it at this file.
+The plugin-local [`hooks.json`](./hooks.json) is a reference policy for the workflow bundle. Current
+Codex plugin manifests do not load hooks directly; if your workspace uses project-scoped Codex hook
+config, point it at this file.
 
-The active hook only covers `PreToolUse` for `Bash` (it blocks dangerous commands via [`scripts/block-dangerous-bash.sh`](./scripts/block-dangerous-bash.sh)). Codex currently does not emit `Write`, `Edit`, or `MultiEdit` for `PostToolUse`, so format-on-write hooks cannot be implemented through the current hooks API.
+The active hook covers `PreToolUse` for `Bash` and blocks dangerous commands via
+[`scripts/block-dangerous-bash.sh`](./scripts/block-dangerous-bash.sh).
 
 ## Docs MCPs
 
 The plugin declares project-local docs MCP servers in [`.mcp.json`](./.mcp.json):
 
-- `context7` (third-party library/framework docs)
-- `openaiDeveloperDocs` (OpenAI platform/developer docs)
-
-Codex can also use global MCP entries, which remain the most reliable option when `context7-mcp` is not on PATH.
-
-Recommended docs lookup order:
-
-1. `context7` via MCP for third-party library/framework docs
-2. `openaiDeveloperDocs` via MCP for OpenAI platform/API docs
-3. `ctx7` CLI fallback
-4. Official docs only when MCP/CLI are unavailable
+- `context7` for third-party library/framework docs
+- `openaiDeveloperDocs` for OpenAI platform/developer docs
 
 See [`AGENTS.md`](../../AGENTS.md) at the project root for the full agent contract.
 
 ## Restart requirement
 
-After adding or changing plugin files, restart Codex in this workspace so the plugin, slash commands, and marketplace entry are reloaded.
+After adding or changing plugin files, restart Codex in this workspace so the plugin, slash
+commands, and marketplace entry are reloaded.
