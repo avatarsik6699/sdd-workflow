@@ -29,10 +29,9 @@ Wrappers are thin pointers to playbooks. Never duplicate workflow logic in a wra
 
 ## Do not run derived-project skills against this repo
 
-`/spec-init`, `/spec-sync`, `/phase-init`, `/impl-assist`, `/impl-review-notes`, `/phase-gate`, and
-`/context-update` are intended for integrated projects. Do not invoke them against this repo's
-`docs/`. The only skill that runs from here is `/workflow-init`, and its target path must be
-outside this repo.
+`/spec-init`, `/spec-sync`, `/phase-init`, `/impl-assist`, `/phase-gate`, and `/context-update` are
+intended for integrated projects. Do not invoke them against this repo's `docs/`. The only skill
+that runs from here is `/workflow-init`, and its target path must be outside this repo.
 
 ## Editing rules
 
@@ -40,9 +39,9 @@ outside this repo.
    `docs/playbooks/<name>.md`, then mirror it to `project-files/docs/playbooks/<name>.md`.
 2. **Keep integrated-project rules stack-agnostic.** Stack-specific assumptions belong in
    `project-files/docs/templates/STACK.md`, not `project-files/AGENTS.md`.
-3. **Do not invent document files.** The shipped doc set is fixed: `SPEC.md`, `STATE.md`,
-   `CHANGELOG.md`, `CONTEXT.md`, `STACK.md`, `PHASE_TEMPLATE.md`, `PHASE_XX.md`,
-   `PHASE_XX_NOTES.md`, `KNOWN_GOTCHAS.md`, `DECISIONS.md`.
+3. **Do not invent document files.** The shipped doc set is fixed: `SPEC.md`, `STATE.md`
+   (Phase Status + Current Contract + Project Log, merged), `STACK.md`, `PHASE_TEMPLATE.md`,
+   `PHASE_XX.md`, `KNOWN_GOTCHAS.md`.
 4. **No code dependencies.** The repo must remain installable by `git clone` alone. Do not add a
    `package.json`, `pyproject.toml`, `Cargo.toml`, or other build manifest.
 5. **No docs site.** Do not reintroduce hosted documentation, marketing docs, or generated
@@ -75,9 +74,9 @@ sdd-workflow/
 ├── project-files/                      # source tree copied by /workflow-init
 │   ├── AGENTS.md
 │   ├── CLAUDE.md
-│   ├── .claude/skills/<7>/SKILL.md
+│   ├── .claude/skills/<6>/SKILL.md
 │   ├── plugins/sdd-workflow/
-│   ├── docs/playbooks/<8>.md
+│   ├── docs/playbooks/<7>.md
 │   └── docs/templates/
 ├── .claude/skills/workflow-init/
 ├── plugins/sdd-workflow/               # bootstrap-only Codex plugin

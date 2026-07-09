@@ -15,7 +15,6 @@
     "spec-sync",
     "context7",
     "impl-assist",
-    "impl-review-notes",
     "agent-only"
   ],
   "skills": "./skills/",
@@ -35,9 +34,9 @@
       "Draft SPEC.md from a high-level project brief",
       "Initialize the next project phase from SPEC.md",
       "Implement scoped phase tasks through the agent execution loop",
-      "Fix unchecked Architect Review Notes",
+      "Fix unchecked Architect Review Notes via /impl-assist review",
       "Run the phase gate checks for the current phase",
-      "Sync CONTEXT.md and STATE.md after a phase completes"
+      "Sync STATE.md after a phase completes"
     ],
     "brandColor": "#0F766E"
   }

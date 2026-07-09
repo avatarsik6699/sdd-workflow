@@ -1,6 +1,6 @@
 ---
 name: spec-sync
-description: Run when docs/SPEC.md has changed. Propagates the change to CHANGELOG.md, STATE.md, CONTEXT.md, and affected PHASE_XX.md files following the SDD sync protocol. Prevents context drift.
+description: Run when docs/SPEC.md has changed. Propagates the change to docs/STATE.md (Current Contract, Phase Status, Project Log) and affected PHASE_XX.md files following the SDD sync protocol. Prevents context drift.
 allowed-tools: Read, Write, Edit, Glob, Bash
 argument-hint: "[brief description of what changed in SPEC.md]"
 ---

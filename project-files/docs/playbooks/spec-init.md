@@ -143,7 +143,7 @@ Next:
 
 ## Rules
 
-- Do not edit `docs/CONTEXT.md`, `docs/STATE.md`, or `docs/CHANGELOG.md` in this workflow.
+- Do not edit `docs/STATE.md` in this workflow.
 - Do not scaffold phase files here. `phase-init` owns phase scaffolding.
 - Do not commit.
 

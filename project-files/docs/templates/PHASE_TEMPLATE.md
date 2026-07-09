@@ -135,11 +135,22 @@ Add one unchecked checkbox per issue the agent must fix before the phase can clo
 independently fixable and describe observed behavior plus expected behavior. If the fix may change
 SPEC/API/schema/security behavior, say so explicitly in the note.
 
-The agent resolves these items through `/impl-review-notes [XX]`. Leave an item unchecked while it
+The agent resolves these items through `/impl-assist [XX] review`. Leave an item unchecked while it
 is still open. Check it off only after the fix is implemented and re-verified. If manual
 verification found nothing, keep the default checked line below.
 
 - [x] No architect review issues recorded
+
+---
+
+## Implementation Notes
+
+<!-- Optional. The agent adds a short bullet here only when something isn't already visible from
+     the code or commit history: an intentional deviation from the plan, a residual risk, a
+     rejected alternative. Leave empty when nothing needs recording — this is not a mandatory
+     per-task log. -->
+
+None
 
 ---
 
@@ -154,11 +165,8 @@ feat(phase-[XX]): [short description — what was built, not how]
 ## Post-Phase Checklist
 
 - [ ] All Scope checkboxes checked (or deferred in Architect Review Notes)
-- [ ] `docs/PHASE_[XX]_NOTES.md` complete — agent execution memory recorded
 - [ ] All automated gate checks green
 - [ ] All architect review notes resolved
-- [ ] `docs/CONTEXT.md` updated — run `/context-update [XX]`
-- [ ] `docs/STATE.md` phase row updated to `✅ done`
-- [ ] `docs/CHANGELOG.md` entry added (if contracts changed)
+- [ ] `docs/STATE.md` updated — run `/context-update [XX]`
 - [ ] Committed atomically on `feat/phase-[XX]` branch
 - [ ] Tag created after merge to develop: `git tag -a v0.[XX].0 -m "Phase [XX]: [title]"`

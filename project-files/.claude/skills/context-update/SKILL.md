@@ -1,6 +1,6 @@
 ---
 name: context-update
-description: Update docs/CONTEXT.md after a phase is completed. Reads the phase Contracts section, bumps the version if schema/API/types changed, updates STATE.md and CHANGELOG.md.
+description: Update docs/STATE.md after a phase is completed. Reads the phase Contracts section and updates the Current Contract, Phase Status, and Project Log.
 allowed-tools: Read, Write, Edit, Glob
 argument-hint: "[phase number, e.g. 01]"
 ---

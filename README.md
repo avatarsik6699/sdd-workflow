@@ -28,14 +28,13 @@ After installation, work from the target project repository.
 ```text
 1. /spec-init                         -> draft or refresh docs/SPEC.md
 2. architect approves SPEC.md
-3. /phase-init 01                     -> create phase contract and execution memory
+3. /phase-init 01                     -> create the phase contract
 4. /impl-assist 01                    -> agent implements scoped phase tasks
 5. architect manually verifies product behavior
 6. add unchecked Architect Review Notes if fixes are needed
-7. /impl-review-notes 01              -> agent fixes review notes
-8. repeat manual verification/fixes until clean
-9. /phase-gate 01                     -> run gate checks
-10. /context-update 01                -> finalize project memory
+7. /impl-assist 01 review             -> agent fixes review notes; repeat 5-7 until clean
+8. /phase-gate 01                     -> run gate checks
+9. /context-update 01                 -> finalize project memory
 ```
 
 ## Commands shipped to target projects
@@ -43,8 +42,7 @@ After installation, work from the target project repository.
 - `/spec-init`
 - `/spec-sync`
 - `/phase-init`
-- `/impl-assist`
-- `/impl-review-notes`
+- `/impl-assist` (Scope tasks by default, or `/impl-assist [XX] review` for Architect Review Notes)
 - `/phase-gate`
 - `/context-update`
 

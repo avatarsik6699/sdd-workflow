@@ -1,6 +1,6 @@
 ---
 name: phase-init
-description: Initialize a new SDD phase document from SPEC, CONTEXT, STATE, and PHASE_TEMPLATE. Use when the user wants to scaffold or refresh a PHASE_XX.md file.
+description: Initialize a new SDD phase document from SPEC, STATE, and PHASE_TEMPLATE. Use when the user wants to scaffold or refresh a PHASE_XX.md file.
 metadata:
   priority: 5
   pathPatterns:
@@ -8,7 +8,6 @@ metadata:
     - 'docs/PHASE_*.md'
     - 'docs/SPEC.md'
     - 'docs/STATE.md'
-    - 'docs/CONTEXT.md'
   promptSignals:
     phrases:
       - "phase init"

@@ -6,12 +6,12 @@ All workflow logic lives in `docs/playbooks/`; plugin files are thin wrappers.
 ## Commands
 
 - `/spec-init` — draft or refresh `docs/SPEC.md`
-- `/spec-sync` — propagate approved spec changes
-- `/phase-init` — scaffold a phase contract and agent execution memory
-- `/impl-assist` — implement scoped phase tasks through the agent execution loop
-- `/impl-review-notes` — fix unchecked Architect Review Notes
+- `/spec-sync` — propagate approved spec changes into `docs/STATE.md`
+- `/phase-init` — scaffold a phase contract
+- `/impl-assist` — implement scoped phase tasks (default) or fix unchecked Architect Review Notes
+  (`/impl-assist [XX] review`) through the same agent execution loop
 - `/phase-gate` — validate automated checks and unresolved review notes
-- `/context-update` — finalize completed phase memory
+- `/context-update` — finalize completed phase memory in `docs/STATE.md`
 
 ## Hooks
 
