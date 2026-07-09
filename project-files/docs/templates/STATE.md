@@ -3,7 +3,7 @@
 > **Single source of truth for project status, current contracts, and history.**
 > Replaces what used to be four separate files (`STATE.md`, `CONTEXT.md`, `CHANGELOG.md`,
 > `DECISIONS.md`). Updated by `/spec-sync` and `/context-update`.
-
+>
 > **Status legend**
 > `⏳ pending` — not started
 > `🔄 in-progress` — agent implementation in progress
