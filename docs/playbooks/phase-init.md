@@ -15,9 +15,7 @@ thin stubs — every workflow detail lives in this file.
 ## Required reads
 
 - `docs/PHASE_TEMPLATE.md`
-- `docs/PHASE_NOTES_TEMPLATE.md`
-- `docs/CONTEXT.md` — note current `_meta.version` and `phase_completed`
-- `docs/STATE.md` — find the previous phase status
+- `docs/STATE.md` — note § Current Contract (`Phase completed`, `Phase in progress`) and find the previous phase status in § Phase Status
 - `docs/SPEC.md` — read all sections, especially §3 (data model), §4 (API/backend), §5 (frontend), §6 (infra), §8 (phases plan)
 
 ## Procedure
@@ -92,36 +90,7 @@ Copy `docs/PHASE_TEMPLATE.md` and substitute placeholders:
 
 Use `[TODO: verify]` only for details genuinely absent from SPEC.md (e.g. a smoke-test response body example). Do not invent data.
 
-### 6. Create `docs/PHASE_XX_NOTES.md`
-
-Copy `docs/PHASE_NOTES_TEMPLATE.md` and generate one task block per Scope item assigned in step 4:
-
-```markdown
-## [ID] — [task description]
-
-**Status:** open
-**Depends on:** [IDs or —]
-
-### Contract Snapshot
-
-### Exploration
-
-### Plan
-
-### Implementation Log
-
-### Verification
-
-### Residual Risks
-
-None
-```
-
-Save as `docs/PHASE_[XX]_NOTES.md`. Update the `_Generated:` date. Leave execution sections empty
-except `Status`, `Depends on`, and `Residual Risks: None`. The file is agent-owned execution memory
-populated by `/impl-assist` and `/impl-review-notes`.
-
-### 7. Append the phase row to `docs/STATE.md`
+### 6. Append the phase row to `docs/STATE.md`
 
 Add to the Phase Status table:
 
@@ -129,13 +98,12 @@ Add to the Phase Status table:
 | PHASE_[XX] | ⏳ pending | v0.[XX].0 | ⬜ | — | [Phase Title] |
 ```
 
-### 8. Report
+### 7. Report
 
 ```
 ## phase-init complete
 
 Created: docs/PHASE_[XX].md
-Created: docs/PHASE_[XX]_NOTES.md (agent execution memory stub)
 STATE.md: PHASE_[XX] row added (⏳ pending)
 
 Scope tasks assigned:
@@ -159,12 +127,11 @@ Run /impl-assist [XX] (or /impl-assist [XX] [ID]) to implement the phase through
 
 ## Rules
 
-- Never modify `docs/SPEC.md` or `docs/CONTEXT.md`.
+- Never modify `docs/SPEC.md` or `docs/STATE.md` § Current Contract / § Project Log.
 - Extract contracts from SPEC.md — do not invent or leave blank.
 - Do not commit.
 
 ## Done when
 
 - `docs/PHASE_XX.md` exists and is filled from `docs/SPEC.md` with task IDs in Scope.
-- `docs/PHASE_XX_NOTES.md` exists as a stub with one block per Scope task.
-- `docs/STATE.md` contains the new pending row.
+- `docs/STATE.md` § Phase Status contains the new pending row.

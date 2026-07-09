@@ -11,9 +11,7 @@ This document is the single source of truth for the `spec-sync` workflow. Runtim
 ## Required reads
 
 - `docs/SPEC.md` (updated)
-- `docs/CONTEXT.md` — current contracts (models, endpoints, types, env vars)
-- `docs/STATE.md` — current phase statuses
-- `docs/CHANGELOG.md`
+- `docs/STATE.md` — current phase statuses, Current Contract, and Project Log
 - All `docs/PHASE_*.md` files
 
 If a recent SPEC.md diff is available (`git diff HEAD -- docs/SPEC.md`), inspect it before making decisions.
@@ -26,11 +24,11 @@ Identify which domains changed:
 
 | Domain | Signal | Affects |
 |--------|--------|---------|
-| Data model (§3) | table/column added, removed, renamed, retyped | `CONTEXT.md` `core_models` / `db_schema`, phase files touching those tables |
-| API endpoints (§4.2) | endpoint added, renamed, removed | `CONTEXT.md` `endpoints_active`, phase files implementing those routes |
+| Data model (§3) | table/column added, removed, renamed, retyped | `STATE.md` § Current Contract (`DB Schema`), phase files touching those tables |
+| API endpoints (§4.2) | endpoint added, renamed, removed | `STATE.md` § Current Contract (`Active Endpoints`), phase files implementing those routes |
 | Frontend (§5) | pages/stores/components changed | phase files building those |
 | Non-functional reqs (§7) | performance, security, coverage | Gate checks of affected phase files |
-| Phase plan (§8) | phase reordered or scope changed | specific phase files and STATE.md ordering |
+| Phase plan (§8) | phase reordered or scope changed | specific phase files and `STATE.md` § Phase Status ordering |
 
 For each changed domain, list affected phase files with precise reasons. **False-positive rule**: if unsure whether a phase is affected, mark it `⚠️ NEEDS_REVIEW`. A false positive is safer than a missed dependency.
 
@@ -41,9 +39,14 @@ For each changed domain, list affected phase files with precise reasons. **False
 - **No contract change** (docs-only, non-functional only): skip steps 3 and 4 and note "no
   contract change" in the report.
 
-### 3. Prepend to `docs/CHANGELOG.md` (only if contracts changed)
+### 3. Update `docs/STATE.md` § Current Contract (only if contracts changed)
 
-Immediately after the `# CHANGELOG` heading and its intro lines, before any previous entry:
+1. Edit only the affected subsections: `Core Models`, `Active Endpoints`, `DB Schema`, `Env Config`.
+2. Never remove an entry unless SPEC explicitly removes it.
+
+### 4. Prepend a Project Log entry to `docs/STATE.md` (only if contracts changed)
+
+Immediately above the previous newest entry in § Project Log:
 
 ```markdown
 ## [YYYY-MM-DD] — [Short Title]
@@ -52,29 +55,17 @@ Immediately after the `# CHANGELOG` heading and its intro lines, before any prev
 **Author**: AI (spec-sync)
 **Triggered by**: [what changed in SPEC.md]
 
-### Changes
+### Changes / Decision
 - [specific section and what changed]
 
-### Affected Phases
+### Affected Phases / Consequences
 - PHASE_XX — [precise reason]
 - (or: None — change has no impact on existing phases)
-
-### Contract Updates
-- [renamed endpoints, new tables, etc.]
-- (or: No contract change — docs-only)
-
-### Notes
-[Any relevant trade-offs, decisions, or context.]
 ```
 
-### 4. Update `docs/CONTEXT.md` (only if contracts changed)
+If no contract change: skip this entry entirely — do not log docs-only edits.
 
-1. Edit only the sections that changed: `core_models`, `endpoints_active`, `db_schema.tables`, `env_config.keys`.
-2. Update `notes` with one sentence about the spec change.
-
-If no contract change: leave CONTEXT.md untouched.
-
-### 5. Mark affected phases in `docs/STATE.md`
+### 5. Mark affected phases in `docs/STATE.md` § Phase Status
 
 For each affected phase:
 
@@ -104,8 +95,8 @@ For each affected phase:
 ```
 ## spec-sync complete
 
-CHANGELOG.md: new entry added / no entry needed — [reason]
-CONTEXT.md:   contracts updated / unchanged — [reason]
+STATE.md:     Current Contract updated / unchanged — [reason]
+STATE.md:     Project Log entry added / no entry needed — [reason]
 STATE.md:     phases marked ⚠️ NEEDS_REVIEW — [list / none]
 PHASE files patched: [list / none]
 Unaffected phases:   [list / none]
@@ -118,14 +109,14 @@ Next:
 
 ## Rules
 
-- Never delete existing CHANGELOG entries.
-- Never remove endpoints / models from CONTEXT.md unless SPEC explicitly removes them.
+- Never delete existing Project Log entries.
+- Never remove endpoints / models from `STATE.md` § Current Contract unless SPEC explicitly removes them.
 - Never rewrite a phase file from scratch.
 - Do not commit.
 - If the change description is empty and no diff is available, ask the architect what changed before proceeding.
 
 ## Done when
 
-- Impacted docs are synchronized.
+- `docs/STATE.md` is synchronized (Current Contract, Project Log, Phase Status).
 - Affected phases are marked for review.
 - Unchanged phases remain untouched.

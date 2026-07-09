@@ -1,5 +1,5 @@
 ---
-description: Update CONTEXT.md, STATE.md, and CHANGELOG.md after a completed phase. Usage: /context-update 01
+description: Update docs/STATE.md (Current Contract, Phase Status, Project Log) after a completed phase. Usage: /context-update 01
 ---
 
 # /context-update

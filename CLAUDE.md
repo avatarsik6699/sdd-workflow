@@ -15,8 +15,7 @@ Only `/workflow-init <target-path>` runs from here, and the target must be outsi
 | `/spec-init` (integrated projects) | [`docs/playbooks/spec-init.md`](docs/playbooks/spec-init.md) |
 | `/spec-sync` (integrated projects) | [`docs/playbooks/spec-sync.md`](docs/playbooks/spec-sync.md) |
 | `/phase-init` (integrated projects) | [`docs/playbooks/phase-init.md`](docs/playbooks/phase-init.md) |
-| `/impl-assist` (integrated projects) | [`docs/playbooks/impl-assist.md`](docs/playbooks/impl-assist.md) |
-| `/impl-review-notes` (integrated projects) | [`docs/playbooks/impl-review-notes.md`](docs/playbooks/impl-review-notes.md) |
+| `/impl-assist` (integrated projects) | [`docs/playbooks/impl-assist.md`](docs/playbooks/impl-assist.md) — also handles Architect Review Notes via `/impl-assist [XX] review` |
 | `/phase-gate` (integrated projects) | [`docs/playbooks/phase-gate.md`](docs/playbooks/phase-gate.md) |
 | `/context-update` (integrated projects) | [`docs/playbooks/context-update.md`](docs/playbooks/context-update.md) |
 

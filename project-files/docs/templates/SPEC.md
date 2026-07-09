@@ -11,7 +11,7 @@
 | Document Version | `v1.0` |
 | Date | `[DATE]` |
 | Architect / Owner | `[OWNER]` |
-| Contract Version | `v1.0` (see `docs/CONTEXT.md`) |
+| Contract Version | `v1.0` (see `docs/STATE.md` § Current Contract) |
 | Stack | See [docs/STACK.md](./STACK.md) |
 | Domain | `[DOMAIN — brief description of the subject area]` |
 

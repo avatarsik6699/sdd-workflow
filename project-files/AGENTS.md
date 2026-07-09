@@ -8,16 +8,17 @@ must follow when working on this project. Stack-specific commands, file layout, 
 
 1. **Scope Lock**: Do only what is specified in the active `docs/PHASE_XX.md`. Do not assume future
    phases.
-2. **Agent-Only Implementation**: Code changes happen through `/impl-assist` or
-   `/impl-review-notes`. Humans define intent, scope, and review notes; agents implement.
+2. **Agent-Only Implementation**: Code changes happen through `/impl-assist` (Scope tasks by
+   default, or Architect Review Notes via `/impl-assist [XX] review`). Humans define intent, scope,
+   and review notes; agents implement.
 3. **No Guessing**: If a requirement is genuinely ambiguous and risky, ask a concise question
    instead of inventing behavior.
 4. **Gates First**: Before a phase closes, run `/phase-gate`. Automated green is not enough if
    `Architect Review Notes` has unchecked items.
 5. **Security**: No hardcoded secrets. Use `.env`, environment variables, and typed settings
    appropriate to the stack.
-6. **Context Sync**: After a phase completes, run `/context-update` to refresh `docs/CONTEXT.md`,
-   `docs/STATE.md`, and `docs/CHANGELOG.md`.
+6. **Context Sync**: After a phase completes, run `/context-update` to refresh `docs/STATE.md`
+   (Current Contract, Phase Status, Project Log).
 
 ## Stack Conventions
 
@@ -52,7 +53,8 @@ Rules:
 
 Keep lightweight long-lived project memory in `docs/`:
 
-- `docs/DECISIONS.md` — ADR-style technical decisions
+- `docs/STATE.md` § Project Log — ADR-style technical decisions (`Type: decision`) alongside spec
+  changes, phase completions, feedback, and rollbacks
 - `docs/KNOWN_GOTCHAS.md` — recurring pitfalls, symptoms, and fixes
 
 Consult and update these files as part of normal development.
@@ -87,56 +89,45 @@ When `docs/SPEC.md` changes:
 The SDD workflows are defined in `docs/playbooks/`:
 
 - [`spec-init`](docs/playbooks/spec-init.md) — draft or refresh `docs/SPEC.md`
-- [`spec-sync`](docs/playbooks/spec-sync.md) — propagate an approved spec change
-- [`phase-init`](docs/playbooks/phase-init.md) — scaffold `docs/PHASE_XX.md` and
-  `docs/PHASE_XX_NOTES.md`
-- [`impl-assist`](docs/playbooks/impl-assist.md) — implement scoped phase tasks through the agent
-  execution loop
-- [`impl-review-notes`](docs/playbooks/impl-review-notes.md) — fix unchecked Architect Review Notes
+- [`spec-sync`](docs/playbooks/spec-sync.md) — propagate an approved spec change into `docs/STATE.md`
+- [`phase-init`](docs/playbooks/phase-init.md) — scaffold `docs/PHASE_XX.md`
+- [`impl-assist`](docs/playbooks/impl-assist.md) — implement Scope tasks (default) or fix
+  Architect Review Notes (`/impl-assist [XX] review`) through the same agent execution loop
 - [`phase-gate`](docs/playbooks/phase-gate.md) — validate a phase before closing it
-- [`context-update`](docs/playbooks/context-update.md) — finalize completed phase memory
+- [`context-update`](docs/playbooks/context-update.md) — finalize completed phase memory in `docs/STATE.md`
 
 Runtime wrappers are thin stubs. Workflow logic belongs in the playbooks.
 
 ## Phase Lifecycle
 
 ```text
-1.  Architect provides or updates project intent
-2.  /spec-init                  -> draft or refresh docs/SPEC.md
-3.  Architect approves SPEC.md
-4.  /phase-init N               -> create docs/PHASE_N.md + docs/PHASE_N_NOTES.md
-5.  /impl-assist N              -> agent implements all scoped tasks
-6.  Architect manually verifies product behavior
-7.  Architect adds unchecked items to Architect Review Notes if fixes are needed
-8.  /impl-review-notes N        -> agent fixes review notes
-9.  Repeat 6-8 until manual verification is clean
-10. /phase-gate N               -> automated checks + unresolved review-note check
-11. /context-update N           -> update CONTEXT, STATE, CHANGELOG
-12. Commit / PR / tag according to project git policy
+1. Architect provides or updates project intent
+2. /spec-init                  -> draft or refresh docs/SPEC.md
+3. Architect approves SPEC.md
+4. /phase-init N               -> create docs/PHASE_N.md
+5. /impl-assist N              -> agent implements all scoped tasks
+6. Architect manually verifies product behavior
+7. Architect adds unchecked items to Architect Review Notes if fixes are needed
+8. /impl-assist N review       -> agent fixes review notes; repeat 6-8 until verification is clean
+9. /phase-gate N               -> automated checks + unresolved review-note check
+10. /context-update N          -> update docs/STATE.md (Current Contract, Phase Status, Project Log)
+11. Commit / PR / tag according to project git policy
 ```
 
-## Agent Execution Memory
+## Implementation Notes
 
-`docs/PHASE_XX_NOTES.md` is agent-owned execution memory. Humans are not expected to read or edit
-it. The agent must keep it current during `/impl-assist` and `/impl-review-notes`:
-
-- `Contract Snapshot` — the relevant task contract from `PHASE_XX.md`
-- `Exploration` — files inspected, existing patterns, constraints, risks
-- `Plan` — done-when, files, steps, checks before editing
-- `Implementation Log` — actual changes and deviations
-- `Verification` — commands/checks run and results
-- `Residual Risks` — known remaining risks or `None`
+`docs/PHASE_XX.md` § Implementation Notes is a short, optional, agent-maintained bullet list —
+not a mandatory execution log. The agent adds an entry only when something isn't already visible
+from the code or commit history: an intentional deviation from the plan, a residual risk, a
+rejected alternative. Git history and the diff are the record of *how* work was done; this section
+exists only for what git can't tell you.
 
 ## Document Roles
 
 | File | Role | Change cadence |
 |------|------|----------------|
 | `docs/SPEC.md` | Strategic product and system intent | Rarely; architect-approved |
-| `docs/PHASE_XX.md` | Human-facing phase contract: scope, files, contracts, gate checks, review notes | Per phase |
-| `docs/PHASE_XX_NOTES.md` | Agent-owned execution memory | During agent implementation |
+| `docs/PHASE_XX.md` | Human-facing phase contract: scope, files, contracts, gate checks, review notes, implementation notes | Per phase |
 | `docs/STACK.md` | Stack-specific commands, layout, and conventions | When tooling changes |
-| `docs/CONTEXT.md` | Technical contract after completed phases | After `/context-update` |
-| `docs/STATE.md` | Operational phase tracker | During phase lifecycle |
-| `docs/CHANGELOG.md` | Contract/spec history | On spec or context changes |
-| `docs/DECISIONS.md` | ADR log | On architectural decisions |
+| `docs/STATE.md` | Phase tracker, current technical contract, and append-only project log (spec changes, phase completions, decisions, feedback, rollbacks) | During phase lifecycle |
 | `docs/KNOWN_GOTCHAS.md` | Recurring pitfall log | When new traps are discovered |
