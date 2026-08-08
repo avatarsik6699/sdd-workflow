@@ -1,10 +1,11 @@
 # sdd-workflow
 
-Compact Spec-Driven Development workflow bundle for deterministic agent-only coding.
+Spec-Driven Development workflow bundle for deterministic agent-only coding, specialized for
+**web applications** (frontend + backend + database).
 
 The repository has no CLI, runtime, package manager, or build manifest. It ships markdown
-playbooks, agent rules, templates, and thin Claude/Codex wrappers that can be copied into any
-target project.
+playbooks, agent rules, templates, and thin Claude/Codex/generic-agent wrappers that can be copied
+into any target project.
 
 ## Install into a project
 
@@ -26,25 +27,29 @@ After installation, work from the target project repository.
 ## Agent-only lifecycle
 
 ```text
-1. /spec-init                         -> draft or refresh docs/SPEC.md
-2. architect approves SPEC.md
-3. /phase-init 01                     -> create the phase contract
-4. /impl-assist 01                    -> agent implements scoped phase tasks
+1. Architect provides a brief (chat text or a draft file, e.g. docs/DRAFT_SPEC.md)
+2. /plan ["brief" | path/to/draft.md]  -> draft/refresh docs/SPEC.md, scaffold
+                                          docs/changes/NN-slug.md, create feature/NN-slug
+3. architect approves docs/SPEC.md (first time / on pivots only)
+4. /work NN                            -> agent implements Backlog items, absorbing any
+                                          findings the architect reports mid-session,
+                                          running the Fast Gate per item
 5. architect manually verifies product behavior
 6. add unchecked Architect Review Notes if fixes are needed
-7. /impl-assist 01 review             -> agent fixes review notes; repeat 5-7 until clean
-8. /phase-gate 01                     -> run gate checks
-9. /context-update 01                 -> finalize project memory
+7. /work NN review                     -> agent fixes review notes; repeat 5-7 until clean
+8. /ship NN                            -> Full Gate; on PASS: merge feature branch to main,
+                                          archive the change
+9. /ship NN --release                  -> Release Gate; push origin/main; verify the deploy via gh
 ```
 
 ## Commands shipped to target projects
 
-- `/spec-init`
-- `/spec-sync`
-- `/phase-init`
-- `/impl-assist` (Scope tasks by default, or `/impl-assist [XX] review` for Architect Review Notes)
-- `/phase-gate`
-- `/context-update`
+- `/plan` — draft/refresh `docs/SPEC.md` and scaffold a new `docs/changes/NN-slug.md` with its
+  feature branch (also runs a self-driving design flow when no design references exist)
+- `/work` — implement Backlog tasks (default) or fix Architect Review Notes
+  (`/work [XX] review`), absorbing mid-session findings into the Backlog and running the Fast Gate
+- `/ship` — run the Full Gate, merge to `main`, archive the change, and (with `--release`) push
+  and verify the deploy via `gh`
 
 From this source repository, only `/workflow-init` is intended to run.
 
@@ -62,11 +67,14 @@ From this source repository, only `/workflow-init` is intended to run.
 This repo has a single version line. Tag `main` for releases:
 
 ```bash
-git tag -a v1.0.0 -m "sdd-workflow v1.0.0"
-git push origin v1.0.0
+git tag -a v0.3.0 -m "sdd-workflow v0.3.0"
+git push origin v0.3.0
 ```
 
-Integrated projects upgrade by re-running `/workflow-init` from a fresh clone of the desired tag.
+Integrated projects upgrade by re-running `/workflow-init` from a fresh clone of the desired tag —
+`/workflow-init` detects and offers to migrate older doc shapes (including the previous
+`STATE.md` + `PHASE_XX.md` generation) into the current `docs/changes/` + `docs/changes/archive/`
+layout.
 
 ## License
 

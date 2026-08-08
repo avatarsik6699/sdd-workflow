@@ -1,8 +1,7 @@
 # [PROJECT_NAME] — Claude Code adapter
 
-**Start here:** read [`AGENTS.md`](AGENTS.md). It is the source of truth for scope lock, gates,
-library lookup, git workflow, permission-denied handling, spec-sync protocol, and the phase
-lifecycle.
+**Start here:** read [`AGENTS.md`](AGENTS.md). It is the source of truth for core rules, gates,
+library lookup, git workflow, permission-denied handling, and the change lifecycle.
 
 This file only lists Claude-specific command wrappers.
 
@@ -10,13 +9,10 @@ This file only lists Claude-specific command wrappers.
 
 | Command | When to use | Wraps playbook |
 |---------|-------------|----------------|
-| `/spec-init [--new\|--continue] [project brief]` | Draft, reset, or continue `docs/SPEC.md` | [docs/playbooks/spec-init.md](docs/playbooks/spec-init.md) |
-| `/spec-sync [description]` | Immediately after editing `docs/SPEC.md` | [docs/playbooks/spec-sync.md](docs/playbooks/spec-sync.md) |
-| `/phase-init [N]` | Scaffold `docs/PHASE_XX.md` | [docs/playbooks/phase-init.md](docs/playbooks/phase-init.md) |
-| `/impl-assist [N] [ID\|group]` | Agent implements scoped Scope tasks | [docs/playbooks/impl-assist.md](docs/playbooks/impl-assist.md) |
-| `/impl-assist [N] review [R#]` | Agent fixes unchecked Architect Review Notes | [docs/playbooks/impl-assist.md](docs/playbooks/impl-assist.md) |
-| `/phase-gate [N]` | Validate automated checks and unresolved review notes | [docs/playbooks/phase-gate.md](docs/playbooks/phase-gate.md) |
-| `/context-update [N]` | Finalize completed phase memory in `docs/STATE.md` | [docs/playbooks/context-update.md](docs/playbooks/context-update.md) |
+| `/plan ["brief" \| path/to/draft.md] [--new\|--continue]` | Draft/refresh `docs/SPEC.md` and scaffold a new `docs/changes/NN-slug.md` with its feature branch | [docs/playbooks/plan.md](docs/playbooks/plan.md) |
+| `/work [NN] [ID\|group]` | Agent implements Backlog items, absorbing mid-session findings, running the Fast Gate | [docs/playbooks/work.md](docs/playbooks/work.md) |
+| `/work [NN] review [R#]` | Agent fixes unchecked Architect Review Notes | [docs/playbooks/work.md](docs/playbooks/work.md) |
+| `/ship [NN] [--release]` | Full Gate; on PASS merge to `main` and archive; with `--release`, push and verify deploy | [docs/playbooks/ship.md](docs/playbooks/ship.md) |
 
 Skill wrappers live in `.claude/skills/` and are intentionally thin.
 

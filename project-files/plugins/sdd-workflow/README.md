@@ -5,13 +5,13 @@ All workflow logic lives in `docs/playbooks/`; plugin files are thin wrappers.
 
 ## Commands
 
-- `/spec-init` — draft or refresh `docs/SPEC.md`
-- `/spec-sync` — propagate approved spec changes into `docs/STATE.md`
-- `/phase-init` — scaffold a phase contract
-- `/impl-assist` — implement scoped phase tasks (default) or fix unchecked Architect Review Notes
-  (`/impl-assist [XX] review`) through the same agent execution loop
-- `/phase-gate` — validate automated checks and unresolved review notes
-- `/context-update` — finalize completed phase memory in `docs/STATE.md`
+- `/plan` — draft/refresh `docs/SPEC.md` and scaffold a new `docs/changes/NN-slug.md` with its
+  feature branch
+- `/work` — implement Backlog tasks (default) or fix unchecked Architect Review Notes
+  (`/work [XX] review`) through the same agent execution loop, absorbing mid-session findings and
+  running the Fast Gate
+- `/ship` — run the Full Gate, merge to `main`, archive the change, and (with `--release`) push
+  and verify the deploy
 
 ## Hooks
 

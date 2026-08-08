@@ -1,7 +1,7 @@
 {
   "name": "sdd-workflow",
   "version": "1.0.0",
-  "description": "Project-local SDD workflow plugin for agent-only phase implementation, review-note fixes, gates, and contract sync.",
+  "description": "Project-local SDD workflow plugin for agent-only planning, implementation, review-note fixes, and gated shipping.",
   "author": {
     "name": "Local Project Plugin"
   },
@@ -9,12 +9,12 @@
   "keywords": [
     "sdd",
     "workflow",
-    "phase-gate",
-    "spec-init",
-    "phase-init",
-    "spec-sync",
+    "plan",
+    "work",
+    "ship",
+    "full-gate",
+    "fast-gate",
     "context7",
-    "impl-assist",
     "agent-only"
   ],
   "skills": "./skills/",
@@ -31,12 +31,11 @@
       "Write"
     ],
     "defaultPrompt": [
-      "Draft SPEC.md from a high-level project brief",
-      "Initialize the next project phase from SPEC.md",
-      "Implement scoped phase tasks through the agent execution loop",
-      "Fix unchecked Architect Review Notes via /impl-assist review",
-      "Run the phase gate checks for the current phase",
-      "Sync STATE.md after a phase completes"
+      "Draft SPEC.md from a high-level project brief and scaffold the next change",
+      "Implement Backlog tasks for a change through the agent execution loop",
+      "Fix unchecked Architect Review Notes via /work review",
+      "Run the Full Gate for a change and merge it to main",
+      "Ship a change to production via /ship --release"
     ],
     "brandColor": "#0F766E"
   }
