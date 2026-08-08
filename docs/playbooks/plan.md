@@ -116,7 +116,7 @@ marker.
   - **Backlog**: group items into Backend/Frontend/Infra/Data/Other, assign IDs sequentially per
     group (`B1`, `F1`, `I1`, `D1`, `T1`…), detect dependency ordering (migrations before models,
     models before routes, routes before tests), and format each as
-    `- [ ] \`B2\` [description] — _Depends on:_ \`B1\`` (or `—`). IDs are stable once assigned —
+    `- [ ] B2 [description] — _Depends on:_ B1` (or `—` if none). IDs are stable once assigned —
     never renumber; a removed item becomes `~~BN~~ (removed)`, never deleted outright.
   - **Files**: explicit create/modify list grouped as backend, frontend, infrastructure, plus any
     "do NOT touch" paths.
