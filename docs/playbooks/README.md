@@ -9,10 +9,10 @@ These playbooks are the canonical source of truth for the workflow. Runtime wrap
 
 ## Integrated-project workflow
 
-- [spec-init.md](./spec-init.md) — draft or refresh `docs/SPEC.md`
-- [spec-sync.md](./spec-sync.md) — propagate approved spec changes into `docs/STATE.md`
-- [phase-init.md](./phase-init.md) — scaffold `docs/PHASE_XX.md` from `docs/SPEC.md`
-- [impl-assist.md](./impl-assist.md) — implement Scope tasks (default) or fix Architect Review
-  Notes (`/impl-assist XX review`) through the same agent execution loop
-- [phase-gate.md](./phase-gate.md) — validate gate commands and unresolved review notes
-- [context-update.md](./context-update.md) — finalize phase context in `docs/STATE.md` after the gate passes
+- [plan.md](./plan.md) — draft/refresh `docs/SPEC.md` and scaffold a new `docs/changes/NN-slug.md`
+  with its feature branch
+- [work.md](./work.md) — implement Backlog tasks (default) or fix Architect Review Notes
+  (`/work XX review`) through the agent execution loop, absorbing mid-session findings into the
+  Backlog and running the Fast Gate
+- [ship.md](./ship.md) — run the Full Gate, merge to `main`, archive the change, and (with
+  `--release`) push and verify the deploy

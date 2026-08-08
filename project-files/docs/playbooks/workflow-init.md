@@ -4,7 +4,9 @@ Integrate the SDD workflow into a target project (new or existing). This skill r
 project**, from a freshly cloned `sdd-workflow` checkout. After it succeeds, the workflow is part
 of the target project and the cloned repo can be deleted.
 
-This document is the single source of truth for the `workflow-init` workflow.
+This document is the single source of truth for the `workflow-init` workflow. The workflow is
+specialized for **web applications** (frontend + backend + database) — see `docs/SPEC.md`'s
+section structure and `docs/STACK.md`'s stack table.
 
 ## Inputs
 
@@ -45,24 +47,32 @@ Record what was detected. Decisions later branch on this.
 
 ### 3. Detect and offer migration of legacy per-project docs (upgrade only)
 
-Only relevant when step 2 classified the target as **partially initialized**. An older version of
-this workflow shipped four separate files (`STATE.md`, `CONTEXT.md`, `CHANGELOG.md`,
-`DECISIONS.md`) where the current version ships one merged `docs/STATE.md`
-(§ Phase Status + § Current Contract + § Project Log), and shipped a `docs/PHASE_XX_NOTES.md`
-twin per phase file that the current version no longer uses.
+Only relevant when step 2 classified the target as **partially initialized**. Two legacy shapes
+may be present; check for both, oldest first, since a project could in principle need both folds
+applied in sequence.
+
+**3a. Pre-merge four-file shape → merged `STATE.md`** (oldest generation)
+
+An older version shipped four separate files (`STATE.md`, `CONTEXT.md`, `CHANGELOG.md`,
+`DECISIONS.md`) plus a `docs/PHASE_XX_NOTES.md` twin per phase file, where a later generation
+shipped one merged `docs/STATE.md` (§ Phase Status + § Current Contract + § Project Log). The
+current generation drops `STATE.md`/`PHASE_XX.md` entirely (see 3b) — but a project may still be
+on this oldest shape, so fold it into the merged `STATE.md` shape first, then let 3b carry it
+forward into `changes/`.
 
 1. Check the target's `docs/` for any of: `CONTEXT.md`, `CHANGELOG.md`, `DECISIONS.md`, an
    existing `STATE.md` that lacks a `## Current Contract` or `## Project Log` heading (i.e. still
    the old shape), or any `PHASE_*_NOTES.md` files.
-2. If none found: skip this step entirely — proceed to step 4.
+2. If none found: skip to 3b.
 3. If found: report exactly what was detected, then ask:
 
    > "This project was set up with an older version of the workflow. It keeps `CONTEXT.md` /
    > `CHANGELOG.md` / `DECISIONS.md` separate from `STATE.md`[, and has PHASE_XX_NOTES.md files].
-   > The current version merges the first four into one `docs/STATE.md`. I can fold their content
-   > into the new format now — nothing is deleted, only `STATE.md` is rewritten. Proceed? (yes / skip)"
+   > A later version merges the first four into one `docs/STATE.md`. I can fold their content into
+   > that format now — nothing is deleted, only `STATE.md` is rewritten — before migrating
+   > everything to the current `changes/` format. Proceed? (yes / skip)"
 
-4. If the user agrees, build the new `docs/STATE.md` losslessly from the existing files:
+4. If the user agrees, build the merged `docs/STATE.md` losslessly from the existing files:
    - Old `STATE.md` § Phase Status table → new § Phase Status, unchanged.
    - `CONTEXT.md` JSON fields → new § Current Contract: `core_models` → Core Models,
      `endpoints_active` → Active Endpoints, `db_schema` → DB Schema (incl. `current_head`),
@@ -82,39 +92,102 @@ twin per phase file that the current version no longer uses.
    project history, and has no home in the new shape). Leave those files untouched.
 7. Leave `docs/CONTEXT.md`, `docs/CHANGELOG.md`, `docs/DECISIONS.md`, and any
    `docs/PHASE_*_NOTES.md` on disk. Never delete project files automatically. List them in the
-   final report (step 9) as safe to delete once the user has spot-checked the merged `STATE.md`.
-8. If the user says "skip": leave every legacy file untouched, do not create or overwrite
-   `STATE.md`, and note in the final report that the project remains on the legacy doc shape.
+   final report (step 9) as safe to delete once the user has spot-checked the result.
+8. If the user says "skip" here: leave every legacy file untouched, do not create or overwrite
+   `STATE.md`, note it in the final report, and still proceed to 3b (3b operates on whatever
+   `STATE.md`/`PHASE_XX.md` shape currently exists, merged or not).
+
+**3b. `STATE.md` + `PHASE_XX.md` shape → `changes/` + `changes/archive/`** (previous generation)
+
+The previous generation tracked work as `docs/PHASE_XX.md` files with statuses mirrored in
+`docs/STATE.md` § Phase Status. The current generation has no `STATE.md`: completed work lives in
+`docs/changes/archive/`, active work in `docs/changes/`, and the codebase/git history is the
+record of what exists — nothing is hand-mirrored.
+
+1. Check the target for `docs/STATE.md` and any `docs/PHASE_XX.md` files (post-3a shape, or
+   already current if 3a found nothing).
+2. If none found: skip to step 4.
+3. If found: report what was detected, then ask:
+
+   > "This project tracks work as PHASE_XX.md files with a STATE.md status table. The current
+   > version replaces that with docs/changes/ (active) and docs/changes/archive/ (done) — no
+   > hand-maintained contract mirror. I can convert your phase files now. Proceed? (yes / skip)"
+
+4. If the user agrees, for each `docs/PHASE_XX.md`, read its `STATE.md` § Phase Status row and its
+   own Contracts section, then:
+   - **`✅ done`** → convert to `docs/changes/archive/XX-<slug>.md`, where `<slug>` is derived from
+     the phase title (kebab-case). Map: `Scope` → `Backlog` (keep IDs, dependencies, and
+     strikethrough-removed markers exactly as they are); `Files` → `Files` unchanged;
+     `Implementation Notes` → `Implementation Notes` unchanged; drop the old `Contracts` section
+     entirely (replace with the one-line "see `docs/SPEC.md`" pointer per the current
+     `CHANGE_TEMPLATE.md` shape) since it duplicated the codebase and the current template no
+     longer carries it.
+   - **`🔄 in-progress`** (or, if none is in-progress, the single oldest `⏳ pending`) → convert to
+     the new active `docs/changes/XX-<slug>.md` using the same field mapping. If more than one
+     phase is ambiguously "next," ask which one should become the active change; the rest become
+     archived-as-pending (still moved to `archive/` with a note that they were never started, so
+     the project isn't left with orphaned `PHASE_XX.md` files).
+   - **`⚠️ NEEDS_REVIEW`** → convert and archive as above, but prepend a note at the top of the
+     resulting file: "⚠️ Was NEEDS_REVIEW at migration time — re-check against the current
+     `docs/SPEC.md` before assuming this is settled." (The old `spec-sync` banner-patching
+     mechanism no longer exists in the current workflow, so this state can't be re-derived
+     automatically.)
+5. Create `docs/changes/` and `docs/changes/archive/` if they don't already exist.
+6. Never delete `docs/STATE.md`, the original `docs/PHASE_XX.md` files, or `docs/PHASE_TEMPLATE.md`
+   automatically. List them in the final report as safe to delete once the user has spot-checked
+   the converted `changes/` files.
+7. If the user says "skip": leave everything untouched and note in the final report that the
+   project remains on the `STATE.md`/`PHASE_XX.md` shape (the new `plan`/`work`/`ship` skills
+   expect `docs/changes/`, so the project should not mix the two shapes going forward).
 
 ### 4. Gather project metadata (interactive)
 
 Ask the user for:
 
-1. **Project name** — used for `[PROJECT_NAME]` placeholders in `AGENTS.md`, `CLAUDE.md`, `SPEC.md`,
-   `STATE.md`. If the target directory has an obvious name, propose it as the default.
+1. **Project name** — used for `[PROJECT_NAME]` placeholders in `AGENTS.md`, `CLAUDE.md`,
+   `SPEC.md`. If the target directory has an obvious name, propose it as the default.
 2. **One-line description** (optional) — for the SPEC seed.
 3. **Owner / architect name** — for `[OWNER]` placeholders.
 4. **Stack signals** — before asking these, if the project state is **empty**, ask:
 
    > "Do you know your tech stack already? Answer **yes** to provide gate commands now, or
-   > **no** to skip — you can fill `docs/STACK.md` after `/spec-init` determines the stack."
+   > **no** to skip — you can fill `docs/STACK.md` after `/plan` determines the stack."
 
    Record the answer as `stack_known`. If the answer is **no**, skip the rest of item 4 and
    proceed to item 5.
 
-   If `stack_known` is **yes** (or the project is **existing** / **partially initialized**), ask
-   the rows that apply — infer from project state where possible:
-   - infrastructure / bootstrap command
-   - migrations command (or `n/a`)
-   - backend / unit tests command
-   - frontend prep / build command (or `n/a`)
-   - frontend type-check command (or `n/a`)
-   - frontend unit tests command (or `n/a`)
-   - e2e lint command (or `n/a`)
-   - e2e command (or `n/a`)
-   - smoke command
-   - optional helper script path (e.g. `./scripts/phase-gate.sh`)
-5. **Container / OS notes** worth recording in `KNOWN_GOTCHAS.md`. If unsure, skip.
+   If `stack_known` is **yes** (or the project is **existing** / **partially initialized**):
+
+   - Offer the built-in **frontend default** as a starting point: "React + TanStack Start +
+     TanStack Query + `openapi-typescript` (API type generation) + Docker + Nginx — use this as
+     your frontend default? (yes / no, describe your own)". If accepted, pre-fill the frontend
+     rows of `docs/STACK.md`'s Stack table and Gate Commands with the matching conventions
+     (Vite/TanStack build, typecheck, unit test, and `openapi-typescript` regen commands); the
+     user can still edit rows afterward.
+   - Ask the **backend** stack freely, with no default offered — backend stacks vary per project
+     and are sometimes polyglot. Record language(s)/framework(s) as given.
+   - Ask the DB (default suggestion: Postgres, editable) and infra (default suggestion:
+     Docker + Nginx, editable).
+   - Ask for the gate command rows, split by tier — group by area, accept "skip"/`n/a` per row:
+     - **Fast Gate** (run per task in `/work`): lint, type-check, targeted/affected unit tests,
+       LSP diagnostics availability (yes/no — informational, not a command), API type regen
+       command (e.g. `openapi-typescript` invocation) if applicable.
+     - **Full Gate** (run once per `/ship`): infrastructure/bootstrap, migrations, backend test
+       suite, frontend build, frontend unit tests, e2e determinism/lint check, e2e suite, smoke,
+       SAST command (e.g. Semgrep), secrets-scan command (e.g. Gitleaks), dependency-audit command
+       (e.g. Trivy / `npm audit` / `pip-audit`), accessibility-audit command (e.g. axe/Lighthouse
+       CI), performance-budget command (e.g. Lighthouse CI with Core Web Vitals thresholds).
+     - **Release Gate** (run only on `/ship --release`): container image scan command (e.g.
+       Trivy), deploy/health-check verification command or endpoint, and whether `gh` is
+       authenticated for this repo (yes/no — informational).
+     - Optional helper script path for the Full Gate (e.g. `./scripts/ship.sh`).
+5. **Required tooling availability** — ask which of the following are set up in this environment,
+   to fill `docs/STACK.md`'s Required Tooling table honestly rather than assuming: Playwright MCP
+   and/or chrome-devtools MCP (frontend visual verification), an LSP server for the project's
+   languages, a `frontend-design` skill, a `backend-design` skill, an architecture skill. Any
+   answered "no" gets recorded as "not available — do not enforce" rather than left silently
+   assumed.
+6. **Container / OS notes** worth recording in `KNOWN_GOTCHAS.md`. If unsure, skip.
 
 Do not ask all of these in one wall of text — group by area, accept "skip" / `n/a` per row.
 
@@ -129,13 +202,14 @@ For each artefact under `project-files/`, decide one of:
 For conflicts, default policy:
 
 - For `AGENTS.md`, `CLAUDE.md`: rename existing to `<file>.bak`, then write new.
-- For `docs/SPEC.md`, `docs/STATE.md`, `docs/KNOWN_GOTCHAS.md`, `docs/STACK.md`,
-  `docs/PHASE_TEMPLATE.md`: do **not** overwrite. Leave the existing file. Report a warning. (If
-  step 3 already rewrote `docs/STATE.md` as part of a migration the user approved, treat it as
-  already up to date — do not warn about it again here.)
+- For `docs/SPEC.md`, `docs/KNOWN_GOTCHAS.md`, `docs/STACK.md`, `docs/CHANGE_TEMPLATE.md`: do
+  **not** overwrite. Leave the existing file. Report a warning.
 - For `docs/playbooks/<name>.md`: overwrite (these are versioned with the workflow).
-- For `.claude/skills/<name>/SKILL.md` and `plugins/sdd-workflow/...`: overwrite (wrappers).
+- For `.claude/skills/<name>/SKILL.md`, `.agents/skills/<name>/SKILL.md`, and
+  `plugins/sdd-workflow/...`: overwrite (wrappers).
 - For `scripts/*` and `.mcp.json`: skip if already present.
+- `docs/changes/` and `docs/changes/archive/`: create as empty directories if missing (add a
+  `.gitkeep` so they're tracked); never touch their contents if they already exist.
 
 Show the user a planned action list **before** writing anything. Wait for `proceed` (or accept the
 default if the user confirms in plain language). On `cancel`, abort.
@@ -149,26 +223,26 @@ regex-creative.
 
 Resolve `[STACK_STATUS]`:
 - `stack_known` is **true** → substitute `CONFIGURED`
-- `stack_known` is **false** → substitute `TBD — fill Gate Commands before running /phase-gate`
+- `stack_known` is **false** → substitute `TBD — fill Gate Commands before running /ship`
 
 Files to copy from `project-files/` to the target root, preserving structure:
 
 - `AGENTS.md` → `AGENTS.md`
 - `CLAUDE.md` → `CLAUDE.md`
 - `.mcp.json` → `.mcp.json`
-- `.claude/skills/<6 skills>/SKILL.md` → `.claude/skills/<6 skills>/SKILL.md`
-  (spec-init, phase-init, phase-gate, spec-sync, context-update, impl-assist)
+- `.claude/skills/<3 skills>/SKILL.md` → `.claude/skills/<3 skills>/SKILL.md` (plan, work, ship)
+- `.agents/skills/<3 skills>/SKILL.md` → `.agents/skills/<3 skills>/SKILL.md` (plan, work, ship)
 - `plugins/sdd-workflow/` → `plugins/sdd-workflow/` (commands, skills, hooks.json, .mcp.json,
   .codex-plugin/, scripts/, README.md)
-- `docs/playbooks/<7 playbooks>.md` → `docs/playbooks/<7 playbooks>.md` (includes
+- `docs/playbooks/<4 playbooks>.md` → `docs/playbooks/<4 playbooks>.md` (plan, work, ship, and
   `workflow-init.md` for future-self reference)
 - `docs/templates/SPEC.md` → `docs/SPEC.md` (only if missing)
-- `docs/templates/STATE.md` → `docs/STATE.md` (only if missing, and only if step 3 didn't already
-  write it via migration)
-- `docs/templates/PHASE_TEMPLATE.md` → `docs/PHASE_TEMPLATE.md` (only if missing)
+- `docs/templates/CHANGE_TEMPLATE.md` → `docs/CHANGE_TEMPLATE.md` (only if missing)
 - `docs/templates/STACK.md` → `docs/STACK.md` (only if missing — if existing, leave it and tell the
   user where to merge gate commands)
 - `docs/templates/KNOWN_GOTCHAS.md` → `docs/KNOWN_GOTCHAS.md` (only if missing)
+- `docs/changes/.gitkeep`, `docs/changes/archive/.gitkeep` → create the directories (only if
+  missing)
 
 ### 7. Fill `docs/STACK.md` from gathered commands
 
@@ -178,24 +252,31 @@ banner. Print:
 
 ```
 docs/STACK.md has been left as a template.
-Fill the ## Gate Commands section before running /phase-gate.
+Fill the Fast Gate / Full Gate / Release Gate tables before running /ship.
 ```
 
 Then skip the rest of this step.
 
-If `docs/STACK.md` was just created (step 6) and `stack_known` is **true**, substitute the
-gate-command rows under `## Gate Commands` with what the user entered in step 4. Leave
-`[bracketed placeholders]` for any row the user said `n/a` to, but mark the row's **Command**
-column with `n/a` so phase-gate reports it as `SKIPPED — n/a in STACK.md`.
+If `docs/STACK.md` was just created (step 6) and `stack_known` is **true**:
+
+- Substitute the Stack table with the frontend default (if accepted) plus the given backend/DB/infra.
+- Substitute the Fast Gate, Full Gate, and Release Gate rows with what the user entered in step 4.
+  Leave `[bracketed placeholders]` for any row the user said `n/a` to, but mark the row's
+  **Command** column with `n/a` so `/work`/`/ship` report it as `SKIPPED — n/a in STACK.md`.
+- Fill the Required Tooling table from the availability answers in step 4 item 5 — mark
+  unavailable tools as "not available — do not enforce" rather than leaving the row implying it's
+  mandatory.
 
 If `docs/STACK.md` already existed, do **not** edit it. Print a clear message:
 
-> `docs/STACK.md` already exists. Verify it has a `## Gate Commands` section with the rows expected
-> by `docs/playbooks/phase-gate.md`. Missing rows will be reported as SKIPPED.
+> `docs/STACK.md` already exists. Verify it has Fast Gate / Full Gate / Release Gate tables and a
+> Required Tooling table matching the shape expected by `docs/playbooks/work.md` and `ship.md`.
+> Missing rows will be reported as SKIPPED.
 
 ### 8. Stamp metadata
 
-- In `docs/STATE.md` § Project Log seed entry, fill `[DATE]` and `[OWNER]`.
+- Nothing to stamp beyond the placeholder substitution in step 6 — there is no `STATE.md` seed
+  entry in the current generation.
 
 ### 9. Final report
 
@@ -205,26 +286,31 @@ Produce a short report with:
 - Files preserved as `.bak` (list)
 - Files skipped because they already existed (list)
 - Files left unchanged that the user should review (e.g. existing `STACK.md`)
-- If step 3 ran a migration: confirmation that `docs/STATE.md` was rewritten, plus the exact list
-  of legacy files (`docs/CONTEXT.md`, `docs/CHANGELOG.md`, `docs/DECISIONS.md`,
-  `docs/PHASE_*_NOTES.md`) that are now safe to delete once the user has spot-checked the result.
+- If step 3a ran: confirmation that `docs/STATE.md` was rewritten, plus the exact list of legacy
+  files (`docs/CONTEXT.md`, `docs/CHANGELOG.md`, `docs/DECISIONS.md`, `docs/PHASE_*_NOTES.md`)
+  that are now safe to delete once the user has spot-checked the merged `STATE.md`.
+- If step 3b ran: the list of `docs/changes/archive/*.md` created from done phases, the one active
+  `docs/changes/*.md` created from the in-progress/next phase, any `⚠️ NEEDS_REVIEW` phases that
+  need a manual re-check, and confirmation that `docs/STATE.md` / old `docs/PHASE_XX.md` /
+  `docs/PHASE_TEMPLATE.md` are now safe to delete once spot-checked.
 - The exact next-step commands. Use the appropriate variant:
 
   **Stack configured** (`stack_known = true`):
   ```text
   Next steps:
-    1. Review docs/STACK.md and ensure every Gate Commands row is correct.
-    2. Run /spec-init "[your project brief]" to draft docs/SPEC.md.
-    3. Run /phase-init 01 once SPEC.md is approved.
+    1. Review docs/STACK.md and ensure every Fast Gate / Full Gate / Release Gate row is correct,
+       and the Required Tooling table matches what's actually available in this environment.
+    2. Run /plan "[your project brief]" (or /plan docs/DRAFT_SPEC.md if you have a draft file) to
+       draft docs/SPEC.md and scaffold the first change.
   ```
 
   **Stack deferred** (`stack_known = false`):
   ```text
   Next steps:
-    1. Run /spec-init "[your idea]" to draft docs/SPEC.md.
-    2. Once you've chosen your stack, fill docs/STACK.md → ## Gate Commands.
+    1. Run /plan "[your idea]" to draft docs/SPEC.md and scaffold the first change.
+    2. Once you've chosen your stack, fill docs/STACK.md's Fast/Full/Release Gate tables and
+       Required Tooling table.
     3. Review and approve docs/SPEC.md.
-    4. Run /phase-init 01 to scaffold the first phase.
   ```
 
 ## Rules
@@ -232,17 +318,20 @@ Produce a short report with:
 - Do not delete or overwrite user-authored content unless the conflict policy in step 5, or a
   migration the user explicitly approved in step 3, allows it.
 - Never delete a file automatically — flag legacy files for manual deletion only.
-- Do not run any of the gate commands during init. This skill is a copy + scaffold operation.
+- Do not run any gate commands during init. This skill is a copy + scaffold operation.
 - Do not commit. The user reviews and commits.
 - Idempotency: a second run on the same target should add nothing and report `0 files created`.
 - If the target is the `sdd-workflow` checkout itself, refuse — never bootstrap onto the source.
 
 ## Done when
 
-- The target project has `AGENTS.md`, `CLAUDE.md`, `.claude/skills/<6>`, `plugins/sdd-workflow/`,
-  `docs/playbooks/<7>`, and seeded `docs/{SPEC,STATE,STACK,KNOWN_GOTCHAS,PHASE_TEMPLATE}.md`.
-- `docs/STACK.md` either has user-supplied gate commands or is flagged for the user to fill in.
-- If a legacy doc shape was detected, the user was offered a migration and knows which legacy
-  files remain to be deleted by hand.
+- The target project has `AGENTS.md`, `CLAUDE.md`, `.claude/skills/<3>`, `.agents/skills/<3>`,
+  `plugins/sdd-workflow/`, `docs/playbooks/<4>`, and seeded
+  `docs/{SPEC,STACK,KNOWN_GOTCHAS,CHANGE_TEMPLATE}.md` plus empty `docs/changes/`/
+  `docs/changes/archive/` directories.
+- `docs/STACK.md` either has user-supplied Fast/Full/Release Gate commands and a filled Required
+  Tooling table, or is flagged for the user to fill in.
+- If a legacy doc shape was detected (four-file, or `STATE.md`+`PHASE_XX.md`), the user was
+  offered a migration and knows which legacy files remain to be deleted by hand.
 - The user has the exact "next steps" list and knows the cloned `sdd-workflow` checkout can be
   deleted.

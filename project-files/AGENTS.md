@@ -1,30 +1,36 @@
 # Rules of operation of the AI agent during [PROJECT_NAME] development
 
-These rules are stack-agnostic. They are the contract any AI agent (Claude Code, Codex, others)
-must follow when working on this project. Stack-specific commands, file layout, and tooling live in
-[`docs/STACK.md`](docs/STACK.md).
+This workflow is specialized for **web applications** (frontend + backend + database) — it is not
+a general-purpose SDD framework. These rules are the contract any AI agent (Claude Code, Codex,
+others) must follow when working on this project. Stack-specific commands, file layout, and
+tooling live in [`docs/STACK.md`](docs/STACK.md).
 
 ## Core Rules
 
-1. **Scope Lock**: Do only what is specified in the active `docs/PHASE_XX.md`. Do not assume future
-   phases.
-2. **Agent-Only Implementation**: Code changes happen through `/impl-assist` (Scope tasks by
-   default, or Architect Review Notes via `/impl-assist [XX] review`). Humans define intent, scope,
-   and review notes; agents implement.
+1. **Backlog Lock**: Do only what is specified in the active `docs/changes/*.md`'s Backlog, plus
+   whatever the architect reports mid-session (see Rule 6). Do not assume future changes.
+2. **Agent-Only Implementation**: Code changes happen through `/work` (Backlog tasks by default, or
+   Architect Review Notes via `/work [XX] review`). Humans define intent, scope, and review notes;
+   agents implement.
 3. **No Guessing**: If a requirement is genuinely ambiguous and risky, ask a concise question
    instead of inventing behavior.
-4. **Gates First**: Before a phase closes, run `/phase-gate`. Automated green is not enough if
-   `Architect Review Notes` has unchecked items.
+4. **Gates First**: `/work` runs the Fast Gate after every item; `/ship` runs the Full Gate before
+   merging. Automated green is not enough if `Architect Review Notes` has unchecked items.
 5. **Security**: No hardcoded secrets. Use `.env`, environment variables, and typed settings
-   appropriate to the stack.
-6. **Context Sync**: After a phase completes, run `/context-update` to refresh `docs/STATE.md`
-   (Current Contract, Phase Status, Project Log).
+   appropriate to the stack. `/ship`'s Full Gate includes a secrets scan and dependency audit —
+   don't treat those as optional.
+6. **Open Backlog**: When the architect reports a finding, bug, or follow-up in chat mid-session,
+   append it to the active change's Backlog with a new ID before acting on it — never fix it
+   off-list. See `docs/playbooks/work.md` § Backlog append.
+7. **Required Tooling**: Domain-mandated tools (Playwright/chrome-devtools MCP for frontend UI,
+   LSP for TypeScript/Python, design skills for design decisions) are not optional judgment calls —
+   see `docs/STACK.md` § Required Tooling and use them before checking an item off.
 
 ## Stack Conventions
 
 Before writing code, running commands, or reasoning about project layout, read
 [`docs/STACK.md`](docs/STACK.md). It is the source of truth for concrete technologies, setup
-commands, test tooling, and per-module style guides.
+commands, gate commands (Fast/Full/Release), required tooling, and per-module style guides.
 
 If a stack convention is missing from `STACK.md`, do not invent it. Ask the user, then update
 `STACK.md` so the answer is durable.
@@ -53,11 +59,14 @@ Rules:
 
 Keep lightweight long-lived project memory in `docs/`:
 
-- `docs/STATE.md` § Project Log — ADR-style technical decisions (`Type: decision`) alongside spec
-  changes, phase completions, feedback, and rollbacks
-- `docs/KNOWN_GOTCHAS.md` — recurring pitfalls, symptoms, and fixes
+- `docs/SPEC.md`'s own git history — the record of spec-level decisions (there is no separate
+  decision log file; diff `docs/SPEC.md` to see what changed and when).
+- Each `docs/changes/*.md` (and, once shipped, `docs/changes/archive/*.md`) § Implementation Notes
+  — non-obvious deviations for that unit of work.
+- `docs/KNOWN_GOTCHAS.md` — recurring pitfalls, symptoms, and fixes.
 
-Consult and update these files as part of normal development.
+There is no separate contract-mirror file to keep in sync. The codebase is the source of truth for
+what currently exists; `docs/changes/archive/` is the source of truth for what's already shipped.
 
 ## Filesystem Permission Failures
 
@@ -70,64 +79,61 @@ fix. If no gotcha entry exists, ask how to proceed and add the resolution to `KN
 
 ## Git Workflow
 
-1. Work on `feat/phase-N` branches unless the user explicitly directs otherwise.
+1. `/plan` creates and switches to `feature/NN-slug` for the change it scaffolds. `/work` checks
+   the current branch first and switches (creating if needed) before doing anything else — the
+   architect should not need to say "switch to the feature branch" in chat.
 2. Never use destructive git commands or force-push without explicit instruction.
 3. Use conventional commits: `feat|fix|chore|docs|test|refactor(scope): description`.
-4. Run `/phase-gate` before committing phase work. Do not commit on gate failure.
-5. After a phase branch merges, tag the phase if the project uses phase tags.
-
-## Spec Change Sync Protocol
-
-When `docs/SPEC.md` changes:
-
-1. Run `/spec-sync` immediately with a brief description.
-2. Review the generated changes before continuing implementation.
-3. Do not implement any phase marked `NEEDS_REVIEW` until resolved.
+4. `/ship` runs the Full Gate, and on PASS commits outstanding work, merges `feature/NN-slug` into
+   local `main`, and archives the change file. Do not merge or push outside of `/ship`.
+5. `/ship --release` additionally pushes `main` to `origin/main` and verifies the resulting
+   deploy via `gh` — only after the Full Gate (and Release Gate) pass. Do not push to `origin/main`
+   any other way without explicit instruction.
 
 ## Workflow Playbooks
 
 The SDD workflows are defined in `docs/playbooks/`:
 
-- [`spec-init`](docs/playbooks/spec-init.md) — draft or refresh `docs/SPEC.md`
-- [`spec-sync`](docs/playbooks/spec-sync.md) — propagate an approved spec change into `docs/STATE.md`
-- [`phase-init`](docs/playbooks/phase-init.md) — scaffold `docs/PHASE_XX.md`
-- [`impl-assist`](docs/playbooks/impl-assist.md) — implement Scope tasks (default) or fix
-  Architect Review Notes (`/impl-assist [XX] review`) through the same agent execution loop
-- [`phase-gate`](docs/playbooks/phase-gate.md) — validate a phase before closing it
-- [`context-update`](docs/playbooks/context-update.md) — finalize completed phase memory in `docs/STATE.md`
+- [`plan`](docs/playbooks/plan.md) — draft/refresh `docs/SPEC.md` and scaffold a new
+  `docs/changes/NN-slug.md` with its feature branch
+- [`work`](docs/playbooks/work.md) — implement Backlog tasks (default) or fix Architect Review
+  Notes (`/work [XX] review`) through the agent execution loop, absorbing mid-session findings and
+  running the Fast Gate
+- [`ship`](docs/playbooks/ship.md) — run the Full Gate, merge to `main`, archive the change, and
+  (with `--release`) push and verify the deploy
 
 Runtime wrappers are thin stubs. Workflow logic belongs in the playbooks.
 
-## Phase Lifecycle
+## Change Lifecycle
 
 ```text
-1. Architect provides or updates project intent
-2. /spec-init                  -> draft or refresh docs/SPEC.md
-3. Architect approves SPEC.md
-4. /phase-init N               -> create docs/PHASE_N.md
-5. /impl-assist N              -> agent implements all scoped tasks
-6. Architect manually verifies product behavior
-7. Architect adds unchecked items to Architect Review Notes if fixes are needed
-8. /impl-assist N review       -> agent fixes review notes; repeat 6-8 until verification is clean
-9. /phase-gate N               -> automated checks + unresolved review-note check
-10. /context-update N          -> update docs/STATE.md (Current Contract, Phase Status, Project Log)
-11. Commit / PR / tag according to project git policy
+1. Architect provides a brief (chat text or a draft file, e.g. docs/DRAFT_SPEC.md)
+2. /plan ["brief" | path/to/draft.md]  -> draft/refresh docs/SPEC.md, scaffold
+                                          docs/changes/NN-slug.md, create feature/NN-slug
+3. Architect approves docs/SPEC.md (first time / on pivots only)
+4. /work NN                            -> agent implements Backlog items, absorbing any
+                                          findings the architect reports mid-session
+5. Architect manually verifies product behavior
+6. Architect adds unchecked items to Architect Review Notes if fixes are needed
+7. /work NN review                     -> agent fixes review notes; repeat 5-7 until clean
+8. /ship NN                            -> Full Gate; on PASS: merge to main, archive the change
+9. /ship NN --release                  -> Release Gate; push origin/main; verify deploy via gh
 ```
 
 ## Implementation Notes
 
-`docs/PHASE_XX.md` § Implementation Notes is a short, optional, agent-maintained bullet list —
-not a mandatory execution log. The agent adds an entry only when something isn't already visible
-from the code or commit history: an intentional deviation from the plan, a residual risk, a
-rejected alternative. Git history and the diff are the record of *how* work was done; this section
-exists only for what git can't tell you.
+`docs/changes/NN-slug.md` § Implementation Notes is a short, optional, agent-maintained bullet
+list — not a mandatory execution log. The agent adds an entry only when something isn't already
+visible from the code or commit history: an intentional deviation from the plan, a residual risk,
+a rejected alternative. Git history and the diff are the record of *how* work was done; this
+section exists only for what git can't tell you.
 
 ## Document Roles
 
 | File | Role | Change cadence |
 |------|------|----------------|
 | `docs/SPEC.md` | Strategic product and system intent | Rarely; architect-approved |
-| `docs/PHASE_XX.md` | Human-facing phase contract: scope, files, contracts, gate checks, review notes, implementation notes | Per phase |
-| `docs/STACK.md` | Stack-specific commands, layout, and conventions | When tooling changes |
-| `docs/STATE.md` | Phase tracker, current technical contract, and append-only project log (spec changes, phase completions, decisions, feedback, rollbacks) | During phase lifecycle |
+| `docs/changes/NN-slug.md` | Active unit of work: Backlog, files, gate overrides, review notes, implementation notes | Continuously while active |
+| `docs/changes/archive/NN-slug.md` | Completed unit of work, kept as history | Written once, by `/ship` |
+| `docs/STACK.md` | Stack-specific commands, Fast/Full/Release gate tables, required tooling | When tooling changes |
 | `docs/KNOWN_GOTCHAS.md` | Recurring pitfall log | When new traps are discovered |
