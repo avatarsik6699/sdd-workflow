@@ -56,8 +56,11 @@ From this source repository, only `/workflow-init` is intended to run.
 ## Repository map
 
 - `docs/playbooks/` — canonical workflow procedures.
-- `project-files/` — exact tree copied into target projects by `/workflow-init`.
+- `project-files/` — exact tree copied into target projects by `/workflow-init`, including the
+  `plan`/`work`/`ship` wrappers for Claude Code (`.claude/skills/`), generic agents
+  (`.agents/skills/`), and Codex (`plugins/sdd-workflow/`).
 - `.claude/skills/workflow-init/` — bootstrap wrapper for Claude Code.
+- `.agents/skills/workflow-init/` — bootstrap wrapper for generic agents.
 - `plugins/sdd-workflow/` — bootstrap wrapper for Codex.
 - `scripts/` — shared safety scripts.
 - `AGENTS.md` — rules for editing this repository.
