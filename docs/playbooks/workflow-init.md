@@ -45,6 +45,13 @@ Read the top of the target directory and classify:
 
 Record what was detected. Decisions later branch on this.
 
+Independently of the classification above, also check the target root itself (not `docs/`) for a
+draft/seed spec file: look for `DRAFT_SPEC.md` first; if absent, fall back to a single unambiguous
+match of `*DRAFT*SPEC*.md` or `*SPEC*DRAFT*.md`. Record the found path, or `none`. This supports
+the common staging layout where the architect drops a draft brief next to the cloned
+`sdd-workflow` checkout, one level above `docs/` — e.g. `<target>/DRAFT_SPEC.md` — before running
+this skill. The recorded path (or its absence) is used in step 9's next-steps text.
+
 ### 3. Detect and offer migration of legacy per-project docs (upgrade only)
 
 Only relevant when step 2 classified the target as **partially initialized**. Two legacy shapes
@@ -278,6 +285,25 @@ If `docs/STACK.md` already existed, do **not** edit it. Print a clear message:
 - Nothing to stamp beyond the placeholder substitution in step 6 — there is no `STATE.md` seed
   entry in the current generation.
 
+### 8a. Offer to remove the source checkout
+
+Only run this step if step 6 completed without errors, and the current working directory (the
+`sdd-workflow` checkout this skill is running from) is not the target and not inside the part of
+the target's tree being preserved — i.e. it's the disposable clone used only to bootstrap.
+
+Ask explicitly:
+
+> "The workflow has been copied into `<target>`. This checkout at `<cwd>` is no longer needed —
+> delete it now? (yes / no)"
+
+- On **yes**: delete the checkout directory, then note in the final report that it was deleted.
+- On **no** or no clear answer: leave it untouched; the final report keeps the existing
+  "can be deleted" note.
+
+This does not weaken the "never delete automatically" rule below — that rule protects
+target-project content. This step only ever acts on the skill's own disposable source clone, and
+only after an explicit per-run yes, never silently.
+
 ### 9. Final report
 
 Produce a short report with:
@@ -293,9 +319,20 @@ Produce a short report with:
   `docs/changes/*.md` created from the in-progress/next phase, any `⚠️ NEEDS_REVIEW` phases that
   need a manual re-check, and confirmation that `docs/STATE.md` / old `docs/PHASE_XX.md` /
   `docs/PHASE_TEMPLATE.md` are now safe to delete once spot-checked.
-- The exact next-step commands. Use the appropriate variant:
+- Whether the source checkout was deleted per step 8a, or left in place.
+- The exact next-step commands. Substitute the `/plan` line's argument with the draft-spec path
+  found in step 2, if one was found; otherwise use the generic wording shown below. Use the
+  appropriate stack variant:
 
-  **Stack configured** (`stack_known = true`):
+  **Stack configured** (`stack_known = true`), draft found:
+  ```text
+  Next steps:
+    1. Review docs/STACK.md and ensure every Fast Gate / Full Gate / Release Gate row is correct,
+       and the Required Tooling table matches what's actually available in this environment.
+    2. Run /plan <found-draft-path> to draft docs/SPEC.md and scaffold the first change.
+  ```
+
+  **Stack configured** (`stack_known = true`), no draft found:
   ```text
   Next steps:
     1. Review docs/STACK.md and ensure every Fast Gate / Full Gate / Release Gate row is correct,
@@ -304,7 +341,16 @@ Produce a short report with:
        draft docs/SPEC.md and scaffold the first change.
   ```
 
-  **Stack deferred** (`stack_known = false`):
+  **Stack deferred** (`stack_known = false`), draft found:
+  ```text
+  Next steps:
+    1. Run /plan <found-draft-path> to draft docs/SPEC.md and scaffold the first change.
+    2. Once you've chosen your stack, fill docs/STACK.md's Fast/Full/Release Gate tables and
+       Required Tooling table.
+    3. Review and approve docs/SPEC.md.
+  ```
+
+  **Stack deferred** (`stack_known = false`), no draft found:
   ```text
   Next steps:
     1. Run /plan "[your idea]" to draft docs/SPEC.md and scaffold the first change.
@@ -317,7 +363,9 @@ Produce a short report with:
 
 - Do not delete or overwrite user-authored content unless the conflict policy in step 5, or a
   migration the user explicitly approved in step 3, allows it.
-- Never delete a file automatically — flag legacy files for manual deletion only.
+- Never delete a file automatically — flag legacy files for manual deletion only. The sole
+  exception is the skill's own source checkout (step 8a), which may be deleted only after an
+  explicit per-run "yes" — never silently, and never any target-project content.
 - Do not run any gate commands during init. This skill is a copy + scaffold operation.
 - Do not commit. The user reviews and commits.
 - Idempotency: a second run on the same target should add nothing and report `0 files created`.
@@ -333,5 +381,7 @@ Produce a short report with:
   Tooling table, or is flagged for the user to fill in.
 - If a legacy doc shape was detected (four-file, or `STATE.md`+`PHASE_XX.md`), the user was
   offered a migration and knows which legacy files remain to be deleted by hand.
-- The user has the exact "next steps" list and knows the cloned `sdd-workflow` checkout can be
-  deleted.
+- The user was explicitly asked (step 8a) whether to delete the source checkout, and it was
+  deleted or left per their answer.
+- The user has the exact "next steps" list, with the `/plan` command pointing at the detected
+  draft-spec path when one was found at the target root.
