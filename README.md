@@ -45,9 +45,11 @@ After installation, work from the target project repository.
 ## Commands shipped to target projects
 
 - `/plan` — draft/refresh `docs/SPEC.md` and scaffold a new `docs/changes/NN-slug.md` with its
-  feature branch (also runs a self-driving design flow when no design references exist)
+  feature branch. For UI work, identify the project's design sources and define what to verify
+  on the affected screens.
 - `/work` — implement Backlog tasks (default) or fix Architect Review Notes
-  (`/work [XX] review`), absorbing mid-session findings into the Backlog and running the Fast Gate
+  (`/work [XX] review`), absorb mid-session findings into the Backlog, run the Fast Gate, and
+  verify affected UI in the browser.
 - `/ship` — run the Full Gate, merge to `main`, archive the change, and (with `--release`) push
   and verify the deploy via `gh`
 

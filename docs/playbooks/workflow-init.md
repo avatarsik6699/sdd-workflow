@@ -187,13 +187,14 @@ Ask the user for:
      - **Release Gate** (run only on `/ship --release`): container image scan command (e.g.
        Trivy), deploy/health-check verification command or endpoint, and whether `gh` is
        authenticated for this repo (yes/no — informational).
+     - Optional design system audit for the Fast and Full Gates. Record existing commands and
+       their applicable scopes, or use `n/a` when no separate audit is configured.
      - Optional helper script path for the Full Gate (e.g. `./scripts/ship.sh`).
-5. **Required tooling availability** — ask which of the following are set up in this environment,
-   to fill `docs/STACK.md`'s Required Tooling table honestly rather than assuming: Playwright MCP
-   and/or chrome-devtools MCP (frontend visual verification), an LSP server for the project's
-   languages, a `frontend-design` skill, a `backend-design` skill, an architecture skill. Any
-   answered "no" gets recorded as "not available — do not enforce" rather than left silently
-   assumed.
+5. **Required tooling availability** — ask which tools are available in this environment. Record
+   the project's browser tool for frontend verification (e.g. Playwright MCP or chrome-devtools
+   MCP), an LSP server for the project's languages, a `frontend-design` skill, a `backend-design`
+   skill, and an architecture skill in `docs/STACK.md`'s Required Tooling table. Record unavailable
+   tools as "not available — do not enforce".
 6. **Container / OS notes** worth recording in `KNOWN_GOTCHAS.md`. If unsure, skip.
 
 Do not ask all of these in one wall of text — group by area, accept "skip" / `n/a` per row.
@@ -278,7 +279,8 @@ If `docs/STACK.md` already existed, do **not** edit it. Print a clear message:
 
 > `docs/STACK.md` already exists. Verify it has Fast Gate / Full Gate / Release Gate tables and a
 > Required Tooling table matching the shape expected by `docs/playbooks/work.md` and `ship.md`.
-> Missing rows will be reported as SKIPPED.
+> Add optional Design system audit rows if the project has separate audit commands. Missing rows
+> will be reported as SKIPPED.
 
 ### 8. Stamp metadata
 

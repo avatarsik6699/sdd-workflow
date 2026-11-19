@@ -22,7 +22,7 @@ tooling live in [`docs/STACK.md`](docs/STACK.md).
 6. **Open Backlog**: When the architect reports a finding, bug, or follow-up in chat mid-session,
    append it to the active change's Backlog with a new ID before acting on it — never fix it
    off-list. See `docs/playbooks/work.md` § Backlog append.
-7. **Required Tooling**: Domain-mandated tools (Playwright/chrome-devtools MCP for frontend UI,
+7. **Required Tooling**: Domain-mandated tools (the project browser tool for frontend UI,
    LSP for TypeScript/Python, design skills for design decisions) are not optional judgment calls —
    see `docs/STACK.md` § Required Tooling and use them before checking an item off.
 
