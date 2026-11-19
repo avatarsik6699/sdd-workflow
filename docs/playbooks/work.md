@@ -157,6 +157,9 @@ before editing code:
   the applicable design sources and the screen, states, and viewports or themes to verify.
 - **Required tooling:** which row(s) of `docs/STACK.md`'s Required Tooling table apply to this
   item's domain (e.g. the project browser tool for UI work or LSP for TypeScript/Python)
+- When introducing JavaScript syntax or built-ins with version-dependent support, apply
+  the project's `AGENTS.md` § Native JavaScript and Web APIs. Include the affected execution
+  targets and focused compatibility checks in **Checks**.
 
 The plan must stay inside the active change's contract (for Backlog tasks) or narrowly inside the
 targeted note (for Review Notes) — do not use a review-note fix to broaden scope.
@@ -206,10 +209,12 @@ For each implemented item being verified:
 1. Re-read the changed files and confirm the contract/note is satisfied.
 2. Run the `docs/STACK.md` **Fast Gate** rows relevant to the touched area (lint, type-check,
    targeted/affected unit tests, LSP diagnostics, API type regen, and the configured design system
-   audit for relevant UI work). `n/a`/`SKIPPED` rows are reported as such.
-3. Report the commands run and their results. For UI work, also report the route or screen, states,
-   viewports or themes checked, and screenshot links when available. Leave or reopen a UI item's
-   checkbox when an applicable check fails or acceptance criteria still need verification.
+   audit for relevant UI work) and the item's focused compatibility checks. Report
+   `n/a`/`SKIPPED` rows as such.
+3. Report the commands run and their results, including any execution targets left unverified.
+   For UI work, also report the route or screen, states, viewports or themes checked, and screenshot
+   links when available. Leave or reopen a UI item's checkbox when an applicable check fails or
+   acceptance criteria still need verification.
    State the reason for any skipped check.
 4. Mark the item:
    - Backlog task → check off the matching item in `docs/changes/NN-slug.md` § Backlog.

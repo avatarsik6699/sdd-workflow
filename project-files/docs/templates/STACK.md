@@ -26,6 +26,22 @@
 
 ---
 
+## JavaScript runtime compatibility
+
+Fill in the applicable targets. Record the actual support policy and use `unknown` for a floor
+that still needs confirmation.
+
+| Execution target | Supported versions or policy | Source in this project |
+|------------------|------------------------------|------------------------|
+| Browser, including mobile and embedded contexts where supported | [minimum versions or Baseline year] | [support policy or approved configuration] |
+| Server, SSR, and workers | [runtime and minimum version per target] | [deployment image or runtime configuration] |
+| Build, scripts, and CI | [runtime and minimum version per target] | [version pin, image, or workflow] |
+
+- Build and type targets, if applicable [bundler target and TypeScript `target` / `lib` configuration]
+- Compatibility layer and verification [approved fallbacks or polyfills, and the commands or environments used to check the oldest affected targets]
+
+---
+
 ## Prerequisites
 
 ```bash
