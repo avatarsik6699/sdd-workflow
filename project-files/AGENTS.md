@@ -55,6 +55,28 @@ Rules:
 - Cap at 3 `ctx7` calls per question. If unclear, ask rather than guessing.
 - Never include secrets in documentation queries.
 
+## Native JavaScript and Web APIs
+
+For new or changed JavaScript and TypeScript code, prefer a standard built-in when it simplifies the
+implementation and preserves behavior. Consider `toSorted()` for immutable sorting, `Set` methods
+for set operations, and `RegExp.escape()` for literal text inside a regular expression.
+
+Before introducing an API or syntax with version-dependent support:
+
+1. Identify where the code executes from `docs/STACK.md` and project configuration. Check all
+   affected targets, including browsers, workers, server rendering, and scripts or CI where relevant.
+2. Check support for the specific feature. For browsers, use
+   [Baseline and per-browser data](https://web-platform-dx.github.io/web-features-explorer/) and
+   the project's browser policy. Apply Modern Web Guidance where available. For other runtimes,
+   use runtime release notes, compatibility data, or a probe on the required version. Check the
+   [TC39 proposal status](https://github.com/tc39/proposals) when standardization is unclear.
+3. Check build and type support separately. A successful build or a TypeScript `lib` declaration
+   alone cannot establish that a built-in is present at runtime. New syntax needs a compatible
+   parser or build transform before the code can run.
+4. If a target lacks support or its support is unknown, use an existing compatible implementation
+   or a project-approved fallback. Treat a higher support floor or a new polyfill as an explicit
+   project decision. For runtime feature detection, verify the native and fallback paths.
+
 ## Repo Memory Files
 
 Keep lightweight long-lived project memory in `docs/`:

@@ -30,6 +30,16 @@
 - Public site scaffolding, examples, link-check automation, and repository governance files that
   are not needed for the workflow bundle.
 
+## [0.6.0] - 2026-11-19
+
+### Added
+
+- Project-level JavaScript compatibility guidance for selecting native APIs and syntax.
+- Runtime targets, build and type settings, and compatibility verification in the `STACK.md`
+  template.
+- Focused compatibility checks in `/work` when introducing JavaScript syntax or built-ins with
+  version-dependent support.
+
 ## [0.5.0] - 2026-11-19
 
 ### Added
@@ -48,6 +58,7 @@
 - Initial public baseline for `sdd-workflow` with canonical playbooks, project-file payload, and
   `/workflow-init` bootstrap wrappers for Claude Code and Codex.
 
-[Unreleased]: https://github.com/avatarsik6699/sdd-workflow/compare/v0.5.0...main
+[Unreleased]: https://github.com/avatarsik6699/sdd-workflow/compare/v0.6.0...main
+[0.6.0]: https://github.com/avatarsik6699/sdd-workflow/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/avatarsik6699/sdd-workflow/compare/v0.4.0...v0.5.0
 [0.1.0]: https://github.com/avatarsik6699/sdd-workflow/releases/tag/v0.1.0
