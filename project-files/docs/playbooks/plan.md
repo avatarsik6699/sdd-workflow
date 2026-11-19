@@ -44,7 +44,7 @@ In an integrated project, runtime wrappers under `.claude/skills/plan/SKILL.md` 
 
 Only run this step if `docs/SPEC.md` doesn't exist yet, or the brief signals a spec-level change
 (new domain area, changed contract, changed NFRs). A brief that only describes the next unit of
-work against an already-adequate spec skips straight to step 4.
+work against an already-adequate spec can skip this step. Apply step 3 independently for UI work.
 
 - In `new` mode: rewrite the full document end-to-end.
 - In `continue` mode: keep unaffected sections stable; modify only sections touched by the brief.
@@ -72,23 +72,24 @@ Rules:
 
 ### 3. Design flow (§5.3 Design System)
 
-Skip this step in `continue` mode unless the brief explicitly introduces new screens or design
-change requests — those default to becoming Backlog items in step 5 instead of reopening this
-flow.
+Apply this step when drafting the frontend contract or planning a change to visible or interactive
+UI, including in `continue` mode.
 
-- If the brief/attachments include screenshots or explicit design references: for each one, note
-  the screen name, route, key components, layout, and interactions; use them to fill §5.1
-  (Pages) / §5.2 (Components) concretely and list them under §5.3 Design References.
-- If there are none: do not leave §5.3 as a placeholder.
-  1. Analyze the domain, audience, and tone implied by the spec.
-  2. Invoke the `frontend-design` skill to propose 1–2 concrete directions (typography, palette,
-     layout patterns, tone) grounded in that analysis — no heavyweight design tooling (no Figma
-     plugins, no Pencil-style installs), reasoning and lightweight references only.
-  3. Ask a short set of preference questions (max 5): visual tone, light/dark default, density,
-     any hard constraints (existing brand colors, accessibility requirements).
-  4. Record the chosen direction in §5.3 as the project's Design System baseline.
-- Later design change requests (component tweaks, palette adjustments) are ordinary Backlog items
-  added via `/work`, not a re-run of this flow — this only runs once per spec/design baseline.
+- In an existing project, read §5.3 and inspect the relevant theme or token definitions, shared
+  components, and representative screens. Use the established design as the starting point.
+- If the brief includes design references, identify the relevant routes, components, layout, and
+  interactions. Use them to inform §5.1 (Pages) and §5.2 (Components) when those contracts change.
+  Link reusable references from §5.3 and change-specific references from the change file.
+  Resolve material conflicts between a reference and the established design before implementation.
+- If a project needs its first visual direction and the brief and references leave it open,
+  propose 1–2 directions grounded in the domain and audience. Use the `frontend-design` skill
+  when available and work from lightweight references. Ask up to five focused preference
+  questions as needed (e.g. tone, default theme, density). Record the chosen direction and
+  enough rules for the first UI tasks in §5.3.
+- Keep §5.3 short. Record the established or chosen visual direction and link to the available
+  sources that define the theme, tokens, and shared components. Record project-specific rules for
+  choosing and composing components, with examples where useful. Put planned changes to shared
+  design rules or components in the Backlog. Give dependent UI tasks the corresponding dependencies.
 
 ### 4. Run critical validation checks (spec-level, when step 2 ran)
 
@@ -120,8 +121,14 @@ marker.
     never renumber; a removed item becomes `~~BN~~ (removed)`, never deleted outright.
   - **Files**: explicit create/modify list grouped as backend, frontend, infrastructure, plus any
     "do NOT touch" paths.
-  - **Contracts**: a one-line pointer — "see `docs/SPEC.md` §3–§4 and the Files list above" — do
-    not hand-copy schema/endpoint/type details into the change file.
+  - **Contracts**: link to the relevant SPEC sections and the Files list. Include §5 for UI work.
+    Keep schema, endpoint, and type details in their source documents.
+  - **Design and UI Acceptance**: for UI work, link to the applicable rules and references.
+    Record checkable expectations for the layout, interaction, relevant states (e.g. loading or
+    error), and supported viewports or themes affected by the change. Link the criteria to the
+    corresponding Backlog IDs. If the project's template uses the older Design References
+    section, carry relevant references into Design and UI Acceptance in the new change file.
+    Omit this section when the change has no UI impact.
   - Leave Architect Review Notes at its default (`No architect review issues recorded`) and
     Implementation Notes empty.
   - Fill the Commit Message placeholder: `feat(change-[NN]): [title] — [2–4 key deliverables]`,
@@ -143,7 +150,7 @@ If a subsection yields nothing, write `None` — never leave it blank or a gener
 SPEC.md: updated / unchanged — [reason]
 Mode: [new | continue | auto->new | auto->continue]
 Source brief: [chat / file: <path>]
-Design: filled from references / self-driven via frontend-design skill / unchanged
+Design: existing baseline / from references / new direction / n/a
 Validation: PASS / PASS with deferred clarifications
 
 Created: docs/changes/NN-slug.md
@@ -174,4 +181,6 @@ Next: run /work [NN] (or /work [NN] [ID]) to implement Backlog items.
 - `docs/SPEC.md` is concrete, internally consistent, and buildable (or unchanged if this run
   didn't need to touch it).
 - Exactly one new `docs/changes/NN-slug.md` exists with a Backlog assigned stable IDs.
+- For UI work, §5.3 identifies the available design sources and the change file has checkable UI
+  acceptance criteria.
 - The feature branch for that change exists and is checked out.

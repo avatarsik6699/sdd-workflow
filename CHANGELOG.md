@@ -30,6 +30,17 @@
 - Public site scaffolding, examples, link-check automation, and repository governance files that
   are not needed for the workflow bundle.
 
+## [0.5.0] - 2026-11-19
+
+### Added
+
+- Project-specific design guidance in `SPEC.md` §5.3 and UI acceptance criteria linked to
+  Backlog items.
+- Browser verification against the UI acceptance criteria, with coverage of affected states,
+  viewport sizes, and themes.
+- Optional design system audit commands in the Fast and Full Gates. Open UI acceptance items
+  block shipping.
+
 ## [0.1.0] - 2026-04-26
 
 ### Added
@@ -37,5 +48,6 @@
 - Initial public baseline for `sdd-workflow` with canonical playbooks, project-file payload, and
   `/workflow-init` bootstrap wrappers for Claude Code and Codex.
 
-[Unreleased]: https://github.com/avatarsik6699/sdd-workflow/compare/v0.1.0...main
+[Unreleased]: https://github.com/avatarsik6699/sdd-workflow/compare/v0.5.0...main
+[0.5.0]: https://github.com/avatarsik6699/sdd-workflow/compare/v0.4.0...v0.5.0
 [0.1.0]: https://github.com/avatarsik6699/sdd-workflow/releases/tag/v0.1.0

@@ -24,7 +24,7 @@ In an integrated project, runtime wrappers under `.claude/skills/ship/SKILL.md` 
 ## Required reads
 
 - `docs/changes/NN-slug.md` — the change under gate (Backlog, Files, Gate Checks override,
-  Architect Review Notes)
+  Architect Review Notes, and Design and UI Acceptance if present)
 - `docs/STACK.md` — Full Gate table, Release Gate table (`--release` only)
 - Current git branch / `docs/changes/` directory, if `NN` wasn't given
 
@@ -42,8 +42,9 @@ In an integrated project, runtime wrappers under `.claude/skills/ship/SKILL.md` 
 1. Read the change file's `Gate Checks` section for any phase/change-specific override (e.g. a
    custom smoke-test expectation) and treat it as an addition to, not a replacement of, the
    standard rows.
-2. Read the change file's `Architect Review Notes` and count unchecked items. Unchecked items
-   block PASS regardless of automated results.
+2. Read the change file's `Architect Review Notes` and count unchecked items. If the change
+   includes `Design and UI Acceptance`, identify unchecked Backlog items linked to those
+   criteria. Any of these unchecked items block PASS.
 3. Read `docs/STACK.md`'s **Full Gate** table and treat it as the command source. If a command is
    not defined for a row, mark that row `SKIPPED — no command in STACK.md` rather than guessing.
 4. Ensure a project `.env` (or equivalent secrets file declared by `STACK.md`) exists so
@@ -54,14 +55,18 @@ In an integrated project, runtime wrappers under `.claude/skills/ship/SKILL.md` 
    readiness before continuing.
 7. Run, in order, whichever of these rows are defined in `docs/STACK.md`'s Full Gate table:
    migrations, backend test suite, frontend build, frontend type-check, frontend test suite,
-   e2e determinism/lint check, e2e suite, smoke, **SAST** (e.g. Semgrep), **secrets scan** (e.g.
-   Gitleaks), **dependency audit** (e.g. Trivy/`npm audit`/`pip-audit`), **accessibility audit**
-   (e.g. axe/Lighthouse CI), **performance budget** (e.g. Lighthouse CI Core Web Vitals
-   thresholds).
+   design system audit, e2e determinism/lint check, e2e suite, smoke, **SAST** (e.g. Semgrep),
+   **secrets scan** (e.g. Gitleaks), **dependency audit** (e.g. Trivy/`npm audit`/`pip-audit`),
+   **accessibility audit** (e.g. axe/Lighthouse CI), **performance budget** (e.g. Lighthouse CI
+   Core Web Vitals thresholds). A configured design system audit follows the normal Full Gate
+   pass/fail rules. If the helper script does not cover that audit, run the configured audit
+   command separately.
 8. Do not stop at the first failure — run every defined row so the architect sees the full
    picture at once.
-9. Produce a table report: one row per check, plus a row for Architect Review Notes. Overall PASS
-   only if every executed row is green and there are no unchecked review notes.
+9. Produce a table report with one row per check, a row for Architect Review Notes, and a row
+   for Design and UI Acceptance when present. List unchecked item IDs for pending UI acceptance.
+   Overall PASS requires every executed check to pass and every item identified in step 2 to
+   be checked off.
 
 ### 3. On FAIL
 
@@ -97,8 +102,10 @@ Run this only after step 4 succeeds.
 
 Full Gate:
   [row] — PASS
+  [row] — FAIL ([reason])
   [row] — SKIPPED ([reason])
 Architect Review Notes: [count] unresolved
+Design and UI Acceptance (when present): PASS / FAIL ([unchecked item IDs])
 
 Result: PASS / FAIL
 Merged: feature/[NN]-slug -> main (fast-forward / merge commit)

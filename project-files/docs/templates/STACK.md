@@ -58,6 +58,7 @@ not the full suite. Fill every row that applies; mark `n/a` for rows that don't 
 | Check | Command | Preconditions / notes |
 |-------|---------|-----------------------|
 | Lint | `[command]` or `n/a` | |
+| Design system audit | `[command]` or `n/a` | Optional for affected UI code. Use `n/a` if Lint already covers this. |
 | Type-check (affected) | `[command]` or `n/a` | |
 | Targeted / affected unit tests | `[command]` or `n/a` | |
 | LSP diagnostics | `[available: yes/no]` | informational — enforced via Required Tooling, not a shell command |
@@ -77,6 +78,7 @@ task — it's expensive by design; that's why it's separated from the Fast Gate.
 | Backend test suite | `[command]` | |
 | Frontend build | `[command]` or `n/a` | |
 | Frontend unit tests | `[command]` or `n/a` | |
+| Design system audit | `[command]` or `n/a` | Optional project-defined scope. Use `n/a` if a Full Gate command already covers this. |
 | E2E lint / determinism | `[command]` or `n/a` | [e.g. fail on `waitForTimeout`] |
 | E2E (Playwright) | `[command]` or `n/a` | |
 | Smoke | `[command]` | [change files may override] |
@@ -85,6 +87,10 @@ task — it's expensive by design; that's why it's separated from the Fast Gate.
 | Dependency audit (e.g. Trivy / `npm audit` / `pip-audit`) | `[command]` or `n/a` | |
 | Accessibility audit (e.g. axe / Lighthouse CI) | `[command]` or `n/a` | |
 | Performance budget (e.g. Lighthouse CI, Core Web Vitals) | `[command]` or `n/a` | thresholds: LCP ≤ 2.5s, INP ≤ 200ms, CLS ≤ 0.1 (adjust per project) |
+
+When an audit is configured, define the rules it checks (e.g. token usage or shared component
+imports), the paths and exceptions it covers, and which violations fail the check. In an
+existing UI, consider enforcing new violations in the affected code first.
 
 If the project ships a helper script, declare it:
 
@@ -114,7 +120,7 @@ tool that isn't available must be reported as skipped with a reason, never silen
 
 | Domain | Required tool/skill | When | Available in this project |
 |--------|----------------------|------|-----------------------------|
-| Frontend UI change | Playwright MCP / chrome-devtools MCP (screenshot + console check) | after implementing, before checking off | `[yes/no]` |
+| Frontend UI change | Project browser tool (e.g. Playwright MCP or chrome-devtools MCP) | verify UI criteria, capture screenshots, and check the console before checking off | `[tool, yes/no]` |
 | TypeScript / Python change | LSP diagnostics | after implementing, before checking off | `[yes/no]` |
 | New/changed API surface | `openapi-typescript` (or equivalent) regen + frontend re-typecheck | after backend contract change | `[yes/no]` |
 | Architecture-level decision | architecture skill | during planning | `[yes/no]` |

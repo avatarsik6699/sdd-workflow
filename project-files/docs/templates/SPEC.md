@@ -84,10 +84,13 @@ entity_name(id, field1, field2, created_at)
 
 ### 5.3 Design System
 
-<!-- Never leave this blank. If screenshots/references exist, list them here with a one-line note
-     each. If not, `/plan` derives a direction via the `frontend-design` skill and records it here:
-     typography, palette, layout patterns, tone, light/dark default. Later design change requests
-     become Backlog items in the active change file, not a rewrite of this section. -->
+<!-- Record the established or chosen visual direction and the project's default and supported
+     themes. Link to the actual theme and token definitions, shared components, and representative
+     screens or examples. Describe which existing tokens to use by purpose and when to use and
+     compose shared components. Capture product-specific rules for layout, states, and responsive
+     behavior where they recur. Keep concrete token values and component APIs at their source.
+     Start with rules needed for the current UI and extend them as reusable decisions are made.
+     Keep acceptance criteria for individual screens in the corresponding change file. -->
 
 ---
 

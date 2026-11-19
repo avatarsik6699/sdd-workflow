@@ -21,13 +21,13 @@
 
 ---
 
-## Design References
+## Design and UI Acceptance
 
-<!-- Optional. Populated by /plan when design assets (Figma, mockups, screenshots) are provided.
-     Remove this section entirely if no design assets exist for this change.
-     Format: `Screen name — brief description (key components, interactions)` -->
-
-<!-- none provided -->
+<!-- For UI changes, link to SPEC.md §5.3 and any relevant patterns, components, or references.
+     Link checkable expectations to Backlog IDs and name the affected screens/routes. Include
+     layout, key interactions, and applicable states, viewport sizes, and themes. For example,
+     F1 — On the settings screen, a submit error keeps entered values, shows the error next to
+     its field, and keeps Save reachable on mobile. Omit this section if there is no UI impact. -->
 
 ---
 

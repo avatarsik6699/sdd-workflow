@@ -1,6 +1,6 @@
 ---
 name: plan
-description: Draft or refresh docs/SPEC.md from a brief (chat text or a draft file), then scaffold a new docs/changes/NN-slug.md with a Backlog and switch to its feature branch. Runs the self-driving design flow when no design references exist.
+description: Draft or refresh docs/SPEC.md from a brief, scaffold a change with a Backlog, and switch to its feature branch. Use project design rules and define acceptance criteria for UI work.
 ---
 
 <!-- Migrated and adapted from the matching Claude Code skill. -->

@@ -40,6 +40,8 @@ In an integrated project, runtime wrappers under `.claude/skills/work/SKILL.md` 
   Gate Checks override, existing Implementation Notes
 - `docs/SPEC.md` §3–§4 (and others as relevant) — the actual contract; the change file only
   points here, it doesn't duplicate it
+- For UI work, `docs/SPEC.md` §5 (including §5.3), the relevant design sources, and any change
+  file references or UI acceptance criteria
 - `docs/STACK.md` — Fast Gate table, Required Tooling table, stack conventions
 - `docs/KNOWN_GOTCHAS.md` — project pitfalls
 - Relevant source files and git history — verify current implementation before editing; recent
@@ -77,7 +79,9 @@ describes a finding, bug, or follow-up rather than an instruction about the curr
 1. Classify it: fix, enhancement, or new task.
 2. Decompose it into one or more concrete items if it isn't already scoped small.
 3. Append each as a new item to § Backlog in the active change file, in the appropriate group,
-   with the next unused ID in that group — never insert into the middle of the ID sequence.
+   with the next unused ID in that group — never insert into the middle of the ID sequence. If
+   the addition affects UI, record the expectation under Design and UI Acceptance with its
+   Backlog ID. Add the section if needed.
 4. Only ask the architect when it's genuinely ambiguous whether the new item should block or
    follow the items currently in progress; otherwise queue it after the current target set.
 
@@ -123,8 +127,17 @@ Before planning code changes for an item:
    relevant `docs/SPEC.md` sections it points to; for a Review Note, the note text and the
    original Backlog/SPEC context it relates to.
 2. Inspect the relevant source files, tests, and recent git history for that area.
+   For UI work, identify the existing components, tokens, and layout or interaction patterns
+   that apply. For a project without a documented convention, use the nearest relevant screen
+   and its implementation as the starting point. If the item has no applicable UI criteria,
+   derive focused checks from its Backlog entry or review note and any relevant references,
+   including older Design References entries. For a Backlog item, record those criteria under
+   Design and UI Acceptance with its ID.
 3. Decide the current state:
-   - `implemented` — contract/fix is already satisfied in code; skip unless `--force`.
+   - `implemented` — contract/fix is already satisfied in code. For a selected UI item, go to
+     steps 9–10 to verify the existing UI. If verification exposes an in-scope implementation gap,
+     treat the item as `partial` and continue at step 7. For other items, skip unless `--force`
+     was passed.
    - `partial` — some implementation exists but misses contract details.
    - `not-started` — required code/tests are absent (Backlog tasks only).
    - `blocked` — cannot proceed without clarification or missing dependency.
@@ -140,9 +153,10 @@ before editing code:
 - **Done when:** concrete completion condition
 - **Files:** exact paths expected to change
 - **Steps:** short ordered implementation steps
-- **Checks:** which Fast Gate rows apply, plus any focused test commands
+- **Checks:** which Fast Gate rows apply, plus any focused test commands. For UI work, identify
+  the applicable design sources and the screen, states, and viewports or themes to verify.
 - **Required tooling:** which row(s) of `docs/STACK.md`'s Required Tooling table apply to this
-  item's domain (e.g. frontend UI → Playwright/chrome-devtools MCP; TS/Python → LSP)
+  item's domain (e.g. the project browser tool for UI work or LSP for TypeScript/Python)
 
 The plan must stay inside the active change's contract (for Backlog tasks) or narrowly inside the
 targeted note (for Review Notes) — do not use a review-note fix to broaden scope.
@@ -153,6 +167,10 @@ For each planned item:
 
 - Apply the smallest complete implementation that satisfies the contract or resolves the note.
 - Match existing project conventions and patterns observed during exploration.
+- For UI work, reuse applicable shared components and tokens and select tokens by their documented
+  purpose. Include updates to affected design guidance in the same change when the agreed scope
+  introduces or changes a shared rule. When updating a UI library, check the affected token and
+  component references and representative screens.
 - Add or update focused tests when behavior is testable at reasonable cost.
 - If a non-obvious pitfall is discovered, update `docs/KNOWN_GOTCHAS.md`.
 - If — and only if — something isn't already visible from the code or commit history (an
@@ -165,13 +183,16 @@ For each planned item:
 Before verifying and checking off an item, consult `docs/STACK.md`'s Required Tooling table for
 the item's domain and confirm the mandated tool/skill was actually used:
 
-- Frontend UI change → take a screenshot via Playwright/chrome-devtools MCP and check the browser
-  console for new errors/warnings.
+- Frontend UI change → use the browser tool declared in `docs/STACK.md` or the project's
+  documented fallback. Compare the rendered UI with the relevant design rules and the item's
+  acceptance criteria. Exercise the affected interactions and states at the applicable viewport
+  sizes and themes. Capture representative screenshots and check the console for new
+  errors/warnings.
 - TypeScript/Python change → run an LSP diagnostics pass on the changed files.
 - New/changed API surface → regenerate types (`openapi-typescript` or the project's declared
   equivalent) and re-typecheck the frontend consumer.
 - Architecture-level decision → the architecture skill must have been consulted during planning.
-- Frontend design decision → the `frontend-design` skill must have been consulted.
+- Frontend design decision → consult the `frontend-design` skill when available.
 - Backend/API design decision → the `backend-design` skill, if available in this environment.
 
 This is not optional or "if convenient." If a mandated tool genuinely isn't available in this
@@ -180,20 +201,23 @@ as if the tool had run.
 
 ### 10. Verify and mark complete (Fast Gate)
 
-After implementing each item:
+For each implemented item being verified:
 
 1. Re-read the changed files and confirm the contract/note is satisfied.
 2. Run the `docs/STACK.md` **Fast Gate** rows relevant to the touched area (lint, type-check,
-   targeted/affected unit tests, LSP diagnostics, API type regen when applicable) — not the Full
-   Gate. `n/a`/`SKIPPED` rows are reported as such, same honesty rule as the full gate.
-3. Report the commands run and their results; if a check was not run, state the reason.
+   targeted/affected unit tests, LSP diagnostics, API type regen, and the configured design system
+   audit for relevant UI work). `n/a`/`SKIPPED` rows are reported as such.
+3. Report the commands run and their results. For UI work, also report the route or screen, states,
+   viewports or themes checked, and screenshot links when available. Leave or reopen a UI item's
+   checkbox when an applicable check fails or acceptance criteria still need verification.
+   State the reason for any skipped check.
 4. Mark the item:
    - Backlog task → check off the matching item in `docs/changes/NN-slug.md` § Backlog.
    - Review Note → check off the matching item in `docs/changes/NN-slug.md` § Architect Review
      Notes.
 
-Only check off an item after verification succeeds, the fix is re-verified, or the task is
-explicitly already implemented.
+Only check off an item after verification succeeds or a non-UI item is explicitly already
+implemented.
 
 Do not run the Full Gate or merge/archive. That is `/ship`.
 
@@ -224,7 +248,11 @@ Needs clarification:
 
 Fast Gate:
   [row] — PASS
+  [row] — FAIL ([reason])
   [row] — SKIPPED ([reason])
+
+UI verification (when applicable):
+  [ID] — [route/screen, states, viewports/themes, result, screenshot links if available]
 
 Next: manually verify the product, add any findings to Architect Review Notes or let /work absorb
 them next session, then run `/work [NN] review` or `/ship [NN]` when the change is complete.
